@@ -4,26 +4,26 @@ declare(strict_types=1);
 
 namespace Netgen\TagsBundle\Core\Persistence\Legacy\Tags\Gateway;
 
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
+use Ibexa\Core\Base\Exceptions\DatabaseException;
 use Netgen\TagsBundle\Core\Persistence\Legacy\Tags\Gateway;
 use Netgen\TagsBundle\SPI\Persistence\Tags\CreateStruct;
 use Netgen\TagsBundle\SPI\Persistence\Tags\SynonymCreateStruct;
 use Netgen\TagsBundle\SPI\Persistence\Tags\UpdateStruct;
 use PDOException;
-use RuntimeException;
 
 final class ExceptionConversion extends Gateway
 {
-    public function __construct(private Gateway $innerGateway) {}
+    public function __construct(
+        private Gateway $innerGateway,
+    ) {}
 
     public function getBasicTagData(int $tagId): array
     {
         try {
             return $this->innerGateway->getBasicTagData($tagId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -31,10 +31,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getBasicTagDataByRemoteId($remoteId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -42,10 +40,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getFullTagData($tagId, $translations, $useAlwaysAvailable);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -53,10 +49,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getFullTagDataByRemoteId($remoteId, $translations, $useAlwaysAvailable);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -64,10 +58,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getFullTagDataByKeywordAndParentId($keyword, $parentId, $translations, $useAlwaysAvailable);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -75,10 +67,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getChildren($tagId, $offset, $limit, $translations, $useAlwaysAvailable);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -86,10 +76,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getChildrenCount($tagId, $translations, $useAlwaysAvailable);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -97,10 +85,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getTagsByKeyword($keyword, $translation, $useAlwaysAvailable, $exactMatch, $offset, $limit);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -108,10 +94,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getTagsByKeywordCount($keyword, $translation, $useAlwaysAvailable, $exactMatch);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -119,10 +103,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getSynonyms($tagId, $offset, $limit, $translations, $useAlwaysAvailable);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -130,10 +112,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->getSynonymCount($tagId, $translations, $useAlwaysAvailable);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -141,10 +121,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             $this->innerGateway->moveSynonym($synonymId, $mainTagData);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -152,10 +130,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->create($createStruct, $parentTag);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -163,10 +139,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             $this->innerGateway->update($updateStruct, $tagId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -174,10 +148,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->createSynonym($createStruct, $tag);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -185,10 +157,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             $this->innerGateway->convertToSynonym($tagId, $mainTagData);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -196,10 +166,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             $this->innerGateway->transferTagAttributeLinks($tagId, $targetTagId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -207,10 +175,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             $this->innerGateway->moveSubtree($sourceTagData, $destinationParentTagData);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 
@@ -218,10 +184,8 @@ final class ExceptionConversion extends Gateway
     {
         try {
             $this->innerGateway->deleteTag($tagId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
+        } catch (DBALException|PDOException $e) {
+            throw DatabaseException::wrap($e);
         }
     }
 }

@@ -16,7 +16,10 @@ use function str_starts_with;
 
 final class RoutePrefixVoter implements VoterInterface
 {
-    public function __construct(private RequestStack $requestStack, private string $routePrefix) {}
+    public function __construct(
+        private RequestStack $requestStack,
+        private string $routePrefix,
+    ) {}
 
     public function matchItem(ItemInterface $item): ?bool
     {

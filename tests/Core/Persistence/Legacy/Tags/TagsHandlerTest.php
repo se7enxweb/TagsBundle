@@ -117,24 +117,24 @@ final class TagsHandlerTest extends TestCase
         $this->gateway
             ->expects(self::once())
             ->method('getFullTagDataByRemoteId')
-            ->with('abcdef')
+            ->with('remote-id')
             ->willReturn(
                 [
                     [
-                        'remote_id' => 'abcdef',
+                        'remote_id' => 'remote-id',
                     ],
                 ],
             );
 
-        $tag = new Tag(['remoteId' => 'abcdef']);
+        $tag = new Tag(['remoteId' => 'remote-id']);
 
         $this->mapper
             ->expects(self::once())
             ->method('extractTagListFromRows')
-            ->with([['remote_id' => 'abcdef']])
+            ->with([['remote_id' => 'remote-id']])
             ->willReturn([$tag]);
 
-        self::assertSame($tag, $this->tagsHandler->loadByRemoteId('abcdef'));
+        self::assertSame($tag, $this->tagsHandler->loadByRemoteId('remote-id'));
     }
 
     /**
@@ -147,14 +147,14 @@ final class TagsHandlerTest extends TestCase
         $this->gateway
             ->expects(self::once())
             ->method('getFullTagDataByRemoteId')
-            ->with('abcdef')
+            ->with('remote-id')
             ->willReturn([]);
 
         $this->mapper
             ->expects(self::never())
             ->method('extractTagListFromRows');
 
-        $this->tagsHandler->loadByRemoteId('abcdef');
+        $this->tagsHandler->loadByRemoteId('remote-id');
     }
 
     /**
@@ -442,7 +442,7 @@ final class TagsHandlerTest extends TestCase
                         'parentTagId' => 21,
                         'mainLanguageCode' => 'eng-GB',
                         'keywords' => ['eng-GB' => 'New tag'],
-                        'remoteId' => '123456abcdef',
+                        'remoteId' => '123456remote-id',
                         'alwaysAvailable' => true,
                     ],
                 ),
@@ -468,7 +468,7 @@ final class TagsHandlerTest extends TestCase
                         'keywords' => ['eng-GB' => 'New tag'],
                         'depth' => 3,
                         'pathString' => '/1/2/95/',
-                        'remoteId' => '123456abcdef',
+                        'remoteId' => '123456remote-id',
                         'alwaysAvailable' => true,
                         'mainLanguageCode' => 'eng-GB',
                         'languageIds' => [4],
@@ -482,7 +482,7 @@ final class TagsHandlerTest extends TestCase
                     'parentTagId' => 21,
                     'mainLanguageCode' => 'eng-GB',
                     'keywords' => ['eng-GB' => 'New tag'],
-                    'remoteId' => '123456abcdef',
+                    'remoteId' => '123456remote-id',
                     'alwaysAvailable' => true,
                 ],
             ),
@@ -493,7 +493,7 @@ final class TagsHandlerTest extends TestCase
                 'id' => 95,
                 'parentTagId' => 21,
                 'keywords' => ['eng-GB' => 'New tag'],
-                'remoteId' => '123456abcdef',
+                'remoteId' => '123456remote-id',
                 'mainLanguageCode' => 'eng-GB',
                 'alwaysAvailable' => true,
                 'languageIds' => [4],
@@ -518,7 +518,7 @@ final class TagsHandlerTest extends TestCase
                         'parentTagId' => 0,
                         'mainLanguageCode' => 'eng-GB',
                         'keywords' => ['eng-GB' => 'New tag'],
-                        'remoteId' => '123456abcdef',
+                        'remoteId' => '123456remote-id',
                         'alwaysAvailable' => true,
                     ],
                 ),
@@ -539,7 +539,7 @@ final class TagsHandlerTest extends TestCase
                         'keywords' => ['eng-GB' => 'New tag'],
                         'depth' => 3,
                         'pathString' => '/1/2/95/',
-                        'remoteId' => '123456abcdef',
+                        'remoteId' => '123456remote-id',
                         'alwaysAvailable' => true,
                         'mainLanguageCode' => 'eng-GB',
                         'languageIds' => [4],
@@ -553,7 +553,7 @@ final class TagsHandlerTest extends TestCase
                     'parentTagId' => 0,
                     'mainLanguageCode' => 'eng-GB',
                     'keywords' => ['eng-GB' => 'New tag'],
-                    'remoteId' => '123456abcdef',
+                    'remoteId' => '123456remote-id',
                     'alwaysAvailable' => true,
                 ],
             ),
@@ -564,7 +564,7 @@ final class TagsHandlerTest extends TestCase
                 'id' => 95,
                 'parentTagId' => 0,
                 'keywords' => ['eng-GB' => 'New tag'],
-                'remoteId' => '123456abcdef',
+                'remoteId' => '123456remote-id',
                 'mainLanguageCode' => 'eng-GB',
                 'alwaysAvailable' => true,
                 'languageIds' => [4],
@@ -587,7 +587,7 @@ final class TagsHandlerTest extends TestCase
                 new UpdateStruct(
                     [
                         'keywords' => ['eng-US' => 'Updated tag US', 'eng-GB' => 'Updated tag'],
-                        'remoteId' => '123456abcdef',
+                        'remoteId' => '123456remote-id',
                         'mainLanguageCode' => 'eng-US',
                         'alwaysAvailable' => true,
                     ],
@@ -604,7 +604,7 @@ final class TagsHandlerTest extends TestCase
                     [
                         'id' => 40,
                         'keywords' => ['eng-US' => 'Updated tag US', 'eng-GB' => 'Updated tag'],
-                        'remoteId' => '123456abcdef',
+                        'remoteId' => '123456remote-id',
                         'mainLanguageCode' => 'eng-US',
                         'alwaysAvailable' => true,
                         'languageIds' => [2, 4],
@@ -616,7 +616,7 @@ final class TagsHandlerTest extends TestCase
             new UpdateStruct(
                 [
                     'keywords' => ['eng-US' => 'Updated tag US', 'eng-GB' => 'Updated tag'],
-                    'remoteId' => '123456abcdef',
+                    'remoteId' => '123456remote-id',
                     'mainLanguageCode' => 'eng-US',
                     'alwaysAvailable' => true,
                 ],
@@ -628,7 +628,7 @@ final class TagsHandlerTest extends TestCase
             [
                 'id' => 40,
                 'keywords' => ['eng-US' => 'Updated tag US', 'eng-GB' => 'Updated tag'],
-                'remoteId' => '123456abcdef',
+                'remoteId' => '123456remote-id',
                 'mainLanguageCode' => 'eng-US',
                 'alwaysAvailable' => true,
                 'languageIds' => [2, 4],

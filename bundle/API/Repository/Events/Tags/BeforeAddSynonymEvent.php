@@ -15,7 +15,9 @@ final class BeforeAddSynonymEvent extends BeforeEvent
 {
     private Tag $synonym;
 
-    public function __construct(private SynonymCreateStruct $synonymCreateStruct) {}
+    public function __construct(
+        private SynonymCreateStruct $synonymCreateStruct,
+    ) {}
 
     public function getSynonymCreateStruct(): SynonymCreateStruct
     {

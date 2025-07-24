@@ -7,13 +7,13 @@ namespace Netgen\TagsBundle\Tests\API\Repository\FieldType;
 use DateTimeImmutable;
 use Ibexa\Contracts\Core\Repository\Values\Content\Field;
 use Ibexa\Core\Base\Exceptions\InvalidArgumentType;
-use Ibexa\Tests\Integration\Core\Repository\FieldType\BaseIntegrationTest;
+use Ibexa\Tests\Integration\Core\Repository\FieldType\BaseIntegrationTestCase;
 use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 use Netgen\TagsBundle\Core\FieldType\Tags\Type;
 use Netgen\TagsBundle\Core\FieldType\Tags\Value as TagsValue;
 use stdClass;
 
-final class TagsIntegrationTest extends BaseIntegrationTest
+final class TagsIntegrationTest extends BaseIntegrationTestCase
 {
     public function getTypeName(): string
     {

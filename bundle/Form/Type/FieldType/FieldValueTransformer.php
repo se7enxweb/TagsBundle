@@ -19,15 +19,16 @@ use const ENT_HTML401;
 use const ENT_QUOTES;
 use const ENT_SUBSTITUTE;
 
+/**
+ * @implements \Symfony\Component\Form\DataTransformerInterface<\Netgen\TagsBundle\Core\FieldType\Tags\Value|null, array<string, mixed>|null>
+ */
 final class FieldValueTransformer implements DataTransformerInterface
 {
-    public function __construct(private FieldType $fieldType, private Field $field) {}
+    public function __construct(
+        private FieldType $fieldType,
+        private Field $field,
+    ) {}
 
-    /**
-     * @param \Netgen\TagsBundle\Core\FieldType\Tags\Value|null $value
-     *
-     * @return array<string, mixed>|null
-     */
     public function transform(mixed $value): ?array
     {
         if (!$value instanceof Value) {
@@ -57,9 +58,6 @@ final class FieldValueTransformer implements DataTransformerInterface
         ];
     }
 
-    /**
-     * @param mixed[]|null $value
-     */
     public function reverseTransform(mixed $value): Value
     {
         if ($value === null) {

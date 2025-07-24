@@ -33,9 +33,9 @@ use function urldecode;
 
 final class TagRouter implements ChainedRouterInterface, RequestMatcherInterface
 {
-    public const TAG_URL_ROUTE_NAME = 'netgen_tags.tag.url';
+    public const string TAG_URL_ROUTE_NAME = 'netgen_tags.tag.url';
 
-    public const TAG_VIEW_ACTION_CONTROLLER = 'netgen_tags.controller.tag_view:viewAction';
+    public const string TAG_VIEW_ACTION_CONTROLLER = 'netgen_tags.controller.tag_view:viewAction';
 
     public function __construct(
         private TagsService $tagsService,

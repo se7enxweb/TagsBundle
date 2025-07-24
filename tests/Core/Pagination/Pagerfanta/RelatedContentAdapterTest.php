@@ -114,7 +114,6 @@ final class RelatedContentAdapterTest extends TestCase
             ->willReturn($relatedContent);
 
         $this->configResolver
-            ->expects(self::any())
             ->method('getParameter')
             ->with(
                 self::identicalTo('tag_view.related_content_list.return_content_info'),

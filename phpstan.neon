@@ -10,26 +10,22 @@ parameters:
         - bundle/Core/Search/Elasticsearch/QueryDSL/PrefixQuery.php
 
     ignoreErrors:
-        -
-            identifier: missingType.iterableValue
-        -
-            identifier: missingType.generics
-        -
-            message: '#Else branch is unreachable because ternary operator condition is always true.#'
-            path: bundle/Core/FieldType/Tags/Type.php
+        - identifier: missingType.iterableValue
+
+        - '#with generic interface Symfony\\Component\\Form\\\w+ (but )?does not specify its types: TData#'
+        - '#extends generic class Symfony\\Component\\Form\\\w+ but does not specify its types: TData#'
+
+        - '#Method .*::getNbResults\(\) should return int<0, max> but returns int.#'
 
         # Doctrine DBAL
-        - '#Cannot call method fetch(All)?\(\) on Doctrine\\DBAL\\ForwardCompatibility\\Result\|int#'
         - '#expects string\|null, Doctrine\\DBAL\\Query\\Expression\\CompositeExpression given#'
         - '#\$value2 of method Doctrine\\DBAL\\Platforms\\AbstractPlatform::getBitAndComparisonExpression\(\) expects string, int given.#'
 
         # Tags Bundle specifics
         - '#Netgen\\TagsBundle\\Core\\FieldType\\Tags\\Value::__construct\(\) does not call parent constructor#'
-        - '#Method .*::getRelatedContent\(\) should return .* but returns .*#'
         - '#Variable property access on \$this\(Netgen\\TagsBundle\\API\\Repository\\Values\\Tags\\Tag\)#'
 
-        # Errors caused by public properties in eZ Platform
-        - '#Property Ibexa\\Contracts\\Core\\Repository\\Values\\User\\Limitation::\$limitationValues \(array\) on left side of \?\? is not nullable.#'
+        # Errors caused by public properties in Ibexa
         - '#Call to function is_string\(\) with string will always evaluate to true.#'
         - '#Call to function is_array\(\) with array(<.*>)? will always evaluate to true.#'
         - '#Instanceof between (.*) and (.*) will always evaluate to true.#'
@@ -37,6 +33,7 @@ parameters:
         - '#should be contravariant with parameter#'
         - '#should be covariant with return type#'
         - "#Casting to bool something that's already bool.#"
+        - '#Access to protected property Ibexa\\Contracts\\ContentForms\\Data\\Content\\FieldData::\$(fieldDefinition|field)#'
 
         # Errors caused by Ibexa Elasticsearch
         - '#Ibexa\\Contracts\\Elasticsearch#'

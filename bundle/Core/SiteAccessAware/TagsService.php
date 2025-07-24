@@ -15,7 +15,10 @@ use Netgen\TagsBundle\API\Repository\Values\Tags\TagUpdateStruct;
 
 final class TagsService implements TagsServiceInterface
 {
-    public function __construct(private TagsServiceInterface $innerService, private LanguageResolver $languageResolver) {}
+    public function __construct(
+        private TagsServiceInterface $innerService,
+        private LanguageResolver $languageResolver,
+    ) {}
 
     public function loadTag(int $tagId, ?array $languages = null, bool $useAlwaysAvailable = true): Tag
     {

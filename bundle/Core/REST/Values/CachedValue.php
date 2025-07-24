@@ -18,8 +18,10 @@ final class CachedValue extends Value
      * @param mixed $value The value that gets cached
      * @param array<string, int|string> $cacheTags Associative array of cache tags. Example: array( 'tagId' => 42, 'tagKeyword' => 'Some tag|#eng-GB' ).
      */
-    public function __construct(public mixed $value, public array $cacheTags = [])
-    {
+    public function __construct(
+        public mixed $value,
+        public array $cacheTags = [],
+    ) {
         $this->cacheTags = $this->checkCacheTags($cacheTags);
     }
 

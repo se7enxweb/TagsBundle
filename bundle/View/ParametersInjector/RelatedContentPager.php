@@ -7,15 +7,18 @@ namespace Netgen\TagsBundle\View\ParametersInjector;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Core\MVC\Symfony\View\Event\FilterViewParametersEvent;
 use Ibexa\Core\MVC\Symfony\View\ViewEvents;
+use Netgen\TagsBundle\Core\Pagination\Pagerfanta\RelatedContentAdapter;
 use Netgen\TagsBundle\Core\Pagination\Pagerfanta\TagAdapterInterface;
 use Netgen\TagsBundle\View\TagView;
-use Pagerfanta\Adapter\AdapterInterface;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class RelatedContentPager implements EventSubscriberInterface
 {
-    public function __construct(private AdapterInterface $adapter, private ConfigResolverInterface $configResolver) {}
+    public function __construct(
+        private RelatedContentAdapter $adapter,
+        private ConfigResolverInterface $configResolver,
+    ) {}
 
     public static function getSubscribedEvents(): array
     {

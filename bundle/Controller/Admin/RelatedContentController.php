@@ -9,7 +9,6 @@ use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 use Netgen\TagsBundle\Core\Pagination\Pagerfanta\RelatedContentAdapter;
 use Netgen\TagsBundle\Core\Search\RelatedContent\SortClauseMapper;
 use Netgen\TagsBundle\Form\Type\RelatedContentFilterType;
-use Pagerfanta\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,7 +16,10 @@ use function count;
 
 final class RelatedContentController extends Controller
 {
-    public function __construct(private AdapterInterface $adapter, private SortClauseMapper $sortClauseMapper) {}
+    public function __construct(
+        private RelatedContentAdapter $adapter,
+        private SortClauseMapper $sortClauseMapper,
+    ) {}
 
     /**
      * Rendering a view which shows related content of tag.

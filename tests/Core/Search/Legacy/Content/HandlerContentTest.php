@@ -13,6 +13,7 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\SortClause;
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchHit;
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchResult;
+use Ibexa\Core\FieldType\FieldTypeAliasResolverInterface;
 use Ibexa\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use Ibexa\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 use Ibexa\Core\Persistence\Legacy\Content\Mapper;
@@ -62,16 +63,20 @@ final class HandlerContentTest extends LanguageAwareTestCase
 
             $schema = __DIR__ . '/../../../../_fixtures/schema/schema.' . $this->db . '.sql';
 
-            /** @var string[] $queries */
             $queries = preg_split('(;\s*$)m', (string) file_get_contents($schema));
-            $queries = array_filter($queries);
+
+            if (!is_array($queries)) {
+                return;
+            }
+
+            $queries = array_filter($queries, static fn (?string $query): bool => $query !== null && $query !== '');
             foreach ($queries as $query) {
-                $dbConnection->exec($query);
+                $dbConnection->executeStatement($query);
             }
 
             $this->insertDatabaseFixture(__DIR__ . '/../../../../_fixtures/tags_tree.php');
-            $this->insertDatabaseFixture(__DIR__ . '/../../../../_fixtures/object_attributes.php');
-            $this->insertDatabaseFixture(__DIR__ . '/../../../../_fixtures/class_attributes.php');
+            $this->insertDatabaseFixture(__DIR__ . '/../../../../_fixtures/content_fields.php');
+            $this->insertDatabaseFixture(__DIR__ . '/../../../../_fixtures/content_type_field_definitions.php');
         }
 
         $this->fieldRegistry = new ConverterRegistry();
@@ -231,6 +236,10 @@ final class HandlerContentTest extends LanguageAwareTestCase
         );
     }
 
+    /**
+     * @param int[] $expectedIds
+     * @param \Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchResult<\Ibexa\Contracts\Core\Persistence\Content\ContentInfo> $searchResult
+     */
     private function assertSearchResults(array $expectedIds, SearchResult $searchResult): void
     {
         $result = array_map(
@@ -299,11 +308,12 @@ final class HandlerContentTest extends LanguageAwareTestCase
                     $this->getLanguageHandler(),
                     $this->createMock(ContentTypeHandler::class),
                     $this->createMock(EventDispatcherInterface::class),
+                    $this->createMock(FieldTypeAliasResolverInterface::class),
                 ],
             )
             ->getMock();
 
-        $mapperMock->expects(self::any())
+        $mapperMock
             ->method('extractContentFromRows')
             ->with(self::isType('array'))
             ->willReturnCallback(

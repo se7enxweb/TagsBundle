@@ -17,11 +17,14 @@ use Symfony\Component\HttpFoundation\Request;
 use function array_pop;
 use function explode;
 use function in_array;
+use function max;
 use function trim;
 
 final class Tags extends RestController
 {
-    public function __construct(private TagsService $tagsService) {}
+    public function __construct(
+        private TagsService $tagsService,
+    ) {}
 
     /**
      * Loads the tag for a given ID (x)or remote ID.
@@ -99,7 +102,7 @@ final class Tags extends RestController
             $keyword,
             $language,
             true,
-            $offset >= 0 ? $offset : 0,
+            max($offset, 0),
             $limit >= 0 ? $limit : 25,
         );
 
@@ -130,7 +133,7 @@ final class Tags extends RestController
             $tagId !== 0
                 ? $this->tagsService->loadTag($tagId)
                 : null,
-            $offset >= 0 ? $offset : 0,
+            max($offset, 0),
             $limit >= 0 ? $limit : 25,
         );
 
@@ -159,7 +162,7 @@ final class Tags extends RestController
         $tagId = $this->extractTagIdFromPath($tagPath);
         $synonyms = $this->tagsService->loadTagSynonyms(
             $this->tagsService->loadTag($tagId),
-            $offset >= 0 ? $offset : 0,
+            max($offset, 0),
             $limit >= 0 ? $limit : 25,
         );
 
@@ -188,7 +191,7 @@ final class Tags extends RestController
         $tagId = $this->extractTagIdFromPath($tagPath);
         $relatedContent = $this->tagsService->getRelatedContent(
             $this->tagsService->loadTag($tagId),
-            $offset >= 0 ? $offset : 0,
+            max($offset, 0),
             $limit >= 0 ? $limit : 25,
         );
 
@@ -303,8 +306,7 @@ final class Tags extends RestController
         $destinationHref = $request->headers->get('Destination', '');
 
         try {
-            /** @var string $parsedDestinationHref */
-            $parsedDestinationHref = $this->requestParser->parseHref(
+            $parsedDestinationHref = $this->uriParser->getAttributeFromUri(
                 $destinationHref,
                 'tagPath',
             );
@@ -344,8 +346,7 @@ final class Tags extends RestController
         $destinationHref = $request->headers->get('Destination', '');
 
         try {
-            /** @var string $parsedDestinationHref */
-            $parsedDestinationHref = $this->requestParser->parseHref(
+            $parsedDestinationHref = $this->uriParser->getAttributeFromUri(
                 $destinationHref,
                 'tagPath',
             );
@@ -388,8 +389,7 @@ final class Tags extends RestController
         $destinationHref = $request->headers->get('Destination', '');
 
         try {
-            /** @var string $parsedDestinationHref */
-            $parsedDestinationHref = $this->requestParser->parseHref(
+            $parsedDestinationHref = $this->uriParser->getAttributeFromUri(
                 $destinationHref,
                 'tagPath',
             );
@@ -429,8 +429,7 @@ final class Tags extends RestController
         $destinationHref = $request->headers->get('Destination', '');
 
         try {
-            /** @var string $parsedDestinationHref */
-            $parsedDestinationHref = $this->requestParser->parseHref(
+            $parsedDestinationHref = $this->uriParser->getAttributeFromUri(
                 $destinationHref,
                 'tagPath',
             );

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\TagsBundle\Core\Search\Elasticsearch\Query\Common\CriterionVisitor\Tags;
 
-use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion\Operator;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\CriterionInterface;
 use Ibexa\Contracts\Elasticsearch\Query\CriterionVisitor;
 use Ibexa\Contracts\Elasticsearch\Query\LanguageFilter;
 use Ibexa\Core\Base\Exceptions\InvalidArgumentException;
@@ -19,12 +19,15 @@ use function count;
 
 final class TagKeyword extends Tags
 {
-    public function supports(Criterion $criterion, LanguageFilter $languageFilter): bool
+    public function supports(CriterionInterface $criterion, LanguageFilter $languageFilter): bool
     {
         return $criterion instanceof APITagKeyword;
     }
 
-    public function visit(CriterionVisitor $dispatcher, Criterion $criterion, LanguageFilter $languageFilter): array
+    /**
+     * @param \Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion $criterion
+     */
+    public function visit(CriterionVisitor $dispatcher, CriterionInterface $criterion, LanguageFilter $languageFilter): array
     {
         $criterion->value = (array) $criterion->value;
         $searchFields = $this->getSearchFields($criterion);

@@ -9,7 +9,10 @@ use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 
 final class MoveSubtreeEvent extends AfterEvent
 {
-    public function __construct(private Tag $tag, private ?Tag $parentTag = null) {}
+    public function __construct(
+        private Tag $tag,
+        private ?Tag $parentTag = null,
+    ) {}
 
     public function getTag(): Tag
     {

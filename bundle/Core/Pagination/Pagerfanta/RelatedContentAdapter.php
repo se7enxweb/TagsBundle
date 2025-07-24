@@ -12,6 +12,8 @@ use Pagerfanta\Adapter\AdapterInterface;
 /**
  * Pagerfanta adapter for content related to a tag.
  * Will return results as content objects.
+ *
+ * @implements \Pagerfanta\Adapter\AdapterInterface<\Ibexa\Contracts\Core\Repository\Values\Content\Content|\Ibexa\Contracts\Core\Repository\Values\Content\ContentInfo>
  */
 final class RelatedContentAdapter implements AdapterInterface, TagAdapterInterface
 {
@@ -29,7 +31,10 @@ final class RelatedContentAdapter implements AdapterInterface, TagAdapterInterfa
      */
     private array $additionalCriteria = [];
 
-    public function __construct(private TagsService $tagsService, private ConfigResolverInterface $configResolver) {}
+    public function __construct(
+        private TagsService $tagsService,
+        private ConfigResolverInterface $configResolver,
+    ) {}
 
     public function setTag(Tag $tag): void
     {

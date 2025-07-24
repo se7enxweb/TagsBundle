@@ -16,7 +16,10 @@ use function array_values;
  */
 class Mapper
 {
-    public function __construct(private LanguageHandler $languageHandler, private LanguageMaskGenerator $languageMaskGenerator) {}
+    public function __construct(
+        private LanguageHandler $languageHandler,
+        private LanguageMaskGenerator $languageMaskGenerator,
+    ) {}
 
     /**
      * Creates a tag from a $data row.

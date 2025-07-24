@@ -16,7 +16,9 @@ use function in_array;
 
 final class TagsMapper
 {
-    public function __construct(private LanguageHandler $languageHandler) {}
+    public function __construct(
+        private LanguageHandler $languageHandler,
+    ) {}
 
     public function buildTagDomainObject(SPITag $spiTag, array $prioritizedLanguages = []): Tag
     {

@@ -15,7 +15,9 @@ final class BeforeCreateTagEvent extends BeforeEvent
 {
     private Tag $tag;
 
-    public function __construct(private TagCreateStruct $tagCreateStruct) {}
+    public function __construct(
+        private TagCreateStruct $tagCreateStruct,
+    ) {}
 
     public function getTagCreateStruct(): TagCreateStruct
     {

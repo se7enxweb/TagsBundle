@@ -8,13 +8,18 @@ use Netgen\TagsBundle\API\Repository\TagsService;
 use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 use Pagerfanta\Adapter\AdapterInterface;
 
+/**
+ * @implements \Pagerfanta\Adapter\AdapterInterface<\Netgen\TagsBundle\API\Repository\Values\Tags\Tag>
+ */
 final class ChildrenTagsAdapter implements AdapterInterface, TagAdapterInterface
 {
     private ?Tag $tag = null;
 
     private int $nbResults;
 
-    public function __construct(private TagsService $tagsService) {}
+    public function __construct(
+        private TagsService $tagsService,
+    ) {}
 
     public function setTag(Tag $tag): void
     {

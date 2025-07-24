@@ -30,8 +30,6 @@ final class TagLimitationTypeTest extends Base
 {
     private Handler&MockObject $tagsHandlerMock;
 
-    private MockObject&PersistenceHandler $persistenceHandlerMock;
-
     private MockObject&User $userMock;
 
     private TagLimitationType $limitationType;
@@ -40,12 +38,11 @@ final class TagLimitationTypeTest extends Base
     {
         parent::setUp();
 
-        $this->persistenceHandlerMock = $this->createMock(PersistenceHandler::class);
         $this->userMock = $this->createMock(User::class);
         $this->tagsHandlerMock = $this->createMock(Handler::class);
 
         $this->limitationType = new TagLimitationType(
-            $this->persistenceHandlerMock,
+            $this->createMock(PersistenceHandler::class),
             $this->tagsHandlerMock,
         );
     }

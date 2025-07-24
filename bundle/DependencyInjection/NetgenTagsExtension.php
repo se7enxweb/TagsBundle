@@ -51,7 +51,7 @@ final class NetgenTagsExtension extends Extension implements PrependExtensionInt
         $loader->load('admin/templating.yaml');
         $loader->load('forms.yaml');
         $loader->load('validators.yaml');
-        $loader->load('param_converters.yaml');
+        $loader->load('value_resolvers.yaml');
         $loader->load('installer.yaml');
         $loader->load('search/related_content.yaml');
         $loader->load('ibexa/admin/default_settings.yaml');

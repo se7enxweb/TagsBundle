@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Netgen\TagsBundle\Tests\API\Repository\Values\User\Limitation;
 
 use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
-use Ibexa\Tests\Integration\Core\Repository\Values\User\Limitation\BaseLimitationTest;
+use Ibexa\Tests\Integration\Core\Repository\Values\User\Limitation\BaseLimitationTestCase;
 use Netgen\TagsBundle\API\Repository\Values\User\Limitation\TagLimitation;
 
-final class TagLimitationTest extends BaseLimitationTest
+final class TagLimitationTest extends BaseLimitationTestCase
 {
     public function testTagLimitationAllow(): void
     {

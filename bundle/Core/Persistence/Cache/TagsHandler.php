@@ -26,7 +26,7 @@ use function trim;
 
 final class TagsHandler extends AbstractInMemoryHandler implements TagsHandlerInterface
 {
-    private const ALL_TRANSLATIONS_KEY = '0';
+    private const string ALL_TRANSLATIONS_KEY = '0';
 
     public function __construct(
         TransactionAwareAdapterInterface $cache,
@@ -42,7 +42,7 @@ final class TagsHandler extends AbstractInMemoryHandler implements TagsHandlerIn
     {
         $translationsKey = count($translations ?? []) === 0
             ? self::ALL_TRANSLATIONS_KEY
-            : implode('|', $translations);
+            : implode('|', $translations ?? []);
 
         $keySuffix = '-' . $translationsKey . '-' . ($useAlwaysAvailable ? '1' : '0');
 
@@ -70,7 +70,7 @@ final class TagsHandler extends AbstractInMemoryHandler implements TagsHandlerIn
     {
         $translationsKey = count($translations ?? []) === 0
             ? self::ALL_TRANSLATIONS_KEY
-            : implode('|', $translations);
+            : implode('|', $translations ?? []);
 
         $keySuffix = '-' . $translationsKey . '-' . ($useAlwaysAvailable ? '1' : '0');
 
@@ -93,7 +93,6 @@ final class TagsHandler extends AbstractInMemoryHandler implements TagsHandlerIn
 
     public function loadTagInfo(int $tagId): TagInfo
     {
-        /** @var \Symfony\Component\Cache\CacheItem $cacheItem */
         $cacheItem = $this->cache->getItem("netgen-tag-info-{$tagId}");
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
@@ -112,11 +111,10 @@ final class TagsHandler extends AbstractInMemoryHandler implements TagsHandlerIn
     {
         $translationsKey = count($translations ?? []) === 0
             ? self::ALL_TRANSLATIONS_KEY
-            : implode('|', $translations);
+            : implode('|', $translations ?? []);
 
         $alwaysAvailableKey = $useAlwaysAvailable ? '1' : '0';
 
-        /** @var \Symfony\Component\Cache\CacheItem $cacheItem */
         $cacheItem = $this->cache->getItem("netgen-tag-byRemoteId-{$remoteId}-{$translationsKey}-{$alwaysAvailableKey}");
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
@@ -133,7 +131,6 @@ final class TagsHandler extends AbstractInMemoryHandler implements TagsHandlerIn
 
     public function loadTagInfoByRemoteId(string $remoteId): TagInfo
     {
-        /** @var \Symfony\Component\Cache\CacheItem $cacheItem */
         $cacheItem = $this->cache->getItem("netgen-tag-info-byRemoteId-{$remoteId}");
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
@@ -195,11 +192,10 @@ final class TagsHandler extends AbstractInMemoryHandler implements TagsHandlerIn
         // Method caches all synonyms in cache and only uses offset / limit to slice the cached result
         $translationsKey = count($translations ?? []) === 0
             ? self::ALL_TRANSLATIONS_KEY
-            : implode('|', $translations);
+            : implode('|', $translations ?? []);
 
         $alwaysAvailableKey = $useAlwaysAvailable ? '1' : '0';
 
-        /** @var \Symfony\Component\Cache\CacheItem $cacheItem */
         $cacheItem = $this->cache->getItem("netgen-tag-synonyms-{$tagId}-{$translationsKey}-{$alwaysAvailableKey}");
         if ($cacheItem->isHit()) {
             return array_slice($cacheItem->get(), $offset, $limit > -1 ? $limit : null);
@@ -306,12 +302,10 @@ final class TagsHandler extends AbstractInMemoryHandler implements TagsHandlerIn
 
     /**
      * Return relevant cache tags so cache can be purged reliably.
-     *
-     * $tags argument is optional. Can be used to specify additional tags.
      */
-    private function getCacheTags(int $tagId, string $pathString, array $tags = []): array
+    private function getCacheTags(int $tagId, string $pathString): array
     {
-        $tags[] = 'tag-' . $tagId;
+        $tags = ['tag-' . $tagId];
 
         foreach (explode('/', trim($pathString, '/')) as $pathId) {
             $tags[] = 'tag-path-' . $pathId;

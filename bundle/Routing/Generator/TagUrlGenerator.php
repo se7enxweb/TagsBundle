@@ -23,9 +23,9 @@ use function urlencode;
  */
 final class TagUrlGenerator extends Generator
 {
-    public const INTERNAL_TAG_ROUTE = 'netgen_tags.tag.internal';
+    public const string INTERNAL_TAG_ROUTE = 'netgen_tags.tag.internal';
 
-    public const DEFAULT_PATH_PREFIX = '/tags/view';
+    public const string DEFAULT_PATH_PREFIX = '/tags/view';
 
     public function __construct(
         private TagsService $tagsService,
@@ -88,9 +88,7 @@ final class TagUrlGenerator extends Generator
                 ],
             );
         } catch (LogicException $e) {
-            if ($this->logger !== null) {
-                $this->logger->warning($e->getMessage());
-            }
+            $this->logger?->warning($e->getMessage());
 
             $isInternal = true;
             $tagUrl = $this->defaultRouter->generate(

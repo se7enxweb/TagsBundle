@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\TagsBundle\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
+use ArrayObject;
 use Ibexa\Contracts\Core\Persistence\Content\FieldValue;
 use Ibexa\Contracts\Core\Persistence\Content\Type\FieldDefinition;
 use Ibexa\Core\FieldType\FieldSettings;
@@ -14,7 +15,7 @@ use Netgen\TagsBundle\Core\FieldType\Tags\Type;
 
 final class Tags implements Converter
 {
-    private const TAGS_VALIDATOR_IDENTIFIER = 'TagsValueValidator';
+    private const string TAGS_VALIDATOR_IDENTIFIER = 'TagsValueValidator';
 
     public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue): void {}
 
@@ -35,7 +36,7 @@ final class Tags implements Converter
                 'hideRootTag' => (bool) $storageDef->dataInt3,
                 'editView' => $storageDef->dataText1,
             ],
-            FieldSettings::ARRAY_AS_PROPS,
+            ArrayObject::ARRAY_AS_PROPS,
         );
 
         $fieldDef->fieldTypeConstraints->validators = [

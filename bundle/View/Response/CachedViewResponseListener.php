@@ -6,7 +6,6 @@ namespace Netgen\TagsBundle\View\Response;
 
 use FOS\HttpCache\ResponseTagger;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
-use Netgen\TagsBundle\View\CacheableView;
 use Netgen\TagsBundle\View\TagView;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -14,7 +13,10 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 final class CachedViewResponseListener implements EventSubscriberInterface
 {
-    public function __construct(private ResponseTagger $responseTagger, private ConfigResolverInterface $configResolver) {}
+    public function __construct(
+        private ResponseTagger $responseTagger,
+        private ConfigResolverInterface $configResolver,
+    ) {}
 
     public static function getSubscribedEvents(): array
     {
@@ -27,7 +29,7 @@ final class CachedViewResponseListener implements EventSubscriberInterface
     public function configureCache(ResponseEvent $event): void
     {
         $view = $event->getRequest()->attributes->get('view');
-        if (!$view instanceof CacheableView || !$view instanceof TagView) {
+        if (!$view instanceof TagView) {
             return;
         }
 

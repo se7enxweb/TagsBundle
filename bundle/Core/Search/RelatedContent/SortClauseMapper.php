@@ -61,31 +61,15 @@ final class SortClauseMapper
      */
     private function mapSortClause(string $sortOption): SortClause
     {
-        switch ($sortOption) {
-            case 'content_id_ascending':
-                return new SortClause\ContentId(Query::SORT_ASC);
-
-            case 'content_id_desc':
-                return new SortClause\ContentId(Query::SORT_DESC);
-
-            case 'name_ascending':
-                return new SortClause\ContentName(Query::SORT_ASC);
-
-            case 'name_descending':
-                return new SortClause\ContentName(Query::SORT_DESC);
-
-            case 'content_type_id_ascending':
-                return new ContentTypeId(Query::SORT_ASC);
-
-            case 'content_type_id_descending':
-                return new ContentTypeId(Query::SORT_DESC);
-
-            case 'date_modified_ascending':
-                return new SortClause\DateModified(Query::SORT_ASC);
-
-            case 'date_modified_descending':
-            default:
-                return new SortClause\DateModified(Query::SORT_DESC);
-        }
+        return match ($sortOption) {
+            'content_id_ascending' => new SortClause\ContentId(Query::SORT_ASC),
+            'content_id_desc' => new SortClause\ContentId(Query::SORT_DESC),
+            'name_ascending' => new SortClause\ContentName(Query::SORT_ASC),
+            'name_descending' => new SortClause\ContentName(Query::SORT_DESC),
+            'content_type_id_ascending' => new ContentTypeId(Query::SORT_ASC),
+            'content_type_id_descending' => new ContentTypeId(Query::SORT_DESC),
+            'date_modified_ascending' => new SortClause\DateModified(Query::SORT_ASC),
+            default => new SortClause\DateModified(Query::SORT_DESC),
+        };
     }
 }

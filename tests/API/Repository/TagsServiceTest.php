@@ -18,11 +18,11 @@ final class TagsServiceTest extends BaseTagsServiceTest
         $this->tagsService = $this->getTagsService();
     }
 
-    private function getTagsService(bool $initialInitializeFromScratch = true): TagsService
+    private function getTagsService(): TagsService
     {
         /** @var \Netgen\TagsBundle\Tests\API\Repository\SetupFactory\Legacy $setUpFactory */
         $setUpFactory = $this->getSetupFactory();
-        $this->tagsService = $this->tagsService ?? $setUpFactory->getTagsService($initialInitializeFromScratch);
+        $this->tagsService = $this->tagsService ?? $setUpFactory->getTagsService();
 
         return $this->tagsService;
     }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\TagsBundle\Core\FieldType\Tags\TagsStorage\Gateway;
 
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\Types\Types;
 use Ibexa\Contracts\Core\Persistence\Content\Field;
 use Ibexa\Contracts\Core\Persistence\Content\Language\Handler as LanguageHandler;
@@ -17,7 +17,10 @@ use function in_array;
 
 final class DoctrineStorage extends Gateway
 {
-    public function __construct(private Connection $connection, private LanguageHandler $languageHandler) {}
+    public function __construct(
+        private Connection $connection,
+        private LanguageHandler $languageHandler,
+    ) {}
 
     public function storeFieldData(VersionInfo $versionInfo, Field $field): void
     {
@@ -34,13 +37,13 @@ final class DoctrineStorage extends Gateway
                         'priority' => ':priority',
                     ],
                 )
-                ->setParameter(':keyword_id', $tag['id'], Types::INTEGER)
-                ->setParameter(':objectattribute_id', $field->id, Types::INTEGER)
-                ->setParameter(':objectattribute_version', $versionInfo->versionNo, Types::INTEGER)
-                ->setParameter(':object_id', $versionInfo->contentInfo->id, Types::INTEGER)
-                ->setParameter(':priority', $priority, Types::INTEGER);
+                ->setParameter('keyword_id', $tag['id'], Types::INTEGER)
+                ->setParameter('objectattribute_id', $field->id, Types::INTEGER)
+                ->setParameter('objectattribute_version', $versionInfo->versionNo, Types::INTEGER)
+                ->setParameter('object_id', $versionInfo->contentInfo->id, Types::INTEGER)
+                ->setParameter('priority', $priority, Types::INTEGER);
 
-            $insertQuery->execute();
+            $insertQuery->executeStatement();
         }
     }
 
@@ -55,15 +58,15 @@ final class DoctrineStorage extends Gateway
         $query
             ->delete('eztags_attribute_link')
             ->where(
-                $query->expr()->andX(
+                $query->expr()->and(
                     $query->expr()->in('objectattribute_id', [':objectattribute_id']),
                     $query->expr()->eq('objectattribute_version', ':objectattribute_version'),
                 ),
             )
-            ->setParameter(':objectattribute_id', $fieldIds, Connection::PARAM_INT_ARRAY)
-            ->setParameter(':objectattribute_version', $versionInfo->versionNo, Types::INTEGER);
+            ->setParameter('objectattribute_id', $fieldIds, ArrayParameterType::INTEGER)
+            ->setParameter('objectattribute_version', $versionInfo->versionNo, Types::INTEGER);
 
-        $query->execute();
+        $query->executeStatement();
     }
 
     public function loadTagData(int $parentTagId, string $keyword, string $language): array
@@ -73,19 +76,17 @@ final class DoctrineStorage extends Gateway
             ->select('t.*')
             ->from('eztags', 't')
             ->where(
-                $query->expr()->andX(
+                $query->expr()->and(
                     $query->expr()->eq('t.parent_id', ':parent_id'),
                     $query->expr()->eq('t.keyword', ':keyword'),
                     $query->expr()->eq('t.main_language_id', ':main_language_id'),
                 ),
             )
-            ->setParameter(':parent_id', $parentTagId, Types::INTEGER)
-            ->setParameter(':keyword', $keyword, Types::STRING)
-            ->setParameter(':main_language_id', $this->languageHandler->loadByLanguageCode($language)->id, Types::INTEGER);
+            ->setParameter('parent_id', $parentTagId, Types::INTEGER)
+            ->setParameter('keyword', $keyword, Types::STRING)
+            ->setParameter('main_language_id', $this->languageHandler->loadByLanguageCode($language)->id, Types::INTEGER);
 
-        $statement = $query->execute();
-
-        $rows = $statement->fetchAll(FetchMode::ASSOCIATIVE);
+        $rows = $query->executeQuery()->fetchAllAssociative();
 
         return $rows[0] ?? [];
     }
@@ -134,18 +135,16 @@ final class DoctrineStorage extends Gateway
                     'k.keyword_id',
                 ),
             )->where(
-                $query->expr()->andX(
+                $query->expr()->and(
                     $query->expr()->eq('tal.objectattribute_id', ':objectattribute_id'),
                     $query->expr()->eq('tal.objectattribute_version', ':objectattribute_version'),
                 ),
             )
-            ->setParameter(':objectattribute_id', $fieldId, Types::INTEGER)
-            ->setParameter(':objectattribute_version', $versionNo, Types::INTEGER)
+            ->setParameter('objectattribute_id', $fieldId, Types::INTEGER)
+            ->setParameter('objectattribute_version', $versionNo, Types::INTEGER)
             ->orderBy('tal.priority', 'ASC');
 
-        $statement = $query->execute();
-
-        $rows = $statement->fetchAll(FetchMode::ASSOCIATIVE);
+        $rows = $query->executeQuery()->fetchAllAssociative();
 
         $tagList = [];
         foreach ($rows as $row) {

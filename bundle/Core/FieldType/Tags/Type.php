@@ -29,7 +29,7 @@ final class Type extends FieldType
     /**
      * Default edit view interface for content field.
      */
-    public const EDIT_VIEW_DEFAULT_VALUE = 'Default';
+    public const string EDIT_VIEW_DEFAULT_VALUE = 'Default';
 
     protected $settingsSchema = [
         'hideRootTag' => [
@@ -55,7 +55,10 @@ final class Type extends FieldType
         ],
     ];
 
-    public function __construct(private TagsService $tagsService, private ConfigResolverInterface $configResolver) {}
+    public function __construct(
+        private TagsService $tagsService,
+        private ConfigResolverInterface $configResolver,
+    ) {}
 
     public function getFieldTypeIdentifier(): string
     {
@@ -290,23 +293,21 @@ final class Type extends FieldType
     }
 
     /**
-     * @param \Netgen\TagsBundle\Core\FieldType\Tags\Value $fieldValue
+     * @param \Netgen\TagsBundle\Core\FieldType\Tags\Value $value
      */
-    public function validate(FieldDefinition $fieldDefinition, IbexaValue $fieldValue): array
+    public function validate(FieldDefinition $fieldDefinition, IbexaValue $value): array
     {
         $validationErrors = [];
 
-        if ($this->isEmptyValue($fieldValue)) {
+        if ($this->isEmptyValue($value)) {
             return $validationErrors;
         }
 
         $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
         $constraints = $validatorConfiguration['TagsValueValidator'] ?? [];
 
-        $validationErrors = [];
-
         if (($constraints['subTreeLimit'] ?? 0) > 0) {
-            foreach ($fieldValue->tags as $tag) {
+            foreach ($value->tags as $tag) {
                 if ($tag->id === null || $tag->id < 1) {
                     $tag = $this->tagsService->loadTag($tag->parentTagId);
                 }
@@ -327,7 +328,7 @@ final class Type extends FieldType
             }
         }
 
-        if (($constraints['maxTags'] ?? 0) > 0 && count($fieldValue->tags) > $constraints['maxTags']) {
+        if (($constraints['maxTags'] ?? 0) > 0 && count($value->tags) > $constraints['maxTags']) {
             $validationErrors[] = new ValidationError(
                 'Number of tags must be lower or equal to %maxTags%',
                 null,

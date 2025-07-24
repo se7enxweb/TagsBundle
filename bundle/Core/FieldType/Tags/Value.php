@@ -19,7 +19,9 @@ final class Value extends BaseValue implements Stringable
     /**
      * @param \Netgen\TagsBundle\API\Repository\Values\Tags\Tag[] $tags
      */
-    public function __construct(public array $tags = []) {}
+    public function __construct(
+        public array $tags = [],
+    ) {}
 
     /**
      * Returns a string representation of the field value.

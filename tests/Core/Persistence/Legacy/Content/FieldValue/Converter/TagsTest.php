@@ -137,13 +137,4 @@ final class TagsTest extends TestCase
         self::assertSame('Select', $fieldDefinition->fieldTypeConstraints->fieldSettings['editView']);
         self::assertNull($fieldDefinition->defaultValue->data);
     }
-
-    /**
-     * @covers \Netgen\TagsBundle\Core\Persistence\Legacy\Content\FieldValue\Converter\Tags::getIndexColumn
-     */
-    public function testGetIndexColumn(): void
-    {
-        $indexColumn = $this->converter->getIndexColumn();
-        self::assertFalse($indexColumn);
-    }
 }

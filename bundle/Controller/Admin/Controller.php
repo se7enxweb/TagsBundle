@@ -49,7 +49,7 @@ abstract class Controller extends BaseController
     protected function addFlashMessage(string $messageType, string $message, array $parameters = []): void
     {
         /** @var \Symfony\Contracts\Translation\TranslatorInterface $translator */
-        $translator = $this->get('translator');
+        $translator = $this->container->get('translator');
 
         $this->addFlash(
             'tags.' . $messageType,
@@ -63,6 +63,10 @@ abstract class Controller extends BaseController
 
     /**
      * Creates a pager for use with various pages.
+     *
+     * @param \Pagerfanta\Adapter\AdapterInterface<\Ibexa\Contracts\Core\Repository\Values\ValueObject> $adapter
+     *
+     * @return \Pagerfanta\PagerfantaInterface<\Ibexa\Contracts\Core\Repository\Values\ValueObject>
      */
     protected function createPager(AdapterInterface $adapter, int $currentPage, int $maxPerPage, ?Tag $tag = null): PagerfantaInterface
     {

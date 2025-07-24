@@ -59,16 +59,20 @@ final class HandlerLocationTest extends LanguageAwareTestCase
 
             $schema = __DIR__ . '/../../../../_fixtures/schema/schema.' . $this->db . '.sql';
 
-            /** @var string[] $queries */
             $queries = preg_split('(;\s*$)m', (string) file_get_contents($schema));
-            $queries = array_filter($queries);
+
+            if (!is_array($queries)) {
+                return;
+            }
+
+            $queries = array_filter($queries, static fn (?string $query): bool => $query !== null && $query !== '');
             foreach ($queries as $query) {
-                $dbConnection->exec($query);
+                $dbConnection->executeStatement($query);
             }
 
             $this->insertDatabaseFixture(__DIR__ . '/../../../../_fixtures/tags_tree.php');
-            $this->insertDatabaseFixture(__DIR__ . '/../../../../_fixtures/object_attributes.php');
-            $this->insertDatabaseFixture(__DIR__ . '/../../../../_fixtures/class_attributes.php');
+            $this->insertDatabaseFixture(__DIR__ . '/../../../../_fixtures/content_fields.php');
+            $this->insertDatabaseFixture(__DIR__ . '/../../../../_fixtures/content_type_field_definitions.php');
         }
     }
 
@@ -226,6 +230,10 @@ final class HandlerLocationTest extends LanguageAwareTestCase
         );
     }
 
+    /**
+     * @param int[] $expectedIds
+     * @param \Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchResult<\Ibexa\Contracts\Core\Persistence\Content\Location> $searchResult
+     */
     private function assertSearchResults(array $expectedIds, SearchResult $searchResult): void
     {
         $ids = array_map(
@@ -280,7 +288,6 @@ final class HandlerLocationTest extends LanguageAwareTestCase
         $mapperMock = $this->createMock(LocationMapper::class);
 
         $mapperMock
-            ->expects(self::any())
             ->method('createLocationsFromRows')
             ->with(self::isType('array'))
             ->willReturnCallback(

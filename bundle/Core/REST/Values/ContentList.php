@@ -11,5 +11,8 @@ final class ContentList extends Value
     /**
      * @param \Ibexa\Rest\Server\Values\RestContent[] $contents
      */
-    public function __construct(public array $contents, public string $path) {}
+    public function __construct(
+        public array $contents,
+        public string $path,
+    ) {}
 }

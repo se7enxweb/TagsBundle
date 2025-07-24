@@ -5,8 +5,6 @@ includes:
 
 parameters:
     ignoreErrors:
-        -
-            identifier: missingType.iterableValue
-        - '#Access to an undefined property Ibexa\\Contracts\\Core\\Repository\\Values\\ValueObject::\$id.#'
+        - identifier: missingType.iterableValue
         - '#Access to an undefined property Netgen\\TagsBundle\\API\\Repository\\Values\\Tags\\Tag::\$notDefined.#'
         - '#Missing call to parent::setUp\(\) method.#'

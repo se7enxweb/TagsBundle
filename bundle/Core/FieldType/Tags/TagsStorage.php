@@ -21,12 +21,14 @@ use function count;
  */
 final class TagsStorage extends GatewayBasedStorage
 {
-    public function __construct(StorageGateway $gateway, private TagsService $tagsService)
-    {
+    public function __construct(
+        StorageGateway $gateway,
+        private TagsService $tagsService,
+    ) {
         parent::__construct($gateway);
     }
 
-    public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context): ?bool
+    public function storeFieldData(VersionInfo $versionInfo, Field $field): ?bool
     {
         $this->gateway->deleteFieldData($versionInfo, [$field->id]);
         if (count($field->value->externalData ?? []) > 0) {
@@ -62,12 +64,12 @@ final class TagsStorage extends GatewayBasedStorage
         return null;
     }
 
-    public function getFieldData(VersionInfo $versionInfo, Field $field, array $context): void
+    public function getFieldData(VersionInfo $versionInfo, Field $field): void
     {
         $this->gateway->getFieldData($versionInfo, $field);
     }
 
-    public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds, array $context): bool
+    public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds): bool
     {
         $this->gateway->deleteFieldData($versionInfo, $fieldIds);
 
@@ -77,11 +79,6 @@ final class TagsStorage extends GatewayBasedStorage
     public function hasFieldData(): bool
     {
         return true;
-    }
-
-    public function getIndexData(VersionInfo $versionInfo, Field $field, array $context): array
-    {
-        return [];
     }
 
     /**

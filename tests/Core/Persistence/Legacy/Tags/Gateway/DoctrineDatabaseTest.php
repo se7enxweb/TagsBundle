@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\TagsBundle\Tests\Core\Persistence\Legacy\Tags\Gateway;
 
-use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ArrayParameterType;
 use Ibexa\Core\Base\Exceptions\NotFoundException;
 use Ibexa\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use Ibexa\Tests\Core\Persistence\Legacy\TestCase;
@@ -32,11 +32,15 @@ final class DoctrineDatabaseTest extends TestCase
 
         $schema = __DIR__ . '/../../../../../_fixtures/schema/schema.' . $this->db . '.sql';
 
-        /** @var string[] $queries */
         $queries = preg_split('(;\s*$)m', (string) file_get_contents($schema));
-        $queries = array_filter($queries);
+
+        if (!is_array($queries)) {
+            return;
+        }
+
+        $queries = array_filter($queries, static fn (?string $query): bool => $query !== null && $query !== '');
         foreach ($queries as $query) {
-            $dbConnection->exec($query);
+            $dbConnection->executeStatement($query);
         }
 
         $this->insertDatabaseFixture(__DIR__ . '/../../../../../_fixtures/tags_tree.php');
@@ -54,11 +58,15 @@ final class DoctrineDatabaseTest extends TestCase
         // Update PostgreSQL sequences
         $dbConnection = $this->getDatabaseConnection();
 
-        /** @var string[] $queries */
         $queries = preg_split('(;\s*$)m', (string) file_get_contents(__DIR__ . '/../../../../../schema/_fixtures/setval.postgresql.sql'));
-        $queries = array_filter($queries);
+
+        if (!is_array($queries)) {
+            return;
+        }
+
+        $queries = array_filter($queries, static fn (?string $query): bool => $query !== null && $query !== '');
         foreach ($queries as $query) {
-            $dbConnection->exec($query);
+            $dbConnection->executeStatement($query);
         }
     }
 
@@ -76,7 +84,7 @@ final class DoctrineDatabaseTest extends TestCase
         self::assertSame(
             $value,
             $data[$field],
-            "Value in property {$field} not as expected.",
+            "Value in property $field not as expected.",
         );
     }
 
@@ -103,7 +111,7 @@ final class DoctrineDatabaseTest extends TestCase
         self::assertSame(
             $value,
             $data[$field],
-            "Value in property {$field} not as expected.",
+            "Value in property $field not as expected.",
         );
     }
 
@@ -142,14 +150,12 @@ final class DoctrineDatabaseTest extends TestCase
     public function testGetFullTagData(string $field, mixed $value): void
     {
         $data = $this->tagsGateway->getFullTagData(40);
-        foreach ($data as &$dataItem) {
-            $dataItem = $this->convertNumericsToIntegers($dataItem);
-        }
+        $data = array_map(fn (array $item): array => $this->convertNumericsToIntegers($item), $data);
 
         self::assertSame(
             $value,
             $data[0][$field],
-            "Value in property {$field} not as expected.",
+            "Value in property $field not as expected.",
         );
     }
 
@@ -172,14 +178,12 @@ final class DoctrineDatabaseTest extends TestCase
     public function testGetFullTagDataWithoutAlwaysAvailable(string $field, mixed $value): void
     {
         $data = $this->tagsGateway->getFullTagData(40, ['eng-GB'], false);
-        foreach ($data as &$dataItem) {
-            $dataItem = $this->convertNumericsToIntegers($dataItem);
-        }
+        $data = array_map(fn (array $item): array => $this->convertNumericsToIntegers($item), $data);
 
         self::assertSame(
             $value,
             $data[0][$field],
-            "Value in property {$field} not as expected.",
+            "Value in property $field not as expected.",
         );
     }
 
@@ -202,14 +206,12 @@ final class DoctrineDatabaseTest extends TestCase
     public function testGetFullTagDataByRemoteId(string $field, mixed $value): void
     {
         $data = $this->tagsGateway->getFullTagDataByRemoteId('182be0c5cdcd5072bb1864cdee4d3d6e');
-        foreach ($data as &$dataItem) {
-            $dataItem = $this->convertNumericsToIntegers($dataItem);
-        }
+        $data = array_map(fn (array $item): array => $this->convertNumericsToIntegers($item), $data);
 
         self::assertSame(
             $value,
             $data[0][$field],
-            "Value in property {$field} not as expected.",
+            "Value in property $field not as expected.",
         );
     }
 
@@ -232,14 +234,12 @@ final class DoctrineDatabaseTest extends TestCase
     public function testGetFullTagDataByRemoteIdWithoutAlwaysAvailable(string $field, mixed $value): void
     {
         $data = $this->tagsGateway->getFullTagDataByRemoteId('182be0c5cdcd5072bb1864cdee4d3d6e', ['eng-GB'], false);
-        foreach ($data as &$dataItem) {
-            $dataItem = $this->convertNumericsToIntegers($dataItem);
-        }
+        $data = array_map(fn (array $item): array => $this->convertNumericsToIntegers($item), $data);
 
         self::assertSame(
             $value,
             $data[0][$field],
-            "Value in property {$field} not as expected.",
+            "Value in property $field not as expected.",
         );
     }
 
@@ -262,14 +262,12 @@ final class DoctrineDatabaseTest extends TestCase
     public function testGetFullTagDataByKeywordIdAndParentId(string $field, mixed $value): void
     {
         $data = $this->tagsGateway->getFullTagDataByKeywordAndParentId('eztags', 7);
-        foreach ($data as &$dataItem) {
-            $dataItem = $this->convertNumericsToIntegers($dataItem);
-        }
+        $data = array_map(fn (array $item): array => $this->convertNumericsToIntegers($item), $data);
 
         self::assertSame(
             $value,
             $data[0][$field],
-            "Value in property {$field} not as expected.",
+            "Value in property $field not as expected.",
         );
     }
 
@@ -292,14 +290,12 @@ final class DoctrineDatabaseTest extends TestCase
     public function testGetFullTagDataByKeywordIdAndParentIdWithoutAlwaysAvailable(string $field, mixed $value): void
     {
         $data = $this->tagsGateway->getFullTagDataByKeywordAndParentId('eztags', 7, ['eng-GB'], false);
-        foreach ($data as &$dataItem) {
-            $dataItem = $this->convertNumericsToIntegers($dataItem);
-        }
+        $data = array_map(fn (array $item): array => $this->convertNumericsToIntegers($item), $data);
 
         self::assertSame(
             $value,
             $data[0][$field],
-            "Value in property {$field} not as expected.",
+            "Value in property $field not as expected.",
         );
     }
 
@@ -337,9 +333,7 @@ final class DoctrineDatabaseTest extends TestCase
     public function testGetChildren(): void
     {
         $data = $this->tagsGateway->getChildren(16);
-        foreach ($data as &$dataItem) {
-            $dataItem = $this->convertNumericsToIntegers($dataItem);
-        }
+        $data = array_map(fn (array $item): array => $this->convertNumericsToIntegers($item), $data);
 
         self::assertCount(6, $data);
         self::assertSame(20, $data[0]['id']);
@@ -368,9 +362,7 @@ final class DoctrineDatabaseTest extends TestCase
     public function testGetChildrenWithoutAlwaysAvailable(): void
     {
         $data = $this->tagsGateway->getChildren(16, 0, -1, ['eng-GB'], false);
-        foreach ($data as &$dataItem) {
-            $dataItem = $this->convertNumericsToIntegers($dataItem);
-        }
+        $data = array_map(fn (array $item): array => $this->convertNumericsToIntegers($item), $data);
 
         self::assertCount(6, $data);
         self::assertSame(20, $data[0]['id']);
@@ -469,9 +461,7 @@ final class DoctrineDatabaseTest extends TestCase
     public function testGetSynonyms(): void
     {
         $data = $this->tagsGateway->getSynonyms(16);
-        foreach ($data as &$dataItem) {
-            $dataItem = $this->convertNumericsToIntegers($dataItem);
-        }
+        $data = array_map(fn (array $item): array => $this->convertNumericsToIntegers($item), $data);
 
         self::assertCount(2, $data);
         self::assertSame(95, $data[0]['id']);
@@ -496,9 +486,7 @@ final class DoctrineDatabaseTest extends TestCase
     public function testGetSynonymsWithoutAlwaysAvailable(): void
     {
         $data = $this->tagsGateway->getSynonyms(16, 0, -1, ['eng-GB'], false);
-        foreach ($data as &$dataItem) {
-            $dataItem = $this->convertNumericsToIntegers($dataItem);
-        }
+        $data = array_map(fn (array $item): array => $this->convertNumericsToIntegers($item), $data);
 
         self::assertCount(2, $data);
         self::assertSame(95, $data[0]['id']);
@@ -568,7 +556,6 @@ final class DoctrineDatabaseTest extends TestCase
 
     /**
      * @covers \Netgen\TagsBundle\Core\Persistence\Legacy\Tags\Gateway\DoctrineDatabase::create
-     * @covers \Netgen\TagsBundle\Core\Persistence\Legacy\Tags\Gateway\DoctrineDatabase::generateLanguageMask
      * @covers \Netgen\TagsBundle\Core\Persistence\Legacy\Tags\Gateway\DoctrineDatabase::insertTagKeywords
      */
     public function testCreate(): void
@@ -605,7 +592,6 @@ final class DoctrineDatabaseTest extends TestCase
 
     /**
      * @covers \Netgen\TagsBundle\Core\Persistence\Legacy\Tags\Gateway\DoctrineDatabase::create
-     * @covers \Netgen\TagsBundle\Core\Persistence\Legacy\Tags\Gateway\DoctrineDatabase::generateLanguageMask
      * @covers \Netgen\TagsBundle\Core\Persistence\Legacy\Tags\Gateway\DoctrineDatabase::insertTagKeywords
      */
     public function testCreateWithNoParent(): void
@@ -636,7 +622,6 @@ final class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers \Netgen\TagsBundle\Core\Persistence\Legacy\Tags\Gateway\DoctrineDatabase::generateLanguageMask
      * @covers \Netgen\TagsBundle\Core\Persistence\Legacy\Tags\Gateway\DoctrineDatabase::insertTagKeywords
      * @covers \Netgen\TagsBundle\Core\Persistence\Legacy\Tags\Gateway\DoctrineDatabase::update
      */
@@ -668,7 +653,6 @@ final class DoctrineDatabaseTest extends TestCase
 
     /**
      * @covers \Netgen\TagsBundle\Core\Persistence\Legacy\Tags\Gateway\DoctrineDatabase::createSynonym
-     * @covers \Netgen\TagsBundle\Core\Persistence\Legacy\Tags\Gateway\DoctrineDatabase::generateLanguageMask
      * @covers \Netgen\TagsBundle\Core\Persistence\Legacy\Tags\Gateway\DoctrineDatabase::getSynonymPathString
      * @covers \Netgen\TagsBundle\Core\Persistence\Legacy\Tags\Gateway\DoctrineDatabase::insertTagKeywords
      */
@@ -750,7 +734,7 @@ final class DoctrineDatabaseTest extends TestCase
                 ->select('id', 'keyword_id', 'objectattribute_id', 'objectattribute_version', 'object_id')
                 ->from('eztags_attribute_link')
                 ->where($query->expr()->in('id', [':id']))
-                ->setParameter('id', [1284, 1285, 1286, 1287], Connection::PARAM_INT_ARRAY),
+                ->setParameter('id', [1284, 1285, 1286, 1287], ArrayParameterType::INTEGER),
         );
     }
 
@@ -786,7 +770,7 @@ final class DoctrineDatabaseTest extends TestCase
                 ->select('id', 'parent_id', 'depth', 'path_string')
                 ->from('eztags')
                 ->where($query->expr()->in('id', [':id']))
-                ->setParameter('id', [7, 13, 14, 27, 40, 53, 54, 55], Connection::PARAM_INT_ARRAY),
+                ->setParameter('id', [7, 13, 14, 27, 40, 53, 54, 55], ArrayParameterType::INTEGER),
         );
     }
 
@@ -806,7 +790,7 @@ final class DoctrineDatabaseTest extends TestCase
                 ->select('id')
                 ->from('eztags')
                 ->where($query->expr()->in('id', [':id']))
-                ->setParameter('id', [7, 13, 14, 27, 40, 53, 54, 55], Connection::PARAM_INT_ARRAY),
+                ->setParameter('id', [7, 13, 14, 27, 40, 53, 54, 55], ArrayParameterType::INTEGER),
         );
 
         $query = $this->connection->createQueryBuilder();
@@ -818,7 +802,7 @@ final class DoctrineDatabaseTest extends TestCase
                 ->select('keyword_id')
                 ->from('eztags_attribute_link')
                 ->where($query->expr()->in('keyword_id', [':keyword_id']))
-                ->setParameter('keyword_id', [7, 13, 14, 27, 40, 53, 54, 55], Connection::PARAM_INT_ARRAY),
+                ->setParameter('keyword_id', [7, 13, 14, 27, 40, 53, 54, 55], ArrayParameterType::INTEGER),
         );
     }
 

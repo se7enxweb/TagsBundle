@@ -31,7 +31,6 @@ final class TagUpdateStructValidator extends ConstraintValidator
             );
         }
 
-        /** @var \Symfony\Component\Validator\Validator\ContextualValidatorInterface $validator */
         $validator = $this->context->getValidator()->inContext($this->context);
 
         $validator->atPath('alwaysAvailable')->validate(

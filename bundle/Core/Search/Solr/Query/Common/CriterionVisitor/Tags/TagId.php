@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\TagsBundle\Core\Search\Solr\Query\Common\CriterionVisitor\Tags;
 
-use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\CriterionInterface;
 use Ibexa\Contracts\Solr\Query\CriterionVisitor;
 use Ibexa\Core\Base\Exceptions\InvalidArgumentException;
 use Netgen\TagsBundle\API\Repository\Values\Content\Query\Criterion\TagId as APITagId;
@@ -15,12 +15,15 @@ use function implode;
 
 final class TagId extends Tags
 {
-    public function canVisit(Criterion $criterion): bool
+    public function canVisit(CriterionInterface $criterion): bool
     {
         return $criterion instanceof APITagId;
     }
 
-    public function visit(Criterion $criterion, ?CriterionVisitor $subVisitor = null): string
+    /**
+     * @param \Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion $criterion
+     */
+    public function visit(CriterionInterface $criterion, ?CriterionVisitor $subVisitor = null): string
     {
         $criterion->value = (array) $criterion->value;
         $searchFields = $this->getSearchFields($criterion);

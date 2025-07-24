@@ -8,7 +8,7 @@ use Ibexa\Contracts\Core\Repository\Values\User\Limitation;
 
 final class TagLimitation extends Limitation
 {
-    public const TAG = 'Tag';
+    public const string TAG = 'Tag';
 
     public function getIdentifier(): string
     {

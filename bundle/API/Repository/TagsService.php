@@ -66,7 +66,7 @@ interface TagsService
     /**
      * Loads children of a tag object.
      *
-     * @param \Netgen\TagsBundle\API\Repository\Values\Tags\Tag $tag If null, tags from the first level will be returned
+     * @param \Netgen\TagsBundle\API\Repository\Values\Tags\Tag|null $tag If null, tags from the first level will be returned
      * @param int $offset The start offset for paging
      * @param int $limit The number of tags returned. If $limit = -1 all children starting at $offset are returned
      * @param string[]|null $languages A language filter for keywords. If not given all languages are returned
@@ -81,7 +81,7 @@ interface TagsService
     /**
      * Returns the number of children of a tag object.
      *
-     * @param \Netgen\TagsBundle\API\Repository\Values\Tags\Tag $tag If null, tag count from the first level will be returned
+     * @param \Netgen\TagsBundle\API\Repository\Values\Tags\Tag|null $tag If null, tag count from the first level will be returned
      * @param string[]|null $languages A language filter for keywords. If not given all languages are returned
      * @param bool $useAlwaysAvailable Add main language to $languages if true (default) and if tag is always available
      *
@@ -299,8 +299,6 @@ interface TagsService
      *
      * @throws \RuntimeException Thrown on recursive sudo() use
      * @throws \Exception Re throws exceptions thrown inside $callback
-     *
-     * @return mixed
      */
-    public function sudo(callable $callback, ?self $outerTagsService = null);
+    public function sudo(callable $callback, ?self $outerTagsService = null): mixed;
 }

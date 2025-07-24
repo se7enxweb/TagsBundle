@@ -22,7 +22,10 @@ use const ENT_SUBSTITUTE;
 
 final class FieldController extends Controller
 {
-    public function __construct(private TagsService $tagsService, private ConfigResolverInterface $configResolver) {}
+    public function __construct(
+        private TagsService $tagsService,
+        private ConfigResolverInterface $configResolver,
+    ) {}
 
     /**
      * Provides auto-complete data for tag field edit interface.
@@ -39,9 +42,9 @@ final class FieldController extends Controller
             $request->query->get('locale') ?? '',
         );
 
-        $data = $data = $this->filterTags($searchResult->tags, $subTreeLimit, $hideRootTag);
-
-        return new JsonResponse($data);
+        return new JsonResponse(
+            $this->filterTags($searchResult->tags, $subTreeLimit, $hideRootTag),
+        );
     }
 
     /**

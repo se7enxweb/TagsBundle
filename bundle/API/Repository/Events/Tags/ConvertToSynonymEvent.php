@@ -9,7 +9,10 @@ use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 
 final class ConvertToSynonymEvent extends AfterEvent
 {
-    public function __construct(private Tag $synonym, private Tag $mainTag) {}
+    public function __construct(
+        private Tag $synonym,
+        private Tag $mainTag,
+    ) {}
 
     public function getSynonym(): Tag
     {

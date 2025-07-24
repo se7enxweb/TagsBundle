@@ -18,7 +18,7 @@ use Ibexa\Core\Base\Exceptions\InvalidArgumentValue;
 use Ibexa\Core\Repository\Values\Content\Content;
 use Ibexa\Core\Repository\Values\Content\VersionInfo;
 use Ibexa\Core\Repository\Values\User\User;
-use Ibexa\Tests\Integration\Core\Repository\BaseTest;
+use Ibexa\Tests\Integration\Core\Repository\BaseTestCase;
 use Netgen\TagsBundle\API\Repository\TagsService;
 use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 
@@ -31,7 +31,7 @@ use function trim;
 
 use const PHP_INT_MAX;
 
-abstract class BaseTagsServiceTest extends BaseTest
+abstract class BaseTagsServiceTest extends BaseTestCase
 {
     protected Repository $repository;
 
@@ -65,11 +65,11 @@ abstract class BaseTagsServiceTest extends BaseTest
     public function testIsPropertySet(): void
     {
         $tag = new Tag(['id' => 42]);
+
         $value = isset($tag->notDefined);
         self::assertFalse($value);
 
-        $value = isset($tag->id);
-        self::assertTrue($value);
+        self::assertSame(42, $tag->id);
     }
 
     /**
@@ -80,7 +80,7 @@ abstract class BaseTagsServiceTest extends BaseTest
         $this->expectException(PropertyReadOnlyException::class);
 
         $tag = new Tag(['id' => 2]);
-        $tag->id = null;
+        $tag->id = 42;
     }
 
     /**
@@ -339,7 +339,7 @@ abstract class BaseTagsServiceTest extends BaseTest
     public function testGetTagChildrenCount(): void
     {
         $childrenCount = $this->tagsService->getTagChildrenCount(
-            $tag = $this->tagsService->loadTag(16),
+            $this->tagsService->loadTag(16),
         );
 
         self::assertSame(6, $childrenCount);

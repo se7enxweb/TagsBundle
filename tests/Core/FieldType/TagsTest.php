@@ -8,7 +8,7 @@ use DateTimeImmutable;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Core\Base\Exceptions\InvalidArgumentException;
 use Ibexa\Core\FieldType\ValidationError;
-use Ibexa\Tests\Core\FieldType\FieldTypeTest;
+use Ibexa\Tests\Core\FieldType\FieldTypeTestCase;
 use Netgen\TagsBundle\API\Repository\TagsService;
 use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 use Netgen\TagsBundle\API\Repository\Values\Tags\TagList;
@@ -16,15 +16,12 @@ use Netgen\TagsBundle\Core\FieldType\Tags\Type;
 use Netgen\TagsBundle\Core\FieldType\Tags\Type as TagsType;
 use Netgen\TagsBundle\Core\FieldType\Tags\Value;
 use Netgen\TagsBundle\Core\FieldType\Tags\Value as TagsValue;
-use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 
 use const PHP_INT_MAX;
 
-final class TagsTest extends FieldTypeTest
+final class TagsTest extends FieldTypeTestCase
 {
-    private MockObject&TagsService $tagsService;
-
     /**
      * Returns values for TagsService::loadTag based on input value.
      */
@@ -58,7 +55,7 @@ final class TagsTest extends FieldTypeTest
         return new TagList($tags);
     }
 
-    public function provideValidFieldSettings(): array
+    public function provideValidFieldSettings(): iterable
     {
         return [
             [
@@ -214,7 +211,7 @@ final class TagsTest extends FieldTypeTest
         ];
     }
 
-    public function provideInvalidInputForAcceptValue(): array
+    public function provideInvalidInputForAcceptValue(): iterable
     {
         return [
             [
@@ -238,40 +235,40 @@ final class TagsTest extends FieldTypeTest
         ];
     }
 
-    public function provideValidInputForAcceptValue(): array
+    public function provideValidInputForAcceptValue(): iterable
     {
         return [
-            [
+            'null value' => [
                 null,
                 new TagsValue(),
             ],
-            [
+            'empty array' => [
                 [],
                 new TagsValue(),
             ],
-            [
+            'tag' => [
                 [new Tag()],
                 new TagsValue([new Tag()]),
             ],
-            [
+            'empty value' => [
                 new TagsValue(),
                 new TagsValue(),
             ],
-            [
+            'value with empty array' => [
                 new TagsValue([]),
                 new TagsValue(),
             ],
-            [
+            'value with one tag' => [
                 new TagsValue([new Tag()]),
                 new TagsValue([new Tag()]),
             ],
         ];
     }
 
-    public function provideValidDataForValidate(): array
+    public function provideValidDataForValidate(): iterable
     {
         return [
-            [
+            'no subtree limit' => [
                 [
                     'validatorConfiguration' => [
                         'TagsValueValidator' => [
@@ -281,7 +278,7 @@ final class TagsTest extends FieldTypeTest
                 ],
                 new TagsValue([new Tag(['id' => 102, 'pathString' => '/2/42/102/'])]),
             ],
-            [
+            'subtree limit' => [
                 [
                     'validatorConfiguration' => [
                         'TagsValueValidator' => [
@@ -291,7 +288,7 @@ final class TagsTest extends FieldTypeTest
                 ],
                 new TagsValue([new Tag(['id' => 42, 'pathString' => '/2/42/'])]),
             ],
-            [
+            'subtree limit with child tag' => [
                 [
                     'validatorConfiguration' => [
                         'TagsValueValidator' => [
@@ -301,7 +298,7 @@ final class TagsTest extends FieldTypeTest
                 ],
                 new TagsValue([new Tag(['id' => 102, 'pathString' => '/2/42/102/'])]),
             ],
-            [
+            'no max tags with single tag' => [
                 [
                     'validatorConfiguration' => [
                         'TagsValueValidator' => [
@@ -311,7 +308,7 @@ final class TagsTest extends FieldTypeTest
                 ],
                 new TagsValue(),
             ],
-            [
+            'no max tags with multiple tags' => [
                 [
                     'validatorConfiguration' => [
                         'TagsValueValidator' => [
@@ -321,7 +318,7 @@ final class TagsTest extends FieldTypeTest
                 ],
                 new TagsValue([new Tag(), new Tag()]),
             ],
-            [
+            'max tags without tags' => [
                 [
                     'validatorConfiguration' => [
                         'TagsValueValidator' => [
@@ -331,7 +328,7 @@ final class TagsTest extends FieldTypeTest
                 ],
                 new TagsValue(),
             ],
-            [
+            'max tags below limit' => [
                 [
                     'validatorConfiguration' => [
                         'TagsValueValidator' => [
@@ -341,7 +338,7 @@ final class TagsTest extends FieldTypeTest
                 ],
                 new TagsValue([new Tag()]),
             ],
-            [
+            'max tags with equal limit' => [
                 [
                     'validatorConfiguration' => [
                         'TagsValueValidator' => [
@@ -354,10 +351,10 @@ final class TagsTest extends FieldTypeTest
         ];
     }
 
-    public function provideInvalidDataForValidate(): array
+    public function provideInvalidDataForValidate(): iterable
     {
         return [
-            [
+            'subtree limit with tag outside of subtree' => [
                 [
                     'validatorConfiguration' => [
                         'TagsValueValidator' => [
@@ -389,7 +386,7 @@ final class TagsTest extends FieldTypeTest
                     ),
                 ],
             ],
-            [
+            'max tag above limit' => [
                 [
                     'validatorConfiguration' => [
                         'TagsValueValidator' => [
@@ -412,7 +409,7 @@ final class TagsTest extends FieldTypeTest
         ];
     }
 
-    public function provideInputForToHash(): array
+    public function provideInputForToHash(): iterable
     {
         return [
             [
@@ -436,7 +433,7 @@ final class TagsTest extends FieldTypeTest
         ];
     }
 
-    public function provideInputForFromHash(): array
+    public function provideInputForFromHash(): iterable
     {
         return [
             [
@@ -522,15 +519,14 @@ final class TagsTest extends FieldTypeTest
 
     protected function createFieldTypeUnderTest(): Type
     {
-        $this->tagsService = $this->createMock(TagsService::class);
+        $tagsService = $this->createMock(TagsService::class);
 
-        $this->tagsService->expects(self::any())
+        $tagsService
             ->method('loadTagList')
             ->willReturnCallback([$this, 'getTagsServiceLoadTagValues']);
 
         $configResolverMock = $this->createMock(ConfigResolverInterface::class);
         $configResolverMock
-            ->expects(self::any())
             ->method('getParameter')
             ->with(
                 self::identicalTo('edit_views'),
@@ -543,7 +539,7 @@ final class TagsTest extends FieldTypeTest
                 ],
             );
 
-        return new TagsType($this->tagsService, $configResolverMock);
+        return new TagsType($tagsService, $configResolverMock);
     }
 
     protected function getSettingsSchemaExpectation(): array

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Netgen\TagsBundle\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
-use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\Types\Types;
 use Ibexa\Core\Base\Exceptions\InvalidArgumentException;
 use Ibexa\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
@@ -29,20 +28,20 @@ abstract class Tags extends CriterionHandler
 
         $query = $this->connection->createQueryBuilder();
         $query
-            ->select('ezcontentclass_attribute.id')
-            ->from('ezcontentclass_attribute')
+            ->select('ibexa_content_type_field_definition.id')
+            ->from('ibexa_content_type_field_definition')
             ->where(
-                $query->expr()->andX(
+                $query->expr()->and(
                     $query->expr()->eq(
-                        'ezcontentclass_attribute.is_searchable',
+                        'ibexa_content_type_field_definition.is_searchable',
                         ':is_searchable',
                     ),
                     $query->expr()->eq(
-                        'ezcontentclass_attribute.data_type_string',
+                        'ibexa_content_type_field_definition.data_type_string',
                         ':data_type_string',
                     ),
                     $query->expr()->eq(
-                        'ezcontentclass_attribute.identifier',
+                        'ibexa_content_type_field_definition.identifier',
                         ':identifier',
                     ),
                 ),
@@ -50,7 +49,7 @@ abstract class Tags extends CriterionHandler
             ->setParameter('data_type_string', 'eztags', Types::STRING)
             ->setParameter('identifier', $fieldIdentifier, Types::STRING);
 
-        $fieldDefinitionIds = $query->execute()->fetchAll(FetchMode::COLUMN);
+        $fieldDefinitionIds = $query->executeQuery()->fetchFirstColumn();
 
         if (count($fieldDefinitionIds) === 0) {
             throw new InvalidArgumentException(

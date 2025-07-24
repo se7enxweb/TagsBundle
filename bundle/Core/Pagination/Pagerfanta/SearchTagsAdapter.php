@@ -7,6 +7,9 @@ namespace Netgen\TagsBundle\Core\Pagination\Pagerfanta;
 use Netgen\TagsBundle\API\Repository\TagsService;
 use Pagerfanta\Adapter\AdapterInterface;
 
+/**
+ * @implements \Pagerfanta\Adapter\AdapterInterface<\Netgen\TagsBundle\API\Repository\Values\Tags\Tag>
+ */
 final class SearchTagsAdapter implements AdapterInterface
 {
     private string $searchText;
@@ -15,7 +18,9 @@ final class SearchTagsAdapter implements AdapterInterface
 
     private int $nbResults;
 
-    public function __construct(private TagsService $tagsService) {}
+    public function __construct(
+        private TagsService $tagsService,
+    ) {}
 
     public function setSearchText(string $searchText): void
     {

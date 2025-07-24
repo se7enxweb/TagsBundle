@@ -11,7 +11,6 @@ use Ibexa\Contracts\Core\Repository\Exceptions\NotImplementedException;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\CriterionInterface;
 use Ibexa\Contracts\Core\Repository\Values\User\Limitation;
 use Ibexa\Contracts\Core\Repository\Values\User\UserReference;
-use Ibexa\Contracts\Core\Repository\Values\ValueObject;
 use Ibexa\Core\Base\Exceptions\InvalidArgumentException;
 use Ibexa\Core\Base\Exceptions\InvalidArgumentType;
 use Ibexa\Core\FieldType\ValidationError;
@@ -31,8 +30,10 @@ use function is_int;
 
 final class TagLimitationType extends AbstractPersistenceLimitationType implements LimitationTypeInterface
 {
-    public function __construct(PersistenceHandler $persistence, private SPITagsPersistenceHandler $tagsPersistence)
-    {
+    public function __construct(
+        PersistenceHandler $persistence,
+        private SPITagsPersistenceHandler $tagsPersistence,
+    ) {
         parent::__construct($persistence);
     }
 
@@ -81,7 +82,7 @@ final class TagLimitationType extends AbstractPersistenceLimitationType implemen
         return new APITagLimitation(['limitationValues' => array_map('intval', $limitationValues)]);
     }
 
-    public function evaluate(Limitation $value, UserReference $currentUser, ValueObject $object, ?array $targets = null): bool
+    public function evaluate(Limitation $value, UserReference $currentUser, object $object, ?array $targets = null): bool
     {
         if (!$value instanceof APITagLimitation) {
             throw new InvalidArgumentException('$value', 'Must be of type: TagLimitation');
@@ -91,7 +92,7 @@ final class TagLimitationType extends AbstractPersistenceLimitationType implemen
             throw new InvalidArgumentException('$object', 'Must be of type: Tag');
         }
 
-        if (count($value->limitationValues ?? []) === 0) {
+        if (count($value->limitationValues) === 0) {
             return false;
         }
 
@@ -105,7 +106,7 @@ final class TagLimitationType extends AbstractPersistenceLimitationType implemen
 
     public function getCriterion(Limitation $value, UserReference $currentUser): CriterionInterface
     {
-        if (count($value->limitationValues ?? []) === 0) {
+        if (count($value->limitationValues) === 0) {
             // no limitation values
             throw new RuntimeException('$value->limitationValues is empty, it should not have been stored in the first place');
         }

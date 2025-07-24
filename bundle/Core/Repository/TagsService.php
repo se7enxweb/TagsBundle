@@ -50,7 +50,11 @@ class TagsService implements TagsServiceInterface
      */
     private int $sudoNestingLevel = 0;
 
-    public function __construct(private Repository $repository, private TagsHandler $tagsHandler, private TagsMapper $mapper) {}
+    public function __construct(
+        private Repository $repository,
+        private TagsHandler $tagsHandler,
+        private TagsMapper $mapper,
+    ) {}
 
     public function loadTag(int $tagId, ?array $languages = null, bool $useAlwaysAvailable = true): Tag
     {
@@ -159,7 +163,7 @@ class TagsService implements TagsServiceInterface
         }
 
         $spiTags = $this->tagsHandler->loadChildren(
-            $tag?->id ?? 0,
+            $tag->id ?? 0,
             $offset,
             $limit,
             $languages,
@@ -181,7 +185,7 @@ class TagsService implements TagsServiceInterface
         }
 
         return $this->tagsHandler->getChildrenCount(
-            $tag?->id ?? 0,
+            $tag->id ?? 0,
             $languages,
             $useAlwaysAvailable,
         );

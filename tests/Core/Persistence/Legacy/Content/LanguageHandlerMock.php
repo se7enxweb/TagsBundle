@@ -54,7 +54,7 @@ final class LanguageHandlerMock
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mock->expects($testCase::any())
+        $mock
             ->method('load')
             ->willReturnMap(
                 [
@@ -67,7 +67,7 @@ final class LanguageHandlerMock
                 ],
             );
 
-        $mock->expects($testCase::any())
+        $mock
             ->method('loadByLanguageCode')
             ->willReturnMap(
                 [
@@ -77,7 +77,7 @@ final class LanguageHandlerMock
                 ],
             );
 
-        $mock->expects($testCase::any())
+        $mock
             ->method('loadListByLanguageCodes')
             ->willReturnCallback(
                 fn (array $languageCodes): array => iterator_to_array(
@@ -89,7 +89,7 @@ final class LanguageHandlerMock
                 ),
             );
 
-        $mock->expects($testCase::any())
+        $mock
             ->method('loadAll')
             ->willReturn(array_values($this->languages));
 

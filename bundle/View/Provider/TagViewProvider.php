@@ -14,7 +14,9 @@ use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
 final class TagViewProvider implements ViewProvider, SiteAccessAware
 {
-    public function __construct(private MatcherFactoryInterface $matcherFactory) {}
+    public function __construct(
+        private MatcherFactoryInterface $matcherFactory,
+    ) {}
 
     public function getView(View $view): ?View
     {

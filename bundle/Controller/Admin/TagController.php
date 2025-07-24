@@ -8,6 +8,7 @@ use Ibexa\Contracts\Core\Repository\ContentTypeService;
 use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
 use Netgen\TagsBundle\API\Repository\TagsService;
 use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
+use Netgen\TagsBundle\Core\Pagination\Pagerfanta\ChildrenTagsAdapter;
 use Netgen\TagsBundle\Core\Pagination\Pagerfanta\SearchTagsAdapter;
 use Netgen\TagsBundle\Form\Type\CopyTagsType;
 use Netgen\TagsBundle\Form\Type\LanguageSelectType;
@@ -16,7 +17,6 @@ use Netgen\TagsBundle\Form\Type\TagConvertType;
 use Netgen\TagsBundle\Form\Type\TagCreateType;
 use Netgen\TagsBundle\Form\Type\TagMergeType;
 use Netgen\TagsBundle\Form\Type\TagUpdateType;
-use Pagerfanta\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -29,7 +29,7 @@ final class TagController extends Controller
     public function __construct(
         private TagsService $tagsService,
         private ContentTypeService $contentTypeService,
-        private AdapterInterface $tagChildrenAdapter,
+        private ChildrenTagsAdapter $tagChildrenAdapter,
         private SearchTagsAdapter $searchTagsAdapter,
     ) {}
 
@@ -96,7 +96,7 @@ final class TagController extends Controller
             return $this->redirectToRoute(
                 'netgen_tags_admin_tag_add',
                 [
-                    'parentId' => $parentTag?->id ?? 0,
+                    'parentId' => $parentTag->id ?? 0,
                     'languageCode' => $availableLanguages[0],
                 ],
             );
@@ -116,7 +116,7 @@ final class TagController extends Controller
             return $this->redirectToRoute(
                 'netgen_tags_admin_tag_add',
                 [
-                    'parentId' => $parentTag?->id ?? 0,
+                    'parentId' => $parentTag->id ?? 0,
                     'languageCode' => $form->getData()['languageCode'],
                 ],
             );
@@ -411,7 +411,8 @@ final class TagController extends Controller
                 return $this->redirectToTag($tag);
             }
 
-            $locales = (array) $request->request->get('Locale');
+            /** @var string[] $locales */
+            $locales = $request->request->all('Locale');
 
             $newKeywords = $tag->keywords;
 
@@ -477,7 +478,7 @@ final class TagController extends Controller
             return $this->redirectToRoute(
                 'netgen_tags_admin_tag_move_tags',
                 [
-                    'parentId' => $tag?->id ?? 0,
+                    'parentId' => $tag->id ?? 0,
                 ],
             );
         }
@@ -486,7 +487,7 @@ final class TagController extends Controller
             return $this->redirectToRoute(
                 'netgen_tags_admin_tag_copy_tags',
                 [
-                    'parentId' => $tag?->id ?? 0,
+                    'parentId' => $tag->id ?? 0,
                 ],
             );
         }
@@ -495,7 +496,7 @@ final class TagController extends Controller
             return $this->redirectToRoute(
                 'netgen_tags_admin_tag_delete_tags',
                 [
-                    'parentId' => $tag?->id ?? 0,
+                    'parentId' => $tag->id ?? 0,
                 ],
             );
         }

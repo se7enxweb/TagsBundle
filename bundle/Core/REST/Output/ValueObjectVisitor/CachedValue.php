@@ -24,7 +24,7 @@ final class CachedValue extends ValueObjectVisitor
     {
         $visitor->visitValueObject($data->value);
 
-        if ($this->getParameter('tag_view.cache', 'netgen_tags') !== true) {
+        if ($this->getParameter('tag_view.cache') !== true) {
             return;
         }
 
@@ -32,8 +32,8 @@ final class CachedValue extends ValueObjectVisitor
         $response->setPublic();
         $response->setVary('Accept');
 
-        if ($this->getParameter('tag_view.ttl_cache', 'netgen_tags') === true) {
-            $response->setSharedMaxAge($this->getParameter('tag_view.default_ttl', 'netgen_tags'));
+        if ($this->getParameter('tag_view.ttl_cache') === true) {
+            $response->setSharedMaxAge($this->getParameter('tag_view.default_ttl'));
 
             $request = $this->requestStack->getCurrentRequest();
             if ($request instanceof Request && $request->headers->has('X-User-Hash')) {
@@ -53,12 +53,12 @@ final class CachedValue extends ValueObjectVisitor
     /**
      * Returns the parameter value from config resolver.
      */
-    private function getParameter(string $parameterName, string $namespace, mixed $defaultValue = null): mixed
+    private function getParameter(string $parameterName): mixed
     {
-        if ($this->configResolver->hasParameter($parameterName, $namespace)) {
-            return $this->configResolver->getParameter($parameterName, $namespace);
+        if ($this->configResolver->hasParameter($parameterName, 'netgen_tags')) {
+            return $this->configResolver->getParameter($parameterName, 'netgen_tags');
         }
 
-        return $defaultValue;
+        return null;
     }
 }

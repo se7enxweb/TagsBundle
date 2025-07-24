@@ -37,7 +37,7 @@ final class Legacy extends BaseLegacy
     /**
      * Initial data for eztags field type.
      */
-    private static ?Fixture $tagsInitialData;
+    private static Fixture $tagsInitialData;
 
     private Connection $connection;
 
@@ -122,11 +122,14 @@ final class Legacy extends BaseLegacy
 
         $setValPath = __DIR__ . '/../../../_fixtures/schema/setval.postgresql.sql';
 
-        /** @var string[] $queries */
         $queries = preg_split('(;\s*$)m', (string) file_get_contents($setValPath));
 
+        if (!is_array($queries)) {
+            return;
+        }
+
         foreach ($queries as $query) {
-            $this->getDatabaseConnection()->exec($query);
+            $this->getDatabaseConnection()->executeStatement($query);
         }
     }
 
@@ -146,7 +149,7 @@ final class Legacy extends BaseLegacy
         $statements = $this->getTagsSchemaStatements();
 
         foreach ($statements as $statement) {
-            $this->getDatabaseConnection()->exec($statement);
+            $this->getDatabaseConnection()->executeStatement($statement);
         }
     }
 
@@ -157,10 +160,13 @@ final class Legacy extends BaseLegacy
     {
         $tagsSchemaPath = __DIR__ . '/../../../_fixtures/schema/schema.' . self::$db . '.sql';
 
-        /** @var string[] $queries */
         $queries = preg_split('(;\s*$)m', (string) file_get_contents($tagsSchemaPath));
 
-        return array_filter($queries);
+        if (!is_array($queries)) {
+            return [];
+        }
+
+        return array_filter($queries, static fn (?string $query): bool => $query !== null && $query !== '');
     }
 
     private function getDatabaseConnection(): Connection

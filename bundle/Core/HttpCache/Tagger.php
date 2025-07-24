@@ -11,9 +11,9 @@ use function array_map;
 
 final readonly class Tagger
 {
-    public const TAG_PREFIX = 'ngt';
-    public const MAIN_TAG_PREFIX = 'ngtm';
-    public const PATH_TAG_PREFIX = 'ngtp';
+    public const string TAG_PREFIX = 'ngt';
+    public const string MAIN_TAG_PREFIX = 'ngtm';
+    public const string PATH_TAG_PREFIX = 'ngtp';
 
     public function __construct(
         private TagHandler $handler,

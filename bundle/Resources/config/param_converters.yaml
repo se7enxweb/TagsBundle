@@ -1,7 +1,0 @@
-services:
-    netgen_tags.param_converter.tag:
-        class: Netgen\TagsBundle\ParamConverter\TagParamConverter
-        arguments:
-            - "@netgen_tags.api.service.tags"
-        tags:
-            - { name: request.param_converter, priority: 0 }
