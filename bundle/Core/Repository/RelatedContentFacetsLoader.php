@@ -6,6 +6,7 @@ namespace Netgen\TagsBundle\Core\Repository;
 
 use Ibexa\Contracts\Core\Repository\SearchService;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query;
+use Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResultCollection;
 use Ibexa\Core\Base\Exceptions\UnauthorizedException;
 use Netgen\TagsBundle\API\Repository\Values\Content\Query\Criterion\TagId;
 use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
@@ -24,25 +25,25 @@ final class RelatedContentFacetsLoader
      * Returns facets for given $facetBuilders,
      * for content tagged with $tag.
      *
-     * @param \Ibexa\Contracts\Core\Repository\Values\Content\Query\FacetBuilder[] $facetBuilders
+     * @param \Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation[] $aggregations
      *
+     *@throws \Netgen\TagsBundle\Exception\FacetingNotSupportedException
      * @throws \Ibexa\Core\Base\Exceptions\UnauthorizedException
-     * @throws \Netgen\TagsBundle\Exception\FacetingNotSupportedException
      *
-     * @return \Ibexa\Contracts\Core\Repository\Values\Content\Search\Facet[]
+     * @return \Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResultCollection
      */
-    public function getRelatedContentFacets(Tag $tag, array $facetBuilders = []): array
+    public function getRelatedContentFacets(Tag $tag, array $aggregations = []): AggregationResultCollection
     {
         if ($this->tagsService->hasAccess('tags', 'read') === false) {
             throw new UnauthorizedException('tags', 'read');
         }
 
-        if (!$this->searchService->supports(SearchService::CAPABILITY_FACETS)) {
+        if (!$this->searchService->supports(SearchService::CAPABILITY_AGGREGATIONS)) {
             throw new FacetingNotSupportedException('Faceting for related content is not supported');
         }
 
-        if (count($facetBuilders) === 0) {
-            return [];
+        if (count($aggregations) === 0) {
+            return new AggregationResultCollection();
         }
 
         $searchResult = $this->searchService->findContentInfo(
@@ -50,11 +51,11 @@ final class RelatedContentFacetsLoader
                 [
                     'limit' => 0,
                     'filter' => new TagId($tag->id),
-                    'facetBuilders' => $facetBuilders,
+                    'aggregations' => $aggregations,
                 ],
             ),
         );
 
-        return $searchResult->facets;
+        return $searchResult->aggregations;
     }
 }

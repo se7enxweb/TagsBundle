@@ -1,17 +1,11 @@
 services:
     # Controllers
-
-    netgen_tags.admin.controller.base:
-        class: Netgen\TagsBundle\Controller\Admin\Controller
-        parent: Ibexa\Core\MVC\Symfony\Controller\Controller
-        abstract: true
-        calls:
-            - [performAccessChecks, []]
+    _defaults:
+        autowire: true
+        autoconfigure: true
 
     netgen_tags.admin.controller.tag:
         class: Netgen\TagsBundle\Controller\Admin\TagController
-        parent: netgen_tags.admin.controller.base
-        public: true
         arguments:
             - "@netgen_tags.api.service.tags"
             - "@ibexa.api.service.content_type"
@@ -20,23 +14,17 @@ services:
 
     netgen_tags.admin.controller.related_content:
         class: Netgen\TagsBundle\Controller\Admin\RelatedContentController
-        parent: netgen_tags.admin.controller.base
-        public: true
         arguments:
             - "@netgen_tags.pagerfanta.related_content_adapter"
             - "@netgen_tags.search.related_content.sort_service"
 
     netgen_tags.admin.controller.synonym:
         class: Netgen\TagsBundle\Controller\Admin\SynonymController
-        parent: netgen_tags.admin.controller.base
-        public: true
         arguments:
             - "@netgen_tags.api.service.tags"
 
     netgen_tags.admin.controller.tree:
         class: Netgen\TagsBundle\Controller\Admin\TreeController
-        parent: netgen_tags.admin.controller.base
-        public: true
         arguments:
             - "@netgen_tags.api.service.tags"
             - "@translator"
@@ -45,13 +33,9 @@ services:
 
     netgen_tags.admin.controller.field:
         class: Netgen\TagsBundle\Controller\Admin\FieldController
-        parent: netgen_tags.admin.controller.base
-        public: true
         arguments:
             - "@netgen_tags.api.service.tags"
             - "@ibexa.config.resolver"
 
     netgen_tags.admin.controller.access:
         class: Netgen\TagsBundle\Controller\Admin\AccessController
-        parent: Ibexa\Core\MVC\Symfony\Controller\Controller
-        public: true

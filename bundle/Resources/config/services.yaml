@@ -1,8 +1,10 @@
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
     netgen_tags.controller.tag_view:
         class: Netgen\TagsBundle\Controller\TagViewController
-        parent: Ibexa\Core\MVC\Symfony\Controller\Controller
-        public: true
 
     netgen_tags.routing.tag_url_generator:
         class: Netgen\TagsBundle\Routing\Generator\TagUrlGenerator
@@ -28,4 +30,3 @@ services:
         arguments:
             - "@netgen_tags.api.service.tags.inner"
             - "@ibexa.api.service.search"
-

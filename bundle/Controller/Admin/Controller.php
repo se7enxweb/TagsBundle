@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace Netgen\TagsBundle\Controller\Admin;
 
 use Ibexa\Bundle\Core\Controller as BaseController;
+use Ibexa\Contracts\User\Controller\RestrictedControllerInterface;
 use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 use Netgen\TagsBundle\Core\Pagination\Pagerfanta\TagAdapterInterface;
 use Pagerfanta\Adapter\AdapterInterface;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\PagerfantaInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-abstract class Controller extends BaseController
+use function array_merge;
+
+abstract class Controller extends BaseController implements RestrictedControllerInterface
 {
     /**
      * Ensures that only authenticated users can access to controller.
@@ -21,9 +25,19 @@ abstract class Controller extends BaseController
      *
      * @see netgen_tags.admin.controller.base service definition
      */
-    public function performAccessChecks(): void
+    public function performAccessCheck(): void
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+    }
+
+    public static function getSubscribedServices(): array
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                'translator' => TranslatorInterface::class,
+            ],
+        );
     }
 
     /**
