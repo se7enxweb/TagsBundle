@@ -1,8 +1,11 @@
 services:
     # Controllers
-    _defaults:
-        autowire: true
-        autoconfigure: true
+    _instanceof:
+        Netgen\TagsBundle\Controller\Admin\Controller:
+            autowire: true
+            tags:
+                - 'controller.service_arguments'
+                - 'container.service_subscriber'
 
     netgen_tags.admin.controller.tag:
         class: Netgen\TagsBundle\Controller\Admin\TagController
