@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Netgen\TagsBundle\Form\Type;
 
 use Ibexa\Contracts\Core\Repository\ContentTypeService;
-use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
-use Ibexa\Contracts\Core\Repository\Values\Content\Query\FacetBuilder\ContentTypeFacetBuilder;
-use Ibexa\Contracts\Core\Repository\Values\Content\Search\Facet\ContentTypeFacet;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation\ContentTypeTermAggregation;
+use Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResult\TermAggregationResult;
+use Ibexa\Contracts\Core\Repository\Values\ContentType\ContentType;
 use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 use Netgen\TagsBundle\Core\Repository\RelatedContentFacetsLoader;
 use Netgen\TagsBundle\Core\Search\RelatedContent\SortClauseMapper;
@@ -80,32 +80,27 @@ final class RelatedContentFilterType extends AbstractType
      */
     private function getContentTypeOptionsFromFacets(Tag $tag): array
     {
-        $facetBuilders = [
-            new ContentTypeFacetBuilder(
-                [
-                    'name' => 'content_type',
-                    'minCount' => 1,
-                ],
-            ),
+        $aggregations = [
+            new ContentTypeTermAggregation('content_type'),
         ];
 
-        $facets = $this->relatedContentFacetsLoader->getRelatedContentFacets($tag, $facetBuilders);
+        $aggregationResults = $this->relatedContentFacetsLoader->getRelatedContentFacets($tag, $aggregations);
 
         $options = [];
-        foreach ($facets as $facet) {
-            if (!$facet instanceof ContentTypeFacet) {
+        foreach ($aggregationResults as $aggregationResult) {
+            if (!$aggregationResult instanceof TermAggregationResult) {
                 continue;
             }
 
-            foreach ($facet->entries as $contentTypeId => $count) {
-                try {
-                    $contentType = $this->contentTypeService->loadContentType($contentTypeId);
-                    $value = $contentType->getName() . ' (' . $count . ')';
-
-                    $options[$value] = $contentType->identifier;
-                } catch (NotFoundException) {
-                    // Do nothing
+            foreach ($aggregationResult->getEntries() as $entry) {
+                $contentType = $entry->getKey();
+                if (!$contentType instanceof ContentType) {
+                    continue;
                 }
+
+                $value = $contentType->getName() . ' (' . $entry->getCount() . ')';
+
+                $options[$value] = $contentType->identifier;
             }
         }
 
