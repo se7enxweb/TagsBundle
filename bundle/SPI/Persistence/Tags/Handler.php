@@ -69,6 +69,8 @@ interface Handler
      * Returns the number of children of a tag identified by $tagId.
      *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException If the specified tag is not found
+     *
+     * @return int<0, max>
      */
     public function getChildrenCount(int $tagId, ?array $translations = null, bool $useAlwaysAvailable = true): int;
 
@@ -81,6 +83,8 @@ interface Handler
 
     /**
      * Returns the number of tags with specified $keyword.
+     *
+     * @return int<0, max>
      */
     public function getTagsByKeywordCount(string $keyword, string $translation, bool $useAlwaysAvailable = true): int;
 
@@ -104,6 +108,8 @@ interface Handler
      * Returns the number of synonyms of a tag identified by $tagId.
      *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException If the specified tag is not found
+     *
+     * @return int<0, max>
      */
     public function getSynonymCount(int $tagId, ?array $translations = null, bool $useAlwaysAvailable = true): int;
 

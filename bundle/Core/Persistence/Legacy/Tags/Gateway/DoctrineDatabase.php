@@ -165,6 +165,9 @@ final class DoctrineDatabase extends Gateway
         return $query->executeQuery()->fetchAllAssociative();
     }
 
+    /**
+     * @return int<0, max>
+     */
     public function getChildrenCount(int $tagId, ?array $translations = null, bool $useAlwaysAvailable = true): int
     {
         $query = $this->createTagCountQuery($translations, $useAlwaysAvailable);
@@ -180,7 +183,7 @@ final class DoctrineDatabase extends Gateway
 
         $rows = $query->executeQuery()->fetchAllAssociative();
 
-        return (int) $rows[0]['count'];
+        return max(0, (int) $rows[0]['count']);
     }
 
     public function getTagsByKeyword(string $keyword, string $translation, bool $useAlwaysAvailable = true, bool $exactMatch = true, int $offset = 0, int $limit = -1): array
@@ -230,6 +233,9 @@ final class DoctrineDatabase extends Gateway
         return $query->executeQuery()->fetchAllAssociative();
     }
 
+    /**
+     * @return int<0, max>
+     */
     public function getTagsByKeywordCount(string $keyword, string $translation, bool $useAlwaysAvailable = true, bool $exactMatch = true): int
     {
         $query = $this->createTagCountQuery([$translation, $useAlwaysAvailable]);
@@ -252,7 +258,7 @@ final class DoctrineDatabase extends Gateway
 
         $rows = $query->executeQuery()->fetchAllAssociative();
 
-        return (int) $rows[0]['count'];
+        return max(0, (int) $rows[0]['count']);
     }
 
     public function getSynonyms(int $tagId, int $offset = 0, int $limit = -1, ?array $translations = null, bool $useAlwaysAvailable = true): array
@@ -287,6 +293,9 @@ final class DoctrineDatabase extends Gateway
         return $query->executeQuery()->fetchAllAssociative();
     }
 
+    /**
+     * @return int<0, max>
+     */
     public function getSynonymCount(int $tagId, ?array $translations = null, bool $useAlwaysAvailable = true): int
     {
         $query = $this->createTagCountQuery($translations, $useAlwaysAvailable);
@@ -299,7 +308,7 @@ final class DoctrineDatabase extends Gateway
 
         $rows = $query->executeQuery()->fetchAllAssociative();
 
-        return (int) $rows[0]['count'];
+        return max(0, (int) $rows[0]['count']);
     }
 
     public function moveSynonym(int $synonymId, array $mainTagData): void

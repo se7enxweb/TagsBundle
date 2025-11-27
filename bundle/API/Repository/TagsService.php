@@ -87,7 +87,7 @@ interface TagsService
      *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException If the current user is not allowed to read tags
      *
-     * @return int
+     * @return int<0, max>
      */
     public function getTagChildrenCount(?Tag $tag = null, ?array $languages = null, bool $useAlwaysAvailable = true): int;
 
@@ -115,7 +115,7 @@ interface TagsService
      *
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException If the current user is not allowed to read tags
      *
-     * @return int
+     * @return int<0, max>
      */
     public function getTagsByKeywordCount(string $keyword, string $language, bool $useAlwaysAvailable = true): int;
 
@@ -160,7 +160,7 @@ interface TagsService
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException If the current user is not allowed to read tags
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException If the tag is already a synonym
      *
-     * @return int
+     * @return int<0, max>
      */
     public function getTagSynonymCount(Tag $tag, ?array $languages = null, bool $useAlwaysAvailable = true): int;
 
@@ -190,7 +190,7 @@ interface TagsService
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException If the current user is not allowed to read tags
      * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException If the specified tag is not found
      *
-     * @return int
+     * @return int<0, max>
      */
     public function getRelatedContentCount(Tag $tag, array $additionalCriteria = []): int;
 

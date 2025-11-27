@@ -44,6 +44,8 @@ abstract class Gateway
 
     /**
      * Returns how many tags exist below tag identified by $tagId.
+     *
+     * @return int<0, max>
      */
     abstract public function getChildrenCount(int $tagId, ?array $translations = null, bool $useAlwaysAvailable = true): int;
 
@@ -56,6 +58,8 @@ abstract class Gateway
 
     /**
      * Returns how many tags exist with $keyword.
+     *
+     * @return int<0, max>
      */
     abstract public function getTagsByKeywordCount(string $keyword, string $translation, bool $useAlwaysAvailable = true, bool $exactMatch = true): int;
 
@@ -68,6 +72,8 @@ abstract class Gateway
 
     /**
      * Returns how many synonyms exist for a tag identified by $tagId.
+     *
+     * @return int<0, max>
      */
     abstract public function getSynonymCount(int $tagId, ?array $translations = null, bool $useAlwaysAvailable = true): int;
 
