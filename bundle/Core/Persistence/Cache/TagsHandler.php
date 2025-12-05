@@ -22,7 +22,7 @@ use function array_unique;
 use function count;
 use function explode;
 use function implode;
-use function trim;
+use function mb_trim;
 
 final class TagsHandler extends AbstractInMemoryHandler implements TagsHandlerInterface
 {
@@ -53,7 +53,7 @@ final class TagsHandler extends AbstractInMemoryHandler implements TagsHandlerIn
             fn (int $tagId): Tag => $this->tagsHandler->load($tagId, $translations, $useAlwaysAvailable),
             static function (Tag $tag): array {
                 $tags = ['tag-' . $tag->id];
-                foreach (explode('/', trim($tag->pathString, '/')) as $pathId) {
+                foreach (explode('/', mb_trim($tag->pathString, '/')) as $pathId) {
                     $tags[] = 'tag-path-' . $pathId;
                 }
 
@@ -80,7 +80,7 @@ final class TagsHandler extends AbstractInMemoryHandler implements TagsHandlerIn
             fn (array $tagIds): array => $this->tagsHandler->loadList($tagIds, $translations, $useAlwaysAvailable),
             static function (Tag $tag): array {
                 $tags = ['tag-' . $tag->id];
-                foreach (explode('/', trim($tag->pathString, '/')) as $pathId) {
+                foreach (explode('/', mb_trim($tag->pathString, '/')) as $pathId) {
                     $tags[] = 'tag-path-' . $pathId;
                 }
 
@@ -307,7 +307,7 @@ final class TagsHandler extends AbstractInMemoryHandler implements TagsHandlerIn
     {
         $tags = ['tag-' . $tagId];
 
-        foreach (explode('/', trim($pathString, '/')) as $pathId) {
+        foreach (explode('/', mb_trim($pathString, '/')) as $pathId) {
             $tags[] = 'tag-path-' . $pathId;
         }
 

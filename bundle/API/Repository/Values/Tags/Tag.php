@@ -10,7 +10,7 @@ use Ibexa\Contracts\Core\Repository\Values\ValueObject;
 use function array_map;
 use function count;
 use function explode;
-use function trim;
+use function mb_trim;
 
 /**
  * Class representing a tag.
@@ -115,7 +115,7 @@ final class Tag extends ValueObject
         parent::__construct($properties);
 
         if (isset($this->pathString) && $this->pathString !== '') {
-            $this->path = array_map('intval', explode('/', trim($this->pathString, '/')));
+            $this->path = array_map('intval', explode('/', mb_trim($this->pathString, '/')));
         }
     }
 

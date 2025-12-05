@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use function count;
 use function in_array;
-use function trim;
+use function mb_trim;
 
 final class TagController extends Controller
 {
@@ -672,7 +672,7 @@ final class TagController extends Controller
         $this->denyAccessUnlessGranted('ibexa:tags:read');
 
         $tags = [];
-        $searchText = trim($request->query->get('searchText') ?? '');
+        $searchText = mb_trim($request->query->get('searchText') ?? '');
 
         if ($searchText !== '') {
             $page = $request->query->getInt('page', 1);

@@ -25,11 +25,12 @@ use function explode;
 use function implode;
 use function is_array;
 use function is_bool;
+use function max;
 use function mb_strtolower;
 use function mb_substr_count;
+use function mb_trim;
 use function str_replace;
 use function time;
-use function trim;
 
 use const PHP_INT_MAX;
 
@@ -1110,7 +1111,7 @@ final class DoctrineDatabase extends Gateway
      */
     private function getSynonymPathString(int $synonymId, string $mainTagPathString): string
     {
-        $pathStringElements = explode('/', trim($mainTagPathString, '/'));
+        $pathStringElements = explode('/', mb_trim($mainTagPathString, '/'));
         array_pop($pathStringElements);
 
         return (count($pathStringElements) > 0 ? '/' . implode('/', $pathStringElements) : '') . '/' . $synonymId . '/';

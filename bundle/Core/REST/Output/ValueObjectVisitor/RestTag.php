@@ -13,7 +13,7 @@ use function count;
 use function explode;
 use function implode;
 use function in_array;
-use function trim;
+use function mb_trim;
 
 class RestTag extends ValueObjectVisitor
 {
@@ -29,7 +29,7 @@ class RestTag extends ValueObjectVisitor
             'href',
             $this->router->generate(
                 'ibexa.rest.netgen_tags_loadTag',
-                ['tagPath' => trim($tag->pathString, '/')],
+                ['tagPath' => mb_trim($tag->pathString, '/')],
             ),
         );
         $generator->endAttribute('href');
@@ -37,7 +37,7 @@ class RestTag extends ValueObjectVisitor
         $generator->startValueElement('id', $tag->id);
         $generator->endValueElement('id');
 
-        $tagPath = explode('/', trim($tag->pathString, '/'));
+        $tagPath = explode('/', mb_trim($tag->pathString, '/'));
         $parentPathString = implode('/', array_slice($tagPath, 0, count($tagPath) - 1));
 
         if ($tag->parentTagId > 0) {
@@ -113,7 +113,7 @@ class RestTag extends ValueObjectVisitor
                 $this->router->generate(
                     'ibexa.rest.netgen_tags_loadTagChildren',
                     [
-                        'tagPath' => trim($tag->pathString, '/'),
+                        'tagPath' => mb_trim($tag->pathString, '/'),
                     ],
                 ),
             );
@@ -128,7 +128,7 @@ class RestTag extends ValueObjectVisitor
                 'href',
                 $this->router->generate(
                     'ibexa.rest.netgen_tags_loadTagSynonyms',
-                    ['tagPath' => trim($tag->pathString, '/')],
+                    ['tagPath' => mb_trim($tag->pathString, '/')],
                 ),
             );
             $generator->endAttribute('href');
@@ -141,7 +141,7 @@ class RestTag extends ValueObjectVisitor
             $this->router->generate(
                 'ibexa.rest.netgen_tags_getRelatedContent',
                 [
-                    'tagPath' => trim($tag->pathString, '/'),
+                    'tagPath' => mb_trim($tag->pathString, '/'),
                 ],
             ),
         );

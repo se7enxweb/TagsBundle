@@ -10,8 +10,8 @@ use Pagerfanta\View\ViewInterface;
 use Twig\Environment;
 
 use function max;
+use function mb_trim;
 use function min;
-use function trim;
 
 /**
  * @final
@@ -160,6 +160,6 @@ class TagsAdminView implements ViewInterface
     {
         // We use trim here because Pagerfanta (or Symfony?) adds an extra '?'
         // at the end of page when there are no other query params
-        return trim(($this->routeGenerator)($page), '?');
+        return mb_trim(($this->routeGenerator)($page), '?');
     }
 }

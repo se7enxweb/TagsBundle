@@ -35,9 +35,9 @@ use function count;
 use function explode;
 use function is_string;
 use function max;
+use function mb_trim;
 use function md5;
 use function str_starts_with;
-use function trim;
 use function uniqid;
 
 /**
@@ -109,7 +109,7 @@ class TagsService implements TagsServiceInterface
             throw new UnauthorizedException('tags', 'read');
         }
 
-        $keywordArray = explode('/', trim($url, '/'));
+        $keywordArray = explode('/', mb_trim($url, '/'));
         if ($keywordArray[0] === '') {
             throw new InvalidArgumentValue('url', $url);
         }
@@ -454,7 +454,7 @@ class TagsService implements TagsServiceInterface
 
         $updateStruct = new UpdateStruct();
         $updateStruct->keywords = $newKeywords;
-        $updateStruct->remoteId = trim($tagUpdateStruct->remoteId ?? $spiTag->remoteId);
+        $updateStruct->remoteId = mb_trim($tagUpdateStruct->remoteId ?? $spiTag->remoteId);
         $updateStruct->mainLanguageCode = $mainLanguageCode;
         $updateStruct->alwaysAvailable = $tagUpdateStruct->alwaysAvailable ?? $spiTag->alwaysAvailable;
 

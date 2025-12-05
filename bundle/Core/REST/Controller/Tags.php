@@ -18,7 +18,7 @@ use function array_pop;
 use function explode;
 use function in_array;
 use function max;
-use function trim;
+use function mb_trim;
 
 final class Tags extends RestController
 {
@@ -47,7 +47,7 @@ final class Tags extends RestController
             $this->router->generate(
                 'ibexa.rest.netgen_tags_loadTag',
                 [
-                    'tagPath' => trim($tag->pathString, '/'),
+                    'tagPath' => mb_trim($tag->pathString, '/'),
                 ],
             ),
         );
@@ -64,7 +64,7 @@ final class Tags extends RestController
             $this->extractTagIdFromPath($tagPath),
         );
 
-        if (trim($tag->pathString, '/') !== $tagPath) {
+        if (mb_trim($tag->pathString, '/') !== $tagPath) {
             throw new Exceptions\NotFoundException(
                 "Could not find tag with path string {$tagPath}",
             );
@@ -326,7 +326,7 @@ final class Tags extends RestController
             $this->router->generate(
                 'ibexa.rest.netgen_tags_loadTag',
                 [
-                    'tagPath' => trim($newTag->pathString, '/'),
+                    'tagPath' => mb_trim($newTag->pathString, '/'),
                 ],
             ),
         );
@@ -369,7 +369,7 @@ final class Tags extends RestController
             $this->router->generate(
                 'ibexa.rest.netgen_tags_loadTag',
                 [
-                    'tagPath' => trim($tag->pathString, '/'),
+                    'tagPath' => mb_trim($tag->pathString, '/'),
                 ],
             ),
         );
@@ -409,7 +409,7 @@ final class Tags extends RestController
             $this->router->generate(
                 'ibexa.rest.netgen_tags_loadTag',
                 [
-                    'tagPath' => trim($convertedTag->pathString, '/'),
+                    'tagPath' => mb_trim($convertedTag->pathString, '/'),
                 ],
             ),
         );
@@ -467,7 +467,7 @@ final class Tags extends RestController
      */
     private function extractTagIdFromPath(string $path): int
     {
-        $pathParts = explode('/', trim($path, '/'));
+        $pathParts = explode('/', mb_trim($path, '/'));
 
         return (int) array_pop($pathParts);
     }

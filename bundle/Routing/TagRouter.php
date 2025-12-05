@@ -27,8 +27,8 @@ use Symfony\Component\Routing\RouteCollection;
 use function is_object;
 use function mb_strlen;
 use function mb_substr;
+use function mb_trim;
 use function str_starts_with;
-use function trim;
 use function urldecode;
 
 final class TagRouter implements ChainedRouterInterface, RequestMatcherInterface
@@ -55,7 +55,7 @@ final class TagRouter implements ChainedRouterInterface, RequestMatcherInterface
         }
 
         $requestedPath = $this->removePathPrefix($requestedPath, $pathPrefix);
-        $requestedPath = trim($requestedPath, '/');
+        $requestedPath = mb_trim($requestedPath, '/');
 
         if ($requestedPath === '') {
             throw new ResourceNotFoundException('Route not found');

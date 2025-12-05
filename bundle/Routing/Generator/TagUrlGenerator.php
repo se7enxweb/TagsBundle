@@ -13,7 +13,7 @@ use Symfony\Component\Routing\RouterInterface;
 
 use function count;
 use function http_build_query;
-use function trim;
+use function mb_trim;
 use function urlencode;
 
 /**
@@ -104,7 +104,7 @@ final class TagUrlGenerator extends Generator
             $queryString = '?' . http_build_query($parameters, '', '&');
         }
 
-        return (!$isInternal ? $this->getPathPrefix() : '') . '/' . trim($tagUrl, '/') . $queryString;
+        return (!$isInternal ? $this->getPathPrefix() : '') . '/' . mb_trim($tagUrl, '/') . $queryString;
     }
 
     /**
@@ -113,7 +113,7 @@ final class TagUrlGenerator extends Generator
     public function getPathPrefix(): string
     {
         $pathPrefix = $this->configResolver->getParameter('tag_view.path_prefix', 'netgen_tags');
-        $pathPrefix = trim($pathPrefix, '/');
+        $pathPrefix = mb_trim($pathPrefix, '/');
 
         if ($pathPrefix === '') {
             return self::DEFAULT_PATH_PREFIX;

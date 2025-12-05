@@ -7,7 +7,7 @@ namespace Netgen\TagsBundle\Core\REST\Output\ValueObjectVisitor;
 use Ibexa\Contracts\Rest\Output\Generator;
 use Ibexa\Contracts\Rest\Output\Visitor;
 
-use function trim;
+use function mb_trim;
 
 final class CreatedTag extends RestTag
 {
@@ -20,7 +20,7 @@ final class CreatedTag extends RestTag
             $this->router->generate(
                 'ibexa.rest.netgen_tags_loadTag',
                 [
-                    'tagPath' => trim($data->restTag->tag->pathString, '/'),
+                    'tagPath' => mb_trim($data->restTag->tag->pathString, '/'),
                 ],
             ),
         );

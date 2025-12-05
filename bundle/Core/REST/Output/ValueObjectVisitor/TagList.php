@@ -8,7 +8,7 @@ use Ibexa\Contracts\Rest\Output\Generator;
 use Ibexa\Contracts\Rest\Output\ValueObjectVisitor;
 use Ibexa\Contracts\Rest\Output\Visitor;
 
-use function trim;
+use function mb_trim;
 
 final class TagList extends ValueObjectVisitor
 {
@@ -28,7 +28,7 @@ final class TagList extends ValueObjectVisitor
                 'href',
                 $this->router->generate(
                     'ibexa.rest.netgen_tags_loadTag',
-                    ['tagPath' => trim($restTag->tag->pathString, '/')],
+                    ['tagPath' => mb_trim($restTag->tag->pathString, '/')],
                 ),
             );
             $generator->endAttribute('href');
