@@ -1,10 +1,11 @@
 services:
     netgen_tags.controller.tag_view:
         class: Netgen\TagsBundle\Controller\TagViewController
-        autowire: true
+        calls:
+            - setContainer: ["@Psr\\Container\\ContainerInterface"]
         tags:
-            - 'controller.service_arguments'
-            - 'container.service_subscriber'
+            - { name: container.service_subscriber }
+            - { name: controller.service_arguments }
 
     netgen_tags.routing.tag_url_generator:
         class: Netgen\TagsBundle\Routing\Generator\TagUrlGenerator
