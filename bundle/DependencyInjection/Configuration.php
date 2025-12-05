@@ -9,11 +9,12 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 final class Configuration extends SiteAccessConfiguration
 {
+    /**
+     * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder<'array'>
+     */
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('netgen_tags');
-
-        /** @var \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode */
         $rootNode = $treeBuilder->getRootNode();
 
         $this->generateScopeBaseNode($rootNode)

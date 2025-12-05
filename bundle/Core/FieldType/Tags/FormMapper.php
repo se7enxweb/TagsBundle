@@ -68,13 +68,9 @@ final class FormMapper implements FieldDefinitionFormMapperInterface, FieldValue
                     'property_path' => 'validatorConfiguration[TagsValueValidator][maxTags]',
                     'label' => 'field_definition.tags.validator.max_tags',
                     'constraints' => [
-                        new Constraints\Type(['type' => 'int']),
+                        new Constraints\Type(type: 'int'),
                         new Constraints\NotBlank(),
-                        new Constraints\GreaterThanOrEqual(
-                            [
-                                'value' => 0,
-                            ],
-                        ),
+                        new Constraints\PositiveOrZero(),
                     ],
                     'empty_data' => 0,
                     'attr' => [
@@ -90,7 +86,7 @@ final class FormMapper implements FieldDefinitionFormMapperInterface, FieldValue
                     'property_path' => 'fieldSettings[hideRootTag]',
                     'label' => 'field_definition.tags.settings.hide_root_tag',
                     'constraints' => [
-                        new Constraints\Type(['type' => 'bool']),
+                        new Constraints\Type(type: 'bool'),
                         new Constraints\NotNull(),
                     ],
                 ],
@@ -104,13 +100,10 @@ final class FormMapper implements FieldDefinitionFormMapperInterface, FieldValue
                     'property_path' => 'fieldSettings[editView]',
                     'label' => 'field_definition.tags.settings.edit_view',
                     'constraints' => [
-                        new Constraints\Type(['type' => 'string']),
+                        new Constraints\Type(type: 'string'),
                         new Constraints\NotBlank(),
                         new Constraints\Choice(
-                            [
-                                'choices' => array_values($editViewChoices),
-                                'strict' => true,
-                            ],
+                            choices: array_values($editViewChoices),
                         ),
                     ],
                 ],

@@ -37,7 +37,7 @@ final class TagTreeType extends AbstractType
                     'allowRootTag' => true,
                     'disableSubtree' => [],
                     'constraints' => static fn (Options $options): array => [
-                        new Constraints\Type(['type' => 'int']),
+                        new Constraints\Type(type: 'int'),
                         new Constraints\NotBlank(),
                         new TagConstraint(['allowRootTag' => $options['allowRootTag']]),
                     ],

@@ -36,7 +36,7 @@ final class TagCreateStructValidator extends CreateStructValidator
         $validator->atPath('parentTagId')->validate(
             $value->parentTagId,
             [
-                new Constraints\Type(['type' => 'int']),
+                new Constraints\Type(type: 'int'),
                 new Constraints\NotBlank(),
                 new Tag(),
             ],
