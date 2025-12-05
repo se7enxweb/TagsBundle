@@ -27,10 +27,8 @@ final class RelatedContentFacetsLoader
      *
      * @param \Ibexa\Contracts\Core\Repository\Values\Content\Query\Aggregation[] $aggregations
      *
-     *@throws \Netgen\TagsBundle\Exception\FacetingNotSupportedException
+     * @throws \Netgen\TagsBundle\Exception\FacetingNotSupportedException
      * @throws \Ibexa\Core\Base\Exceptions\UnauthorizedException
-     *
-     * @return \Ibexa\Contracts\Core\Repository\Values\Content\Search\AggregationResultCollection
      */
     public function getRelatedContentFacets(Tag $tag, array $aggregations = []): AggregationResultCollection
     {
