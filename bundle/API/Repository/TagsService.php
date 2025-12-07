@@ -297,8 +297,17 @@ interface TagsService
      *         static fn (TagsService $tagsService): Tag => $tagsService->loadTag($tagId),
      *     );
      *
+     * @template T
+     *
+     * @param \Netgen\TagsBundle\API\Repository\TagsService|null $outerTagsService optional, mostly
+     *        for internal use but allows to specify TagsService to pass to closure
+     *
+     * @phpstan-param callable(\Netgen\TagsBundle\API\Repository\TagsService): T $callback
+     *
      * @throws \RuntimeException Thrown on recursive sudo() use
      * @throws \Exception Re throws exceptions thrown inside $callback
+     *
+     * @return T
      */
     public function sudo(callable $callback, ?self $outerTagsService = null): mixed;
 }
