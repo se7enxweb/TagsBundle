@@ -8,3 +8,4 @@ parameters:
         - identifier: missingType.iterableValue
         - '#Access to an undefined property Netgen\\TagsBundle\\API\\Repository\\Values\\Tags\\Tag::\$notDefined.#'
         - '#Missing call to parent::setUp\(\) method.#'
+        - "#Call to static method PHPUnit\\\\Framework\\\\Assert::assertSame\\(\\) with 'some_value' and 'some_value' will always evaluate to true.#"

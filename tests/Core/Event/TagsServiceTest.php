@@ -756,12 +756,12 @@ final class TagsServiceTest extends TestCase
      */
     public function testSudo(): void
     {
-        $callback = static function (): void {};
+        $callback = static function (): string { return 'some_value'; };
 
         $this->tagsService
             ->expects(self::once())
             ->method('sudo')
-            ->willReturn('some_value');
+            ->willReturn($callback());
 
         $eventDispatchingService = $this->getEventDispatchingService();
         $value = $eventDispatchingService->sudo($callback);
