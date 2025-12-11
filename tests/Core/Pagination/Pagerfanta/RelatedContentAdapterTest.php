@@ -16,7 +16,7 @@ final class RelatedContentAdapterTest extends TestCase
 {
     private MockObject&TagsService $tagsService;
 
-    private ConfigResolverInterface&MockObject $configResolver;
+    private MockObject&ConfigResolverInterface $configResolver;
 
     protected function setUp(): void
     {
@@ -40,7 +40,7 @@ final class RelatedContentAdapterTest extends TestCase
         );
 
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getRelatedContentCount')
             ->with(self::identicalTo($tag))
             ->willReturn($nbResults);
@@ -60,7 +60,7 @@ final class RelatedContentAdapterTest extends TestCase
     public function testGetNbResultsWithoutTag(): void
     {
         $this->tagsService
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('getRelatedContentCount');
 
         $adapter = new RelatedContentAdapter($this->tagsService, $this->configResolver);
@@ -98,13 +98,13 @@ final class RelatedContentAdapterTest extends TestCase
         ];
 
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getRelatedContentCount')
             ->with(self::identicalTo($tag))
             ->willReturn($nbResults);
 
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getRelatedContent')
             ->with(
                 self::identicalTo($tag),
@@ -135,12 +135,12 @@ final class RelatedContentAdapterTest extends TestCase
     public function testGetSliceWithoutTag(): void
     {
         $this->tagsService
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('getRelatedContentCount');
 
         $this
             ->tagsService
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('getRelatedContent');
 
         $adapter = new RelatedContentAdapter($this->tagsService, $this->configResolver);

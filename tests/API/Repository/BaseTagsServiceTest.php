@@ -1304,14 +1304,6 @@ abstract class BaseTagsServiceTest extends BaseTestCase
     /**
      * @covers \Netgen\TagsBundle\Core\Repository\TagsService::copySubtree
      */
-    public function testCopySubtree(): void
-    {
-        self::markTestIncomplete('@TODO: Implement test for copySubtree');
-    }
-
-    /**
-     * @covers \Netgen\TagsBundle\Core\Repository\TagsService::copySubtree
-     */
     public function testCopySubtreeThrowsNotFoundException(): void
     {
         try {

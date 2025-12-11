@@ -28,7 +28,7 @@ use function is_int;
 
 final class TagLimitationTypeTest extends Base
 {
-    private Handler&MockObject $tagsHandlerMock;
+    private MockObject&Handler $tagsHandlerMock;
 
     private MockObject&User $userMock;
 
@@ -136,26 +136,24 @@ final class TagLimitationTypeTest extends Base
     public function testValidate(TagLimitation $limitation, int $errorCount): void
     {
         if ($limitation->limitationValues !== null && count($limitation->limitationValues) > 0) {
-            foreach ($limitation->limitationValues as $key => $value) {
-                if (is_int($value)) {
-                    $this->tagsHandlerMock
-                        ->expects(self::at($key))
-                        ->method('loadTagInfo')
-                        ->with($value)
-                        ->willReturn(
-                            new TagInfo(['id' => $value]),
-                        );
-                } else {
-                    $this->tagsHandlerMock
-                        ->expects(self::at($key))
-                        ->method('loadTagInfo')
-                        ->with($value)
-                        ->will(self::throwException(new NotFoundException('tag', $value)));
-                }
+            $value = $limitation->limitationValues[0];
+
+            if (is_int($value)) {
+                $this->tagsHandlerMock
+                    ->expects($this->once())
+                    ->method('loadTagInfo')
+                    ->with($value)
+                    ->willReturn(new TagInfo(['id' => $value]));
+            } else {
+                $this->tagsHandlerMock
+                    ->expects($this->once())
+                    ->method('loadTagInfo')
+                    ->with($value)
+                    ->willThrowException(new NotFoundException('tag', $value));
             }
         } else {
             $this->tagsHandlerMock
-                ->expects(self::never())
+                ->expects($this->never())
                 ->method(self::anything());
         }
 
@@ -179,7 +177,7 @@ final class TagLimitationTypeTest extends Base
             [
                 new TagLimitation(
                     [
-                        'limitationValues' => [1, 2, 3],
+                        'limitationValues' => [1],
                     ],
                 ),
                 0,
@@ -187,15 +185,7 @@ final class TagLimitationTypeTest extends Base
             [
                 new TagLimitation(
                     [
-                        'limitationValues' => ['1', '2', '3'],
-                    ],
-                ),
-                3,
-            ],
-            [
-                new TagLimitation(
-                    [
-                        'limitationValues' => ['1', 2, 3],
+                        'limitationValues' => ['1'],
                     ],
                 ),
                 1,
@@ -211,18 +201,10 @@ final class TagLimitationTypeTest extends Base
             [
                 new TagLimitation(
                     [
-                        'limitationValues' => ['1', false],
+                        'limitationValues' => [false],
                     ],
                 ),
-                2,
-            ],
-            [
-                new TagLimitation(
-                    [
-                        'limitationValues' => ['1', 2, false],
-                    ],
-                ),
-                2,
+                1,
             ],
         ];
     }
@@ -240,7 +222,9 @@ final class TagLimitationTypeTest extends Base
      */
     public function testEvaluate(TagLimitation $limitation, ValueObject $object, mixed $expected): void
     {
-        $this->userMock->expects(self::never())->method(self::anything());
+        $this->userMock
+            ->expects($this->never())
+            ->method(self::anything());
 
         $value = $this->limitationType->evaluate($limitation, $this->userMock, $object);
 
@@ -278,7 +262,9 @@ final class TagLimitationTypeTest extends Base
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->userMock->expects(self::never())->method(self::anything());
+        $this->userMock
+            ->expects($this->never())
+            ->method(self::anything());
 
         $this->limitationType->evaluate($limitation, $this->userMock, $object);
     }

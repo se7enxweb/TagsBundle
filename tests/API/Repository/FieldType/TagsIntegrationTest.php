@@ -102,7 +102,7 @@ final class TagsIntegrationTest extends BaseIntegrationTestCase
         self::assertContainsEquals($this->getTag1(), $field->value->tags);
     }
 
-    public function provideInvalidCreationFieldData(): array
+    public function provideInvalidCreationFieldData(): iterable
     {
         return [
             [
@@ -148,7 +148,7 @@ final class TagsIntegrationTest extends BaseIntegrationTestCase
         self::assertContainsEquals($this->getTag3(), $field->value->tags);
     }
 
-    public function provideInvalidUpdateFieldData(): array
+    public function provideInvalidUpdateFieldData(): iterable
     {
         return $this->provideInvalidCreationFieldData();
     }
@@ -164,7 +164,7 @@ final class TagsIntegrationTest extends BaseIntegrationTestCase
         self::assertContainsEquals($this->getTag1(), $field->value->tags);
     }
 
-    public function provideToHashData(): array
+    public function provideToHashData(): iterable
     {
         return [
             [
@@ -188,7 +188,7 @@ final class TagsIntegrationTest extends BaseIntegrationTestCase
         ];
     }
 
-    public function provideFromHashData(): array
+    public function provideFromHashData(): iterable
     {
         return [
             [
@@ -212,7 +212,7 @@ final class TagsIntegrationTest extends BaseIntegrationTestCase
         ];
     }
 
-    public function providerForTestIsEmptyValue(): array
+    public function providerForTestIsEmptyValue(): iterable
     {
         return [
             [new TagsValue()],
@@ -220,7 +220,7 @@ final class TagsIntegrationTest extends BaseIntegrationTestCase
         ];
     }
 
-    public function providerForTestIsNotEmptyValue(): array
+    public function providerForTestIsNotEmptyValue(): iterable
     {
         return [
             [

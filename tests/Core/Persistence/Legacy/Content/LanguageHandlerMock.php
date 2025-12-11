@@ -48,7 +48,7 @@ final class LanguageHandlerMock
         );
     }
 
-    public function __invoke(TestCase $testCase): LanguageHandler&MockObject
+    public function __invoke(TestCase $testCase): MockObject&LanguageHandler
     {
         $mock = $testCase->getMockBuilder(LanguageHandler::class)
             ->disableOriginalConstructor()

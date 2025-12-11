@@ -22,9 +22,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 final class TagsHandlerTest extends TestCase
 {
-    private Gateway&MockObject $gateway;
+    private MockObject&Gateway $gateway;
 
-    private Mapper&MockObject $mapper;
+    private MockObject&Mapper $mapper;
 
     private SPIHandler $tagsHandler;
 
@@ -40,7 +40,7 @@ final class TagsHandlerTest extends TestCase
     public function testLoad(): void
     {
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getFullTagData')
             ->with(42)
             ->willReturn(
@@ -54,7 +54,7 @@ final class TagsHandlerTest extends TestCase
         $tag = new Tag(['id' => 42]);
 
         $this->mapper
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('extractTagListFromRows')
             ->with([['id' => 42]])
             ->willReturn([$tag]);
@@ -71,13 +71,13 @@ final class TagsHandlerTest extends TestCase
         $this->expectException(NotFoundException::class);
 
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getFullTagData')
             ->with(42)
             ->willReturn([]);
 
         $this->mapper
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('extractTagListFromRows');
 
         $this->tagsHandler->load(42);
@@ -89,19 +89,15 @@ final class TagsHandlerTest extends TestCase
     public function testLoadTagInfo(): void
     {
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getBasicTagData')
             ->with(42)
-            ->willReturn(
-                [
-                    'id' => 42,
-                ],
-            );
+            ->willReturn(['id' => 42]);
 
         $tag = new TagInfo(['id' => 42]);
 
         $this->mapper
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('createTagInfoFromRow')
             ->with(['id' => 42])
             ->willReturn($tag);
@@ -115,7 +111,7 @@ final class TagsHandlerTest extends TestCase
     public function testLoadByRemoteId(): void
     {
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getFullTagDataByRemoteId')
             ->with('remote-id')
             ->willReturn(
@@ -129,7 +125,7 @@ final class TagsHandlerTest extends TestCase
         $tag = new Tag(['remoteId' => 'remote-id']);
 
         $this->mapper
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('extractTagListFromRows')
             ->with([['remote_id' => 'remote-id']])
             ->willReturn([$tag]);
@@ -145,13 +141,13 @@ final class TagsHandlerTest extends TestCase
         $this->expectException(NotFoundException::class);
 
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getFullTagDataByRemoteId')
             ->with('remote-id')
             ->willReturn([]);
 
         $this->mapper
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('extractTagListFromRows');
 
         $this->tagsHandler->loadByRemoteId('remote-id');
@@ -163,7 +159,7 @@ final class TagsHandlerTest extends TestCase
     public function testLoadTagInfoByRemoteId(): void
     {
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getBasicTagDataByRemoteId')
             ->with('12345')
             ->willReturn(
@@ -175,7 +171,7 @@ final class TagsHandlerTest extends TestCase
         $tag = new TagInfo(['remoteId' => '12345']);
 
         $this->mapper
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('createTagInfoFromRow')
             ->with(['remote_id' => '12345'])
             ->willReturn($tag);
@@ -189,7 +185,7 @@ final class TagsHandlerTest extends TestCase
     public function testLoadTagByKeywordAndParentId(): void
     {
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getFullTagDataByKeywordAndParentId')
             ->with('eztags', 42)
             ->willReturn(
@@ -204,7 +200,7 @@ final class TagsHandlerTest extends TestCase
         $tag = new Tag(['id' => 42, 'keywords' => ['eng-GB' => 'eztags']]);
 
         $this->mapper
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('extractTagListFromRows')
             ->with([['id' => 42, 'keyword' => 'eztags']])
             ->willReturn([$tag]);
@@ -220,7 +216,7 @@ final class TagsHandlerTest extends TestCase
         $this->expectException(NotFoundException::class);
 
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getFullTagDataByKeywordAndParentId')
             ->with('unknown', 999)
             ->willReturn([]);
@@ -234,7 +230,7 @@ final class TagsHandlerTest extends TestCase
     public function testLoadChildren(): void
     {
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getChildren')
             ->with(42)
             ->willReturn(
@@ -252,7 +248,7 @@ final class TagsHandlerTest extends TestCase
             );
 
         $this->mapper
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('extractTagListFromRows')
             ->with(
                 [
@@ -281,7 +277,7 @@ final class TagsHandlerTest extends TestCase
     public function testGetChildrenCount(): void
     {
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getChildrenCount')
             ->with(42)
             ->willReturn(3);
@@ -297,7 +293,7 @@ final class TagsHandlerTest extends TestCase
     public function testLoadTagsByKeyword(): void
     {
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getTagsByKeyword')
             ->with('eztags', 'eng-GB')
             ->willReturn(
@@ -314,7 +310,7 @@ final class TagsHandlerTest extends TestCase
             );
 
         $this->mapper
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('extractTagListFromRows')
             ->with(
                 [
@@ -341,7 +337,7 @@ final class TagsHandlerTest extends TestCase
     public function testGetTagsByKeywordCount(): void
     {
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getTagsByKeywordCount')
             ->with('eztags', 'eng-GB')
             ->willReturn(2);
@@ -357,7 +353,7 @@ final class TagsHandlerTest extends TestCase
     public function testLoadSynonyms(): void
     {
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getSynonyms')
             ->with(42)
             ->willReturn(
@@ -375,7 +371,7 @@ final class TagsHandlerTest extends TestCase
             );
 
         $this->mapper
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('extractTagListFromRows')
             ->with(
                 [
@@ -404,7 +400,7 @@ final class TagsHandlerTest extends TestCase
     public function testGetSynonymCount(): void
     {
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getSynonymCount')
             ->with(42)
             ->willReturn(3);
@@ -422,7 +418,7 @@ final class TagsHandlerTest extends TestCase
         $handler = $this->getMockedTagsHandler(['load']);
 
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getBasicTagData')
             ->with(21)
             ->willReturn(
@@ -434,7 +430,7 @@ final class TagsHandlerTest extends TestCase
             );
 
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('create')
             ->with(
                 new CreateStruct(
@@ -452,11 +448,10 @@ final class TagsHandlerTest extends TestCase
                     'path_string' => '/1/2/',
                 ],
             )
-            ->willReturn(
-                95,
-            );
+            ->willReturn(95);
 
-        $handler->expects(self::once())
+        $handler
+            ->expects($this->once())
             ->method('load')
             ->with(95)
             ->willReturn(
@@ -510,7 +505,7 @@ final class TagsHandlerTest extends TestCase
         $handler = $this->getMockedTagsHandler(['load']);
 
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('create')
             ->with(
                 new CreateStruct(
@@ -523,11 +518,10 @@ final class TagsHandlerTest extends TestCase
                     ],
                 ),
             )
-            ->willReturn(
-                95,
-            );
+            ->willReturn(95);
 
-        $handler->expects(self::once())
+        $handler
+            ->expects($this->once())
             ->method('load')
             ->with(95)
             ->willReturn(
@@ -581,7 +575,7 @@ final class TagsHandlerTest extends TestCase
         $handler = $this->getMockedTagsHandler(['load']);
 
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('update')
             ->with(
                 new UpdateStruct(
@@ -596,7 +590,7 @@ final class TagsHandlerTest extends TestCase
             );
 
         $handler
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('load')
             ->with(40)
             ->willReturn(
@@ -645,7 +639,7 @@ final class TagsHandlerTest extends TestCase
         $handler = $this->getMockedTagsHandler(['load']);
 
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getBasicTagData')
             ->with(21)
             ->willReturn(
@@ -658,7 +652,7 @@ final class TagsHandlerTest extends TestCase
             );
 
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('createSynonym')
             ->with(
                 new SynonymCreateStruct(
@@ -677,12 +671,10 @@ final class TagsHandlerTest extends TestCase
                     'path_string' => '/1/21/',
                 ],
             )
-            ->willReturn(
-                95,
-            );
+            ->willReturn(95);
 
         $handler
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('load')
             ->with(95)
             ->willReturn(
@@ -755,39 +747,35 @@ final class TagsHandlerTest extends TestCase
         ];
 
         $handler
-            ->expects(self::at(0))
             ->method('loadTagInfo')
             ->with(16)
-            ->willReturn(
-                $tag,
-            );
+            ->willReturn($tag);
 
         $this->gateway
-            ->expects(self::at(0))
             ->method('getBasicTagData')
             ->with(66)
             ->willReturn($mainTagData);
 
         $handler
-            ->expects(self::at(1))
             ->method('loadSynonyms')
             ->with(16)
             ->willReturn($synonyms);
 
-        foreach ($synonyms as $index => $synonym) {
-            $this->gateway
-                ->expects(self::at($index + 1))
-                ->method('moveSynonym')
-                ->with($synonym->id, $mainTagData);
+        $returnMap = [];
+        foreach ($synonyms as $synonym) {
+            $returnMap[] = [$synonym->id, $mainTagData, null];
         }
 
         $this->gateway
-            ->expects(self::once())
+            ->method('moveSynonym')
+            ->willReturnMap($returnMap);
+
+        $this->gateway
+            ->expects($this->once())
             ->method('convertToSynonym')
             ->with(16, $mainTagData);
 
         $handler
-            ->expects(self::at(2))
             ->method('load')
             ->with(16)
             ->willReturn(
@@ -806,52 +794,6 @@ final class TagsHandlerTest extends TestCase
             ],
             $synonym,
         );
-    }
-
-    /**
-     * @covers \Netgen\TagsBundle\Core\Persistence\Legacy\Tags\Handler::merge
-     */
-    public function testMerge(): void
-    {
-        $handler = $this->getMockedTagsHandler(['loadSynonyms']);
-
-        $tags = [
-            new Tag(['id' => 50]),
-            new Tag(['id' => 51]),
-        ];
-
-        $handler
-            ->expects(self::once())
-            ->method('loadSynonyms')
-            ->with(40)
-            ->willReturn(
-                $tags,
-            );
-
-        $tags[] = new Tag(['id' => 40]);
-
-        foreach ($tags as $index => $tag) {
-            $this->gateway
-                ->expects(self::at($index * 2))
-                ->method('transferTagAttributeLinks')
-                ->with($tag->id, 42);
-
-            $this->gateway
-                ->expects(self::at($index * 2 + 1))
-                ->method('deleteTag')
-                ->with($tag->id);
-        }
-
-        $handler->merge(40, 42);
-    }
-
-    /**
-     * @covers \Netgen\TagsBundle\Core\Persistence\Legacy\Tags\Handler::copySubtree
-     * @covers \Netgen\TagsBundle\Core\Persistence\Legacy\Tags\Handler::recursiveCopySubtree
-     */
-    public function testCopySubtree(): void
-    {
-        self::markTestIncomplete('@TODO: Implement test for copySubtree');
     }
 
     /**
@@ -883,24 +825,21 @@ final class TagsHandlerTest extends TestCase
         ];
 
         $this->gateway
-            ->expects(self::at(0))
             ->method('getBasicTagData')
-            ->with(42)
-            ->willReturn($sourceData);
+            ->willReturnMap(
+                [
+                    [42, $sourceData],
+                    [66, $destinationData],
+                ]
+            );
 
         $this->gateway
-            ->expects(self::at(1))
-            ->method('getBasicTagData')
-            ->with(66)
-            ->willReturn($destinationData);
-
-        $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('moveSubtree')
             ->with($sourceData, $destinationData);
 
         $handler
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('load')
             ->with($movedData['id'])
             ->willReturn(
@@ -937,7 +876,7 @@ final class TagsHandlerTest extends TestCase
         $handler = $this->getMockedTagsHandler(['loadTagInfo']);
 
         $handler
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadTagInfo')
             ->with(40)
             ->willReturn(
@@ -950,7 +889,7 @@ final class TagsHandlerTest extends TestCase
             );
 
         $this->gateway
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('deleteTag')
             ->with(40);
 
@@ -974,7 +913,7 @@ final class TagsHandlerTest extends TestCase
         return new Handler($this->gateway, $this->mapper);
     }
 
-    private function getMockedTagsHandler(array $mockedMethods): Handler&MockObject
+    private function getMockedTagsHandler(array $mockedMethods): MockObject&Handler
     {
         $this->gateway = $this->createMock(Gateway::class);
 

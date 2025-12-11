@@ -18,9 +18,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 final class TagKeywordTest extends TestCase
 {
-    private FieldNameResolver&MockObject $fieldNameResolver;
+    private MockObject&FieldNameResolver $fieldNameResolver;
 
-    private Handler&MockObject $contentTypeHandler;
+    private MockObject&Handler $contentTypeHandler;
 
     private TagKeyword $visitor;
 
@@ -66,7 +66,7 @@ final class TagKeywordTest extends TestCase
         $criterion = new Criterion\TagKeyword(Operator::IN, ['tag1', 'tag2'], 'tags_field');
 
         $this->fieldNameResolver
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getFieldTypes')
             ->with(
                 self::identicalTo($criterion),
@@ -82,7 +82,7 @@ final class TagKeywordTest extends TestCase
             );
 
         $this->contentTypeHandler
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('getSearchableFieldMap');
 
         self::assertSame(
@@ -100,7 +100,7 @@ final class TagKeywordTest extends TestCase
         $criterion = new Criterion\TagKeyword(Operator::IN, ['tag1', 'tag2']);
 
         $this->contentTypeHandler
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getSearchableFieldMap')
             ->willReturn(
                 [
@@ -118,33 +118,28 @@ final class TagKeywordTest extends TestCase
             );
 
         $this->fieldNameResolver
-            ->expects(self::at(0))
             ->method('getFieldTypes')
-            ->with(
-                self::identicalTo($criterion),
-                self::identicalTo('tags_field'),
-                'eztags',
-                'tag_keywords',
-            )
-            ->willReturn(
+            ->willReturnMap(
                 [
-                    'news_tags_field_s' => new FieldType\MultipleStringField(),
-                ],
-            );
-
-        $this->fieldNameResolver
-            ->expects(self::at(1))
-            ->method('getFieldTypes')
-            ->with(
-                self::identicalTo($criterion),
-                self::identicalTo('tags_field2'),
-                'eztags',
-                'tag_keywords',
-            )
-            ->willReturn(
-                [
-                    'article_tags_field2_s' => new FieldType\MultipleStringField(),
-                ],
+                    [
+                        $criterion,
+                        'tags_field',
+                        'eztags',
+                        'tag_keywords',
+                        [
+                            'news_tags_field_s' => new FieldType\MultipleStringField(),
+                        ],
+                    ],
+                    [
+                        $criterion,
+                        'tags_field2',
+                        'eztags',
+                        'tag_keywords',
+                        [
+                            'article_tags_field2_s' => new FieldType\MultipleStringField(),
+                        ],
+                    ]
+                ]
             );
 
         self::assertSame(
@@ -164,7 +159,7 @@ final class TagKeywordTest extends TestCase
         $criterion = new Criterion\TagKeyword(Operator::IN, ['tag1', 'tag2'], 'tags_field');
 
         $this->fieldNameResolver
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getFieldTypes')
             ->with(
                 self::identicalTo($criterion),

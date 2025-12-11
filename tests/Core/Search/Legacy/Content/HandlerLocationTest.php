@@ -283,7 +283,7 @@ final class HandlerLocationTest extends LanguageAwareTestCase
         );
     }
 
-    private function getLocationMapperMock(): LocationMapper&MockObject
+    private function getLocationMapperMock(): MockObject&LocationMapper
     {
         $mapperMock = $this->createMock(LocationMapper::class);
 

@@ -21,9 +21,9 @@ final class NetgenTagsRuntimeTest extends TestCase
 
     private MockObject&TagsService $tagsService;
 
-    private LanguageService&MockObject $languageService;
+    private MockObject&LanguageService $languageService;
 
-    private ContentTypeService&MockObject $contentTypeService;
+    private MockObject&ContentTypeService $contentTypeService;
 
     private Tag $tag;
 
@@ -68,7 +68,8 @@ final class NetgenTagsRuntimeTest extends TestCase
 
     public function testGetTagKeywordWithNotFoundException(): void
     {
-        $this->tagsService->expects(self::once())
+        $this->tagsService
+            ->expects($this->once())
             ->method('loadTag')
             ->willThrowException(new NotFoundException('tag', 'tag'));
 
@@ -79,7 +80,8 @@ final class NetgenTagsRuntimeTest extends TestCase
     {
         $translated = 'translated';
 
-        $this->tagsService->expects(self::once())
+        $this->tagsService
+            ->expects($this->once())
             ->method('loadTag')
             ->willReturn($this->tag);
 
@@ -96,7 +98,8 @@ final class NetgenTagsRuntimeTest extends TestCase
             ],
         );
 
-        $this->languageService->expects(self::once())
+        $this->languageService
+            ->expects($this->once())
             ->method('loadLanguage')
             ->with($language->languageCode)
             ->willReturn($language);
@@ -108,7 +111,8 @@ final class NetgenTagsRuntimeTest extends TestCase
 
     public function testGetContentTypeNameWithNotFoundException(): void
     {
-        $this->contentTypeService->expects(self::once())
+        $this->contentTypeService
+            ->expects($this->once())
             ->method('loadContentType')
             ->with(42)
             ->willThrowException(new NotFoundException('content type', 42));
@@ -118,7 +122,8 @@ final class NetgenTagsRuntimeTest extends TestCase
 
     public function testGetContentTypeNameWithNonContentTypeAsArgument(): void
     {
-        $this->contentTypeService->expects(self::once())
+        $this->contentTypeService
+            ->expects($this->once())
             ->method('loadContentType')
             ->with(42)
             ->willReturn($this->contentType);
@@ -128,7 +133,8 @@ final class NetgenTagsRuntimeTest extends TestCase
 
     public function testGetContentTypeNameWithContentTypeAsArgument(): void
     {
-        $this->contentTypeService->expects(self::never())
+        $this->contentTypeService
+            ->expects($this->never())
             ->method('loadContentType');
 
         self::assertSame('Translated name', $this->runtime->getContentTypeName($this->contentType));

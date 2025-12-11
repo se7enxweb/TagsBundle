@@ -17,9 +17,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 final class TagIdTest extends TestCase
 {
-    private FieldNameResolver&MockObject $fieldNameResolver;
+    private MockObject&FieldNameResolver $fieldNameResolver;
 
-    private Handler&MockObject $contentTypeHandler;
+    private MockObject&Handler $contentTypeHandler;
 
     private TagId $visitor;
 
@@ -65,7 +65,7 @@ final class TagIdTest extends TestCase
         $criterion = new Criterion\TagId([42, 43], 'tags_field');
 
         $this->fieldNameResolver
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getFieldTypes')
             ->with(
                 self::identicalTo($criterion),
@@ -81,7 +81,7 @@ final class TagIdTest extends TestCase
             );
 
         $this->contentTypeHandler
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('getSearchableFieldMap');
 
         self::assertSame(
@@ -99,7 +99,7 @@ final class TagIdTest extends TestCase
         $criterion = new Criterion\TagId([42, 43]);
 
         $this->contentTypeHandler
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getSearchableFieldMap')
             ->willReturn(
                 [
@@ -117,33 +117,28 @@ final class TagIdTest extends TestCase
             );
 
         $this->fieldNameResolver
-            ->expects(self::at(0))
             ->method('getFieldTypes')
-            ->with(
-                self::identicalTo($criterion),
-                self::identicalTo('tags_field'),
-                'eztags',
-                'tag_ids',
-            )
-            ->willReturn(
+            ->willReturnMap(
                 [
-                    'news_tags_field_s' => new FieldType\MultipleIntegerField(),
-                ],
-            );
-
-        $this->fieldNameResolver
-            ->expects(self::at(1))
-            ->method('getFieldTypes')
-            ->with(
-                self::identicalTo($criterion),
-                self::identicalTo('tags_field2'),
-                'eztags',
-                'tag_ids',
-            )
-            ->willReturn(
-                [
-                    'article_tags_field2_s' => new FieldType\MultipleIntegerField(),
-                ],
+                    [
+                        $criterion,
+                        'tags_field',
+                        'eztags',
+                        'tag_ids',
+                        [
+                            'news_tags_field_s' => new FieldType\MultipleIntegerField(),
+                        ],
+                    ],
+                    [
+                        $criterion,
+                        'tags_field2',
+                        'eztags',
+                        'tag_ids',
+                        [
+                            'article_tags_field2_s' => new FieldType\MultipleIntegerField(),
+                        ],
+                    ]
+                ]
             );
 
         self::assertSame(
@@ -163,7 +158,7 @@ final class TagIdTest extends TestCase
         $criterion = new Criterion\TagId([42, 43], 'tags_field');
 
         $this->fieldNameResolver
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getFieldTypes')
             ->with(
                 self::identicalTo($criterion),

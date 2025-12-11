@@ -20,9 +20,9 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class TagsServiceTest extends TestCase
 {
-    private CoreTagsService&MockObject $tagsService;
+    private MockObject&CoreTagsService $tagsService;
 
-    private EventDispatcherInterface&MockObject $eventDispatcher;
+    private MockObject&EventDispatcherInterface $eventDispatcher;
 
     protected function setUp(): void
     {
@@ -37,12 +37,10 @@ final class TagsServiceTest extends TestCase
     public function testLoadTag(): void
     {
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadTag')
             ->with(self::identicalTo(42))
-            ->willReturn(
-                new Tag(['id' => 42]),
-            );
+            ->willReturn(new Tag(['id' => 42]));
 
         $eventDispatchingService = $this->getEventDispatchingService();
         $tag = $eventDispatchingService->loadTag(42);
@@ -56,12 +54,10 @@ final class TagsServiceTest extends TestCase
     public function testLoadTagByRemoteId(): void
     {
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadTagByRemoteId')
             ->with(self::identicalTo('12345'))
-            ->willReturn(
-                new Tag(['remoteId' => '12345']),
-            );
+            ->willReturn(new Tag(['remoteId' => '12345']));
 
         $eventDispatchingService = $this->getEventDispatchingService();
         $tag = $eventDispatchingService->loadTagByRemoteId('12345');
@@ -75,12 +71,10 @@ final class TagsServiceTest extends TestCase
     public function testLoadTagByUrl(): void
     {
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadTagByUrl')
             ->with('Netgen/TagsBundle', ['eng-GB'])
-            ->willReturn(
-                new Tag(['keywords' => ['eng-GB' => 'TagsBundle']]),
-            );
+            ->willReturn(new Tag(['keywords' => ['eng-GB' => 'TagsBundle']]));
 
         $eventDispatchingService = $this->getEventDispatchingService();
         $tag = $eventDispatchingService->loadTagByUrl('Netgen/TagsBundle', ['eng-GB']);
@@ -96,7 +90,7 @@ final class TagsServiceTest extends TestCase
         $tag = new Tag(['id' => 42]);
 
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadTagChildren')
             ->with(self::identicalTo($tag))
             ->willReturn(
@@ -127,7 +121,7 @@ final class TagsServiceTest extends TestCase
         $tag = new Tag(['id' => 42]);
 
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getTagChildrenCount')
             ->with(self::identicalTo($tag))
             ->willReturn(2);
@@ -144,7 +138,7 @@ final class TagsServiceTest extends TestCase
     public function testLoadTagsByKeyword(): void
     {
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadTagsByKeyword')
             ->with('netgen', 'eng-GB')
             ->willReturn(
@@ -173,7 +167,7 @@ final class TagsServiceTest extends TestCase
     public function testGetTagsByKeywordCount(): void
     {
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getTagsByKeywordCount')
             ->with('netgen', 'eng-GB')
             ->willReturn(2);
@@ -192,7 +186,7 @@ final class TagsServiceTest extends TestCase
         $tag = new Tag(['id' => 42]);
 
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('loadTagSynonyms')
             ->with(self::identicalTo($tag))
             ->willReturn(
@@ -223,7 +217,7 @@ final class TagsServiceTest extends TestCase
         $tag = new Tag(['id' => 42]);
 
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getTagSynonymCount')
             ->with(self::identicalTo($tag))
             ->willReturn(2);
@@ -242,15 +236,10 @@ final class TagsServiceTest extends TestCase
         $tag = new Tag(['id' => 42]);
 
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getRelatedContent')
             ->with(self::identicalTo($tag))
-            ->willReturn(
-                [
-                    new Content(),
-                    new Content(),
-                ],
-            );
+            ->willReturn([new Content(), new Content()]);
 
         $eventDispatchingService = $this->getEventDispatchingService();
         $content = $eventDispatchingService->getRelatedContent($tag);
@@ -267,7 +256,7 @@ final class TagsServiceTest extends TestCase
         $tag = new Tag(['id' => 42]);
 
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getRelatedContentCount')
             ->with(self::identicalTo($tag))
             ->willReturn(2);
@@ -300,25 +289,17 @@ final class TagsServiceTest extends TestCase
         );
 
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('createTag')
             ->with(self::identicalTo($tagCreateStruct))
             ->willReturn($tag);
 
         $beforeEvent = new Events\BeforeCreateTagEvent($tagCreateStruct);
+        $afterEvent = new Events\CreateTagEvent($tagCreateStruct, $tag);
 
         $this->eventDispatcher
-            ->expects(self::at(0))
             ->method('dispatch')
-            ->with(self::equalTo($beforeEvent))
-            ->willReturn($beforeEvent);
-
-        $this->eventDispatcher
-            ->expects(self::at(1))
-            ->method('dispatch')
-            ->with(
-                self::equalTo(new Events\CreateTagEvent($tagCreateStruct, $tag)),
-            );
+            ->willReturnOnConsecutiveCalls($beforeEvent, $afterEvent);
 
         $eventDispatchingService = $this->getEventDispatchingService();
         $createdTag = $eventDispatchingService->createTag($tagCreateStruct);
@@ -361,7 +342,7 @@ final class TagsServiceTest extends TestCase
         );
 
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('updateTag')
             ->with(
                 self::identicalTo($tag),
@@ -370,19 +351,11 @@ final class TagsServiceTest extends TestCase
             ->willReturn($updatedTag);
 
         $beforeEvent = new Events\BeforeUpdateTagEvent($tagUpdateStruct, $tag);
+        $afterEvent = new Events\UpdateTagEvent($tagUpdateStruct, $updatedTag);
 
         $this->eventDispatcher
-            ->expects(self::at(0))
             ->method('dispatch')
-            ->with(self::equalTo($beforeEvent))
-            ->willReturn($beforeEvent);
-
-        $this->eventDispatcher
-            ->expects(self::at(1))
-            ->method('dispatch')
-            ->with(
-                self::equalTo(new Events\UpdateTagEvent($tagUpdateStruct, $updatedTag)),
-            );
+            ->willReturnOnConsecutiveCalls($beforeEvent, $afterEvent);
 
         $eventDispatchingService = $this->getEventDispatchingService();
         $updatedTag = $eventDispatchingService->updateTag($tag, $tagUpdateStruct);
@@ -416,25 +389,17 @@ final class TagsServiceTest extends TestCase
         );
 
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('addSynonym')
             ->with(self::identicalTo($synonymCreateStruct))
             ->willReturn($synonym);
 
         $beforeEvent = new Events\BeforeAddSynonymEvent($synonymCreateStruct);
+        $afterEvent = new Events\AddSynonymEvent($synonymCreateStruct, $synonym);
 
         $this->eventDispatcher
-            ->expects(self::at(0))
             ->method('dispatch')
-            ->with(self::equalTo($beforeEvent))
-            ->willReturn($beforeEvent);
-
-        $this->eventDispatcher
-            ->expects(self::at(1))
-            ->method('dispatch')
-            ->with(
-                self::equalTo(new Events\AddSynonymEvent($synonymCreateStruct, $synonym)),
-            );
+            ->willReturnOnConsecutiveCalls($beforeEvent, $afterEvent);
 
         $eventDispatchingService = $this->getEventDispatchingService();
         $synonym = $eventDispatchingService->addSynonym($synonymCreateStruct);
@@ -471,7 +436,7 @@ final class TagsServiceTest extends TestCase
         );
 
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('convertToSynonym')
             ->with(
                 self::identicalTo($tag),
@@ -480,19 +445,11 @@ final class TagsServiceTest extends TestCase
             ->willReturn($synonym);
 
         $beforeEvent = new Events\BeforeConvertToSynonymEvent($tag, $mainTag);
+        $afterEvent = new Events\ConvertToSynonymEvent($synonym, $mainTag);
 
         $this->eventDispatcher
-            ->expects(self::at(0))
             ->method('dispatch')
-            ->with(self::equalTo($beforeEvent))
-            ->willReturn($beforeEvent);
-
-        $this->eventDispatcher
-            ->expects(self::at(1))
-            ->method('dispatch')
-            ->with(
-                self::equalTo(new Events\ConvertToSynonymEvent($synonym, $mainTag)),
-            );
+            ->willReturnOnConsecutiveCalls($beforeEvent, $afterEvent);
 
         $eventDispatchingService = $this->getEventDispatchingService();
         $synonym = $eventDispatchingService->convertToSynonym($tag, $mainTag);
@@ -519,7 +476,7 @@ final class TagsServiceTest extends TestCase
         );
 
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('mergeTags')
             ->with(
                 self::identicalTo($tag),
@@ -527,19 +484,11 @@ final class TagsServiceTest extends TestCase
             );
 
         $beforeEvent = new Events\BeforeMergeTagsEvent($tag, $targetTag);
+        $afterEvent = new Events\MergeTagsEvent($tag, $targetTag);
 
         $this->eventDispatcher
-            ->expects(self::at(0))
             ->method('dispatch')
-            ->with(self::equalTo($beforeEvent))
-            ->willReturn($beforeEvent);
-
-        $this->eventDispatcher
-            ->expects(self::at(1))
-            ->method('dispatch')
-            ->with(
-                self::equalTo(new Events\MergeTagsEvent($tag, $targetTag)),
-            );
+            ->willReturnOnConsecutiveCalls($beforeEvent, $afterEvent);
 
         $eventDispatchingService = $this->getEventDispatchingService();
         $eventDispatchingService->mergeTags($tag, $targetTag);
@@ -572,7 +521,7 @@ final class TagsServiceTest extends TestCase
         );
 
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('copySubtree')
             ->with(
                 self::identicalTo($tag),
@@ -581,19 +530,11 @@ final class TagsServiceTest extends TestCase
             ->willReturn($copiedTag);
 
         $beforeEvent = new Events\BeforeCopySubtreeEvent($tag, $targetTag);
+        $afterEvent = new Events\CopySubtreeEvent($tag, $copiedTag, $targetTag);
 
         $this->eventDispatcher
-            ->expects(self::at(0))
             ->method('dispatch')
-            ->with(self::equalTo($beforeEvent))
-            ->willReturn($beforeEvent);
-
-        $this->eventDispatcher
-            ->expects(self::at(1))
-            ->method('dispatch')
-            ->with(
-                self::equalTo(new Events\CopySubtreeEvent($tag, $copiedTag, $targetTag)),
-            );
+            ->willReturnOnConsecutiveCalls($beforeEvent, $afterEvent);
 
         $eventDispatchingService = $this->getEventDispatchingService();
         $copiedTag = $eventDispatchingService->copySubtree($tag, $targetTag);
@@ -628,7 +569,7 @@ final class TagsServiceTest extends TestCase
         );
 
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('moveSubtree')
             ->with(
                 self::identicalTo($tag),
@@ -637,19 +578,11 @@ final class TagsServiceTest extends TestCase
             ->willReturn($movedTag);
 
         $beforeEvent = new Events\BeforeMoveSubtreeEvent($tag, $targetTag);
+        $afterEvent = new Events\MoveSubtreeEvent($movedTag, $targetTag);
 
         $this->eventDispatcher
-            ->expects(self::at(0))
             ->method('dispatch')
-            ->with(self::equalTo($beforeEvent))
-            ->willReturn($beforeEvent);
-
-        $this->eventDispatcher
-            ->expects(self::at(1))
-            ->method('dispatch')
-            ->with(
-                self::equalTo(new Events\MoveSubtreeEvent($movedTag, $targetTag)),
-            );
+            ->willReturnOnConsecutiveCalls($beforeEvent, $afterEvent);
 
         $eventDispatchingService = $this->getEventDispatchingService();
         $movedTag = $eventDispatchingService->moveSubtree($tag, $targetTag);
@@ -670,24 +603,16 @@ final class TagsServiceTest extends TestCase
         );
 
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('deleteTag')
             ->with(self::identicalTo($tag));
 
         $beforeEvent = new Events\BeforeDeleteTagEvent($tag);
+        $afterEvent = new Events\DeleteTagEvent($tag);
 
         $this->eventDispatcher
-            ->expects(self::at(0))
             ->method('dispatch')
-            ->with(self::equalTo($beforeEvent))
-            ->willReturn($beforeEvent);
-
-        $this->eventDispatcher
-            ->expects(self::at(1))
-            ->method('dispatch')
-            ->with(
-                self::equalTo(new Events\DeleteTagEvent($tag)),
-            );
+            ->willReturnOnConsecutiveCalls($beforeEvent, $afterEvent);
 
         $eventDispatchingService = $this->getEventDispatchingService();
         $eventDispatchingService->deleteTag($tag);
@@ -699,12 +624,10 @@ final class TagsServiceTest extends TestCase
     public function testNewTagCreateStruct(): void
     {
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('newTagCreateStruct')
             ->with(self::identicalTo(42), self::identicalTo('eng-GB'))
-            ->willReturn(
-                new TagCreateStruct(['parentTagId' => 42, 'mainLanguageCode' => 'eng-GB']),
-            );
+            ->willReturn(new TagCreateStruct(['parentTagId' => 42, 'mainLanguageCode' => 'eng-GB']));
 
         $eventDispatchingService = $this->getEventDispatchingService();
         $tagCreateStruct = $eventDispatchingService->newTagCreateStruct(42, 'eng-GB');
@@ -719,12 +642,10 @@ final class TagsServiceTest extends TestCase
     public function testNewSynonymCreateStruct(): void
     {
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('newSynonymCreateStruct')
             ->with(self::identicalTo(42), self::identicalTo('eng-GB'))
-            ->willReturn(
-                new SynonymCreateStruct(['mainTagId' => 42, 'mainLanguageCode' => 'eng-GB']),
-            );
+            ->willReturn(new SynonymCreateStruct(['mainTagId' => 42, 'mainLanguageCode' => 'eng-GB']));
 
         $eventDispatchingService = $this->getEventDispatchingService();
         $synonymCreateStruct = $eventDispatchingService->newSynonymCreateStruct(42, 'eng-GB');
@@ -739,11 +660,9 @@ final class TagsServiceTest extends TestCase
     public function testNewTagUpdateStruct(): void
     {
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('newTagUpdateStruct')
-            ->willReturn(
-                new TagUpdateStruct(),
-            );
+            ->willReturn(new TagUpdateStruct());
 
         $eventDispatchingService = $this->getEventDispatchingService();
         $tagUpdateStruct = $eventDispatchingService->newTagUpdateStruct();
@@ -759,7 +678,7 @@ final class TagsServiceTest extends TestCase
         $callback = static function (): string { return 'some_value'; };
 
         $this->tagsService
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('sudo')
             ->willReturn($callback());
 
