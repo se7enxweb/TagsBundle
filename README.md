@@ -7,7 +7,7 @@ Netgen Tags Bundle
 [![Latest stable](https://img.shields.io/packagist/v/netgen/tagsbundle.svg?style=flat-square)](https://packagist.org/packages/netgen/tagsbundle)
 [![License](https://img.shields.io/github/license/netgen/TagsBundle.svg?style=flat-square)](https://packagist.org/packages/netgen/tagsbundle)
 
-Netgen Tags Bundle is an Ibexa Platform bundle for taxonomy management and easier classification of content, providing more functionality for tagging content than `ibexa_keyword` field type included in Ibexa Platform kernel.
+Netgen Tags Bundle is an Ibexa DXP bundle for taxonomy management and easier classification of content, providing more functionality for tagging content than `ibexa_keyword` field type included in Ibexa core.
 
 Implemented features
 --------------------
@@ -19,7 +19,7 @@ Implemented features
 * `TagId` and `TagKeyword` search criteria
 * Solr indexing of `eztags` field type
 * Tag router and path generator
-* Admin interface (standalone, as well integrated into Ibexa Platform Admin UI)
+* Admin interface (standalone, as well integrated into Ibexa Admin UI)
 * REST interface
 * HTTP cache tagging and purging
 

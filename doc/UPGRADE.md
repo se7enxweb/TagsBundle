@@ -1,6 +1,12 @@
 Netgen Tags Bundle upgrade instructions
 =======================================
 
+Upgrade from 5.0 to 6.0
+-----------------------
+
+* Minimum supported version of PHP is now PHP 8.3
+* Minimum supported version of Ibexa DXP is now 5.0
+
 Upgrade from 4.0 to 5.0
 -----------------------
 

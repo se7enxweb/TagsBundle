@@ -1,5 +1,5 @@
 # It is not recommended to change these settings directly
-# Use Ibexa Platform semantic config instead
+# Use Ibexa semantic config instead
 
 parameters:
 
@@ -53,6 +53,6 @@ parameters:
     netgen_tags.admin.default_pager_template: '@@NetgenTags/admin/pagerfanta.html.twig'
 
     # Enables or disables persistence cache.
-    # It will reuse Ibexa Platform persistence cache configuration.
+    # It will reuse Ibexa persistence cache configuration.
     # Not exposed through semantic config due to it being NON-siteaccess aware.
     netgen_tags.enable_persistence_cache: true

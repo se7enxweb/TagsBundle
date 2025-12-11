@@ -27,7 +27,7 @@ final class MainMenuBuilderListener implements EventSubscriberInterface
     }
 
     /**
-     * This method adds Netgen Tags menu items to Ibexa Platform admin interface.
+     * This method adds Netgen Tags menu items to Ibexa admin interface.
      */
     public function onMainMenuBuild(ConfigureMenuEvent $event): void
     {
@@ -39,7 +39,7 @@ final class MainMenuBuilderListener implements EventSubscriberInterface
     }
 
     /**
-     * Adds the Netgen Tags submenu to Ibexa Platform admin interface.
+     * Adds the Netgen Tags submenu to Ibexa admin interface.
      */
     private function addTagsSubMenu(ItemInterface $menu): void
     {
