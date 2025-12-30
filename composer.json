@@ -28,7 +28,7 @@
         "lolautruche/ez-core-extra-bundle": "^5.0",
         "symfony/polyfill-php84": "^1.33",
         "symfony/translation-contracts": "^3.6",
-        "pagerfanta/pagerfanta": "^3.8",
+        "pagerfanta/pagerfanta": "^3.8 || ^4.7",
         "doctrine/collections": "^2.4"
     },
     "require-dev": {
