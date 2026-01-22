@@ -66,7 +66,7 @@ final class TagKeywordTest extends TestCase
         $criterion = new Criterion\TagKeyword(Operator::IN, ['tag1', 'tag2'], 'tags_field');
 
         $this->fieldNameResolver
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getFieldTypes')
             ->with(
                 self::identicalTo($criterion),
@@ -82,7 +82,7 @@ final class TagKeywordTest extends TestCase
             );
 
         $this->contentTypeHandler
-            ->expects($this->never())
+            ->expects(self::never())
             ->method('getSearchableFieldMap');
 
         self::assertSame(
@@ -100,7 +100,7 @@ final class TagKeywordTest extends TestCase
         $criterion = new Criterion\TagKeyword(Operator::IN, ['tag1', 'tag2']);
 
         $this->contentTypeHandler
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getSearchableFieldMap')
             ->willReturn(
                 [
@@ -159,7 +159,7 @@ final class TagKeywordTest extends TestCase
         $criterion = new Criterion\TagKeyword(Operator::IN, ['tag1', 'tag2'], 'tags_field');
 
         $this->fieldNameResolver
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getFieldTypes')
             ->with(
                 self::identicalTo($criterion),

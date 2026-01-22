@@ -23,6 +23,6 @@ final class ParentKeyword extends MultipleValued
             static fn (TagsService $tagsService): Tag => $tagsService->loadTag($tag->parentTagId),
         );
 
-        return isset($this->values[$parentTag->getKeyword()]);
+        return isset($this->values[$parentTag->getKeyword() ?? '']);
     }
 }

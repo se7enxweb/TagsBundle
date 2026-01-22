@@ -37,7 +37,7 @@ final class TagsServiceTest extends TestCase
     public function testLoadTag(): void
     {
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('loadTag')
             ->with(self::identicalTo(42))
             ->willReturn(new Tag(['id' => 42]));
@@ -54,7 +54,7 @@ final class TagsServiceTest extends TestCase
     public function testLoadTagByRemoteId(): void
     {
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('loadTagByRemoteId')
             ->with(self::identicalTo('12345'))
             ->willReturn(new Tag(['remoteId' => '12345']));
@@ -71,7 +71,7 @@ final class TagsServiceTest extends TestCase
     public function testLoadTagByUrl(): void
     {
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('loadTagByUrl')
             ->with('Netgen/TagsBundle', ['eng-GB'])
             ->willReturn(new Tag(['keywords' => ['eng-GB' => 'TagsBundle']]));
@@ -90,7 +90,7 @@ final class TagsServiceTest extends TestCase
         $tag = new Tag(['id' => 42]);
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('loadTagChildren')
             ->with(self::identicalTo($tag))
             ->willReturn(
@@ -121,7 +121,7 @@ final class TagsServiceTest extends TestCase
         $tag = new Tag(['id' => 42]);
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getTagChildrenCount')
             ->with(self::identicalTo($tag))
             ->willReturn(2);
@@ -138,7 +138,7 @@ final class TagsServiceTest extends TestCase
     public function testLoadTagsByKeyword(): void
     {
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('loadTagsByKeyword')
             ->with('netgen', 'eng-GB')
             ->willReturn(
@@ -167,7 +167,7 @@ final class TagsServiceTest extends TestCase
     public function testGetTagsByKeywordCount(): void
     {
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getTagsByKeywordCount')
             ->with('netgen', 'eng-GB')
             ->willReturn(2);
@@ -186,7 +186,7 @@ final class TagsServiceTest extends TestCase
         $tag = new Tag(['id' => 42]);
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('loadTagSynonyms')
             ->with(self::identicalTo($tag))
             ->willReturn(
@@ -217,7 +217,7 @@ final class TagsServiceTest extends TestCase
         $tag = new Tag(['id' => 42]);
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getTagSynonymCount')
             ->with(self::identicalTo($tag))
             ->willReturn(2);
@@ -236,7 +236,7 @@ final class TagsServiceTest extends TestCase
         $tag = new Tag(['id' => 42]);
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getRelatedContent')
             ->with(self::identicalTo($tag))
             ->willReturn([new Content(), new Content()]);
@@ -256,7 +256,7 @@ final class TagsServiceTest extends TestCase
         $tag = new Tag(['id' => 42]);
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getRelatedContentCount')
             ->with(self::identicalTo($tag))
             ->willReturn(2);
@@ -289,7 +289,7 @@ final class TagsServiceTest extends TestCase
         );
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('createTag')
             ->with(self::identicalTo($tagCreateStruct))
             ->willReturn($tag);
@@ -342,7 +342,7 @@ final class TagsServiceTest extends TestCase
         );
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('updateTag')
             ->with(
                 self::identicalTo($tag),
@@ -389,7 +389,7 @@ final class TagsServiceTest extends TestCase
         );
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('addSynonym')
             ->with(self::identicalTo($synonymCreateStruct))
             ->willReturn($synonym);
@@ -436,7 +436,7 @@ final class TagsServiceTest extends TestCase
         );
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('convertToSynonym')
             ->with(
                 self::identicalTo($tag),
@@ -476,7 +476,7 @@ final class TagsServiceTest extends TestCase
         );
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('mergeTags')
             ->with(
                 self::identicalTo($tag),
@@ -521,7 +521,7 @@ final class TagsServiceTest extends TestCase
         );
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('copySubtree')
             ->with(
                 self::identicalTo($tag),
@@ -569,7 +569,7 @@ final class TagsServiceTest extends TestCase
         );
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('moveSubtree')
             ->with(
                 self::identicalTo($tag),
@@ -603,7 +603,7 @@ final class TagsServiceTest extends TestCase
         );
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('deleteTag')
             ->with(self::identicalTo($tag));
 
@@ -624,7 +624,7 @@ final class TagsServiceTest extends TestCase
     public function testNewTagCreateStruct(): void
     {
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('newTagCreateStruct')
             ->with(self::identicalTo(42), self::identicalTo('eng-GB'))
             ->willReturn(new TagCreateStruct(['parentTagId' => 42, 'mainLanguageCode' => 'eng-GB']));
@@ -642,7 +642,7 @@ final class TagsServiceTest extends TestCase
     public function testNewSynonymCreateStruct(): void
     {
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('newSynonymCreateStruct')
             ->with(self::identicalTo(42), self::identicalTo('eng-GB'))
             ->willReturn(new SynonymCreateStruct(['mainTagId' => 42, 'mainLanguageCode' => 'eng-GB']));
@@ -660,7 +660,7 @@ final class TagsServiceTest extends TestCase
     public function testNewTagUpdateStruct(): void
     {
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('newTagUpdateStruct')
             ->willReturn(new TagUpdateStruct());
 
@@ -678,7 +678,7 @@ final class TagsServiceTest extends TestCase
         $callback = static function (): string { return 'some_value'; };
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('sudo')
             ->willReturn($callback());
 

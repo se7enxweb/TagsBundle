@@ -40,7 +40,7 @@ final class RelatedContentAdapterTest extends TestCase
         );
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getRelatedContentCount')
             ->with(self::identicalTo($tag))
             ->willReturn($nbResults);
@@ -60,7 +60,7 @@ final class RelatedContentAdapterTest extends TestCase
     public function testGetNbResultsWithoutTag(): void
     {
         $this->tagsService
-            ->expects($this->never())
+            ->expects(self::never())
             ->method('getRelatedContentCount');
 
         $adapter = new RelatedContentAdapter($this->tagsService, $this->configResolver);
@@ -98,13 +98,13 @@ final class RelatedContentAdapterTest extends TestCase
         ];
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getRelatedContentCount')
             ->with(self::identicalTo($tag))
             ->willReturn($nbResults);
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getRelatedContent')
             ->with(
                 self::identicalTo($tag),
@@ -135,12 +135,12 @@ final class RelatedContentAdapterTest extends TestCase
     public function testGetSliceWithoutTag(): void
     {
         $this->tagsService
-            ->expects($this->never())
+            ->expects(self::never())
             ->method('getRelatedContentCount');
 
         $this
             ->tagsService
-            ->expects($this->never())
+            ->expects(self::never())
             ->method('getRelatedContent');
 
         $adapter = new RelatedContentAdapter($this->tagsService, $this->configResolver);

@@ -120,7 +120,7 @@ final class RelatedContentFilterType extends AbstractType
             $groupOptions = [];
 
             foreach ($contentTypes as $contentType) {
-                $groupOptions[$contentType->getName()] = $contentType->identifier;
+                $groupOptions[$contentType->getName() ?? ''] = $contentType->identifier;
             }
 
             $options[$group->identifier] = $groupOptions;

@@ -15,6 +15,6 @@ final class Keyword extends MultipleValued
             return false;
         }
 
-        return isset($this->values[$view->getTag()->getKeyword()]);
+        return isset($this->values[$view->getTag()->getKeyword() ?? '']);
     }
 }

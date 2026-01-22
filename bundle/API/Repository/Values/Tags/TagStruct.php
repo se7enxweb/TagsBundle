@@ -49,7 +49,7 @@ abstract class TagStruct extends ValueObject
      */
     public function getKeyword(?string $language = null): ?string
     {
-        return $this->keywords[$language ?? $this->mainLanguageCode] ?? null;
+        return $this->keywords[$language ?? $this->mainLanguageCode ?? ''] ?? null;
     }
 
     /**
@@ -57,7 +57,7 @@ abstract class TagStruct extends ValueObject
      */
     public function setKeyword(string $keyword, ?string $language = null): void
     {
-        $this->keywords[$language ?? $this->mainLanguageCode] = $keyword;
+        $this->keywords[$language ?? $this->mainLanguageCode ?? ''] = $keyword;
     }
 
     /**

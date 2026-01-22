@@ -140,20 +140,20 @@ final class TagLimitationTypeTest extends Base
 
             if (is_int($value)) {
                 $this->tagsHandlerMock
-                    ->expects($this->once())
+                    ->expects(self::once())
                     ->method('loadTagInfo')
                     ->with($value)
                     ->willReturn(new TagInfo(['id' => $value]));
             } else {
                 $this->tagsHandlerMock
-                    ->expects($this->once())
+                    ->expects(self::once())
                     ->method('loadTagInfo')
                     ->with($value)
                     ->willThrowException(new NotFoundException('tag', $value));
             }
         } else {
             $this->tagsHandlerMock
-                ->expects($this->never())
+                ->expects(self::never())
                 ->method(self::anything());
         }
 
@@ -223,7 +223,7 @@ final class TagLimitationTypeTest extends Base
     public function testEvaluate(TagLimitation $limitation, ValueObject $object, mixed $expected): void
     {
         $this->userMock
-            ->expects($this->never())
+            ->expects(self::never())
             ->method(self::anything());
 
         $value = $this->limitationType->evaluate($limitation, $this->userMock, $object);
@@ -263,7 +263,7 @@ final class TagLimitationTypeTest extends Base
         $this->expectException(InvalidArgumentException::class);
 
         $this->userMock
-            ->expects($this->never())
+            ->expects(self::never())
             ->method(self::anything());
 
         $this->limitationType->evaluate($limitation, $this->userMock, $object);

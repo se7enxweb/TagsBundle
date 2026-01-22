@@ -65,7 +65,7 @@ final class TagIdTest extends TestCase
         $criterion = new Criterion\TagId([42, 43], 'tags_field');
 
         $this->fieldNameResolver
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getFieldTypes')
             ->with(
                 self::identicalTo($criterion),
@@ -81,7 +81,7 @@ final class TagIdTest extends TestCase
             );
 
         $this->contentTypeHandler
-            ->expects($this->never())
+            ->expects(self::never())
             ->method('getSearchableFieldMap');
 
         self::assertSame(
@@ -99,7 +99,7 @@ final class TagIdTest extends TestCase
         $criterion = new Criterion\TagId([42, 43]);
 
         $this->contentTypeHandler
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getSearchableFieldMap')
             ->willReturn(
                 [
@@ -158,7 +158,7 @@ final class TagIdTest extends TestCase
         $criterion = new Criterion\TagId([42, 43], 'tags_field');
 
         $this->fieldNameResolver
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getFieldTypes')
             ->with(
                 self::identicalTo($criterion),

@@ -69,7 +69,7 @@ final class NetgenTagsRuntimeTest extends TestCase
     public function testGetTagKeywordWithNotFoundException(): void
     {
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('loadTag')
             ->willThrowException(new NotFoundException('tag', 'tag'));
 
@@ -81,7 +81,7 @@ final class NetgenTagsRuntimeTest extends TestCase
         $translated = 'translated';
 
         $this->tagsService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('loadTag')
             ->willReturn($this->tag);
 
@@ -99,7 +99,7 @@ final class NetgenTagsRuntimeTest extends TestCase
         );
 
         $this->languageService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('loadLanguage')
             ->with($language->languageCode)
             ->willReturn($language);
@@ -112,7 +112,7 @@ final class NetgenTagsRuntimeTest extends TestCase
     public function testGetContentTypeNameWithNotFoundException(): void
     {
         $this->contentTypeService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('loadContentType')
             ->with(42)
             ->willThrowException(new NotFoundException('content type', 42));
@@ -123,7 +123,7 @@ final class NetgenTagsRuntimeTest extends TestCase
     public function testGetContentTypeNameWithNonContentTypeAsArgument(): void
     {
         $this->contentTypeService
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('loadContentType')
             ->with(42)
             ->willReturn($this->contentType);
@@ -134,7 +134,7 @@ final class NetgenTagsRuntimeTest extends TestCase
     public function testGetContentTypeNameWithContentTypeAsArgument(): void
     {
         $this->contentTypeService
-            ->expects($this->never())
+            ->expects(self::never())
             ->method('loadContentType');
 
         self::assertSame('Translated name', $this->runtime->getContentTypeName($this->contentType));

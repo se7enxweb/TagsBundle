@@ -513,7 +513,10 @@ final class TagController extends Controller
     {
         $this->denyAccessUnlessGranted('ibexa:tags:edit');
 
-        $tagIds = (array) $request->request->get('Tags', $request->hasSession() ? $request->getSession()->get('ngtags_tag_ids') : []);
+        $tagIds = $request->hasSession() ? $request->getSession()->get('ngtags_tag_ids') : [];
+        if ($request->request->has('Tags')) {
+            $tagIds = $request->request->all('Tags');
+        }
 
         if (count($tagIds) === 0) {
             return $this->redirectToTag($parentTag);
@@ -572,7 +575,10 @@ final class TagController extends Controller
     {
         $this->denyAccessUnlessGranted('ibexa:tags:read');
 
-        $tagIds = (array) $request->request->get('Tags', $request->hasSession() ? $request->getSession()->get('ngtags_tag_ids') : []);
+        $tagIds = $request->hasSession() ? $request->getSession()->get('ngtags_tag_ids') : [];
+        if ($request->request->has('Tags')) {
+            $tagIds = $request->request->all('Tags');
+        }
 
         if (count($tagIds) === 0) {
             return $this->redirectToTag($parentTag);
@@ -631,7 +637,10 @@ final class TagController extends Controller
     {
         $this->denyAccessUnlessGranted('ibexa:tags:delete');
 
-        $tagIds = (array) $request->request->get('Tags', $request->hasSession() ? $request->getSession()->get('ngtags_tag_ids') : []);
+        $tagIds = $request->hasSession() ? $request->getSession()->get('ngtags_tag_ids') : [];
+        if ($request->request->has('Tags')) {
+            $tagIds = $request->request->all('Tags');
+        }
 
         if (count($tagIds) === 0) {
             return $this->redirectToTag($parentTag);

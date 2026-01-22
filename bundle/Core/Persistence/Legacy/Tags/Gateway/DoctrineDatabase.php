@@ -456,7 +456,7 @@ final class DoctrineDatabase extends Gateway
                 ),
             )->setParameter('id', $tagId, Types::INTEGER)
             ->setParameter('modified', time(), Types::INTEGER)
-            ->setParameter('keyword', $updateStruct->keywords[$updateStruct->mainLanguageCode] ?? '', Types::STRING)
+            ->setParameter('keyword', $updateStruct->keywords[$updateStruct->mainLanguageCode ?? ''] ?? '', Types::STRING)
             ->setParameter('remote_id', $updateStruct->remoteId, Types::STRING)
             ->setParameter(
                 'main_language_id',
