@@ -1,7 +1,7 @@
 {
-    "name": "netgen/tagsbundle",
+    "name": "se7enxweb/tagsbundle",
     "description": "Netgen Tags Bundle is an eZ Platform bundle for taxonomy management and easier classification of content, providing more functionality for tagging content than ezkeyword field type included in eZ Publish kernel.",
-    "license": "GPL-2.0-only",
+    "license": "GPL-2.0-or-later",
     "type": "ezplatform-bundle",
     "keywords": [
         "ezplatform",
@@ -19,12 +19,12 @@
         }
     ],
     "require": {
-        "php": "^7.3 || ^8.0",
-        "ezsystems/ezplatform-kernel": "^1.0",
-        "ezsystems/ezplatform-admin-ui": "^2.0",
-        "ezsystems/ezplatform-rest": "^1.0",
-        "ezsystems/ezplatform-content-forms": "^1.0",
-        "ezsystems/ezplatform-solr-search-engine": "^3.0",
+        "php": "^7.3 || ^8.0 || ^8.3 || ^8.4 || ^8.5",
+        "se7enxweb/ezplatform-kernel": "^1.0",
+        "se7enxweb/ezplatform-admin-ui": "^2.0",
+        "se7enxweb/ezplatform-rest": "^1.0",
+        "se7enxweb/ezplatform-content-forms": "^1.0",
+        "se7enxweb/ezplatform-solr-search-engine": "^3.0",
         "lolautruche/ez-core-extra-bundle": "^3.0",
         "symfony/translation-contracts": "^2.0.1",
         "pagerfanta/pagerfanta": "^2.7",
@@ -55,7 +55,7 @@
     "autoload-dev": {
         "psr-4": {
             "Netgen\\TagsBundle\\Tests\\": "tests/",
-            "EzSystems\\EzPlatformSolrSearchEngine\\Tests\\": "vendor/ezsystems/ezplatform-solr-search-engine/tests/lib"
+            "EzSystems\\EzPlatformSolrSearchEngine\\Tests\\": "vendor/se7enxweb/ezplatform-solr-search-engine/tests/lib"
         },
         "files": [
             "vendor/symfony/var-dumper/Resources/functions/dump.php"
