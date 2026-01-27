@@ -27,7 +27,7 @@
         "se7enxweb/ezplatform-solr-search-engine": "^1.6",
         "se7enxweb/ez-core-extra-bundle": "^3.0",
         "symfony/translation-contracts": "^2.0.1",
-        "pagerfanta/pagerfanta": "^2.7",
+        "pagerfanta/pagerfanta": "^2.1.3",
         "doctrine/collections": "^1.6",
         "twig/twig": "^2.16.1"
     },
