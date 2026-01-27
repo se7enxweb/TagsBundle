@@ -25,7 +25,7 @@
         "se7enxweb/ezplatform-rest": "^1.0",
         "se7enxweb/ezplatform-content-forms": "^1.0",
         "se7enxweb/ezplatform-solr-search-engine": "^3.0",
-        "lolautruche/ez-core-extra-bundle": "^3.0",
+        "se7enxweb/ez-core-extra-bundle": "^3.0",
         "symfony/translation-contracts": "^2.0.1",
         "pagerfanta/pagerfanta": "^2.7",
         "doctrine/collections": "^1.6",
