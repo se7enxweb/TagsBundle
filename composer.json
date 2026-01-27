@@ -21,7 +21,7 @@
     "require": {
         "php": "^7.3 || ^8.0 || ^8.3 || ^8.4 || ^8.5",
         "se7enxweb/ezplatform-kernel": "^1.0",
-        "se7enxweb/ezplatform-admin-ui": "^2.0",
+        "se7enxweb/ezplatform-admin-ui": "^1.5.33",
         "se7enxweb/ezplatform-rest": "^1.0",
         "se7enxweb/ezplatform-content-forms": "^1.0",
         "se7enxweb/ezplatform-solr-search-engine": "^3.0",
@@ -29,7 +29,7 @@
         "symfony/translation-contracts": "^2.0.1",
         "pagerfanta/pagerfanta": "^2.7",
         "doctrine/collections": "^1.6",
-        "twig/twig": "^3.0.3"
+        "twig/twig": "^2.16.1"
     },
     "require-dev": {
         "symfony/var-dumper": "^5.0",
