@@ -20,7 +20,7 @@
     ],
     "require": {
         "php": "^7.3 || ^8.0 || ^8.3 || ^8.4 || ^8.5",
-        "se7enxweb/ezplatform-kernel": "^1.0",
+	"se7enxweb/ezpublish-kernel": "~7.5.33",
         "se7enxweb/ezplatform-admin-ui": "^1.5.33",
         "se7enxweb/ezplatform-rest": "^1.0",
         "se7enxweb/ezplatform-content-forms": "^1.0",
