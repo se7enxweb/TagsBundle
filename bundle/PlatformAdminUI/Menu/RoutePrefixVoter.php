@@ -26,7 +26,7 @@ class RoutePrefixVoter implements VoterInterface
         $this->routePrefix = $routePrefix;
     }
 
-    public function matchItem(ItemInterface $item)
+    public function matchItem(ItemInterface $item): ?bool
     {
         $request = $this->requestStack->getCurrentRequest();
         if (!$request instanceof Request) {
