@@ -1,5 +1,11 @@
-<div class="ng-tags-header">
-    <section class="ng-tags-container">
-        <a href="{{ path('netgen_tags_admin_root') }}"><div class="ng-tags-logo"></div></a>
+<header id="header">
+    <div class="header-nav">
+        <a id="header-logo" class="logo-type-{{ netgen_admin_ui.logoType }}" href="{{ path('netgen_tags_admin_root') }}" title="{{ 'netgen_admin_ui.title'|trans }}"></a>
+    </div>
+    <div class="ng-tags-header">
+    <section class="ng-adminui-tags-container">
+        <a href="{{ path('netgen_tags_admin_root') }}"><div class="ng-adminui-tags-logo"></div></a>
     </section>
-</div>
+    </div>
+
+</header>

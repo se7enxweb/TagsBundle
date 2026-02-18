@@ -1,0 +1,129 @@
+{% extends '@NetgenAdminUI/pagelayout.html.twig' %}
+
+{# This intermediate wrapper provides a header block that Admin UI doesn't have #}
+{# It allows child templates to customize only the header without duplicating the entire pagelayout #}
+
+{% block pagelayout_content %}
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+    {% set ui_context = module_result.ui_context|default( 'navigation' ) %}
+    {% set ui_component = module_result.ui_component|default( 'content' ) %}
+
+    {% set ui_context_edit = ui_context == 'edit' %}
+    {% set content_edit = ui_context_edit and ui_component == 'content' %}
+
+    {% set navigation_part = module_result.navigation_part|default( 'ezcontentnavigationpart' ) %}
+    {% set section_id = module_result.section_id|default( '0' ) %}
+
+    {% include '@NetgenAdminUI/page_head.html.twig' %}
+
+    {% if module_result is defined and navigation_part in ['ezcontentnavigationpart', 'ezmedianavigationpart'] %}
+        {% include '@NetgenLayoutsAdmin/admin/head.html.twig' ignore missing %}
+    {% endif %}
+
+    <title>
+        {% block title %}
+            {{ 'netgen_admin_ui.title'|trans }}
+        {% endblock %}
+    </title>
+
+    {% block stylesheets %}
+        {% include 'design:page_head_style.tpl' %}
+        {% include '@NetgenAdminUI/page_head_style.html.twig' %}
+    {% endblock %}
+
+    {% block javascripts %}
+        {% include 'design:page_head_script.tpl' %}
+        {% include '@NetgenAdminUI/page_head_script.html.twig' %}
+    {% endblock %}
+</head>
+
+<body>
+    <div id="page" class="{{ navigation_part }} section_id_{{ section_id }} {% if content_edit or ui_context_edit %} content-edit{% endif %}{% if not show_side_menu %} hide-side-menu{% endif %}">
+        {% block header %}
+        <header id="header">
+            <div class="header-nav">
+                <a href="/tags/admin/"><div class="ng-tags-logo"></div></a>
+            </div>
+
+            {% if current_menu_plugin != false and menu_plugins[current_menu_plugin].templates.top is defined %}
+                {% include menu_plugins[current_menu_plugin].templates.top ignore missing %}
+            {% endif %}
+        </header>
+        {% endblock %}
+
+        {% if show_side_menu %}
+            <aside id="aside">
+                <div class="aside-wrap">
+                    {% include '@NetgenAdminUI/page_aside_user.html.twig' %}
+
+                    <div class="navi-wrap">
+                        <div class="clearfix hidden-xs text-center hide" id="aside-user"></div>
+
+                        <nav class="aside-nav">
+                            <ul class="nav">
+                                {% for menu_plugin_identifier, menu_plugin in menu_plugins %}
+                                    {% if menu_plugin.active and menu_plugin.templates.aside is defined %}
+                                        {% include menu_plugin.templates.aside ignore missing with {
+                                            plugin: menu_plugin,
+                                            active: menu_plugin.identifier == current_menu_plugin
+                                        } %}
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </nav>
+                    </div>
+                    <a id="menu-toggle"><i></i></a>
+                </div>
+            </aside>
+        {% endif %}
+
+        <div id="content">
+            <div class="content-body">
+                <div id="columns">
+                    {% if not content_edit %}
+                        {% include '@NetgenAdminUI/page_leftmenu.html.twig' %}
+                    {% endif %}
+
+                    <div id="main-column" class="main-column layout-column">
+                        <div class="layout-column-inner">
+                            <div class="inner-cell">
+                                <div class="main-content">
+                                    {% if path_array is not empty %}
+                                        <div id="path" {% if content_edit %}class="path-edit"{% endif %}>
+                                            <div id="path-design">
+                                                {% include '@NetgenAdminUI/page_toppath.html.twig' %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% block pre_content %}{% endblock %}
+                                    {% block content %}{% endblock %}
+                                    {% block post_content %}{% endblock %}
+                                    {% include '@NetgenAdminUI/page_footer.html.twig' %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="break"></div>
+
+        {# The popup menu include must be outside all divs. It is hidden by default. #}
+        {% include 'design:popupmenu/popup_menu.tpl' %}
+    </div>
+
+    <div id="overlay-mask" style="display:none;"></div>
+    <img src="{{ asset( 'bundles/netgenadminui/images/loader.gif' ) }}" id="ajaxuploader-loader" style="display:none;" alt="{{ 'netgen_admin_ui.layout.loading'|trans }}" />
+
+    <div id="size-warning">
+        <div class="size-warning-text">
+            <span class="icon"></span>
+            <h2>{{ 'netgen_admin_ui.layout.size_warning.title'|trans }}</h2>
+            <p>{{ 'netgen_admin_ui.layout.size_warning.text'|trans }}</p>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

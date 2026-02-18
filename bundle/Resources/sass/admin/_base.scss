@@ -30,6 +30,15 @@ body.tags-resizing {
         flex:1;
         align-items:stretch;
     }
+   .ng-adminui-tags-container {
+        height:100%;
+        width:100%;
+        max-width:1600px;
+        margin:0 0;
+        display:flex;
+        flex:1;
+        align-items:stretch;
+    }
     .tags-sidebar {
         width:$sidebarWidth;
         background:$sidebarBg;
@@ -65,6 +74,12 @@ body.tags-resizing {
             width:$sidebarWidth;
             background:hsl(0, 0, 20) url(../images/tags-logo-full.svg) no-repeat center center;
             background-size:auto 60%;
+        }
+        .ng-adminui-tags-logo {
+            height:70px;
+            width: 240px;
+            background:hsl(0, 0, 20) url(../images/tags-logo-full.svg) no-repeat center center;
+            background-size:auto 70%;
         }
     }
 }
