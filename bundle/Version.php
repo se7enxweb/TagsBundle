@@ -7,6 +7,7 @@ namespace Netgen\TagsBundle;
  */
 class Version
 {
+    const VERSION_ID = 30000;
     const MAJOR_VERSION = 3;
     const MINOR_VERSION = 0;
     const RELEASE_VERSION = 0;
