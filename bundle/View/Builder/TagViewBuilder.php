@@ -47,7 +47,7 @@ final class TagViewBuilder implements ViewBuilder
         }
 
         if (isset($parameters['tagId'])) {
-            $view->setTag($this->tagsService->loadTag($parameters['tagId']));
+            $view->setTag($this->tagsService->loadTag((int) $parameters['tagId']));
         } elseif (isset($parameters['tag']) && $parameters['tag'] instanceof Tag) {
             $view->setTag($parameters['tag']);
         } else {
