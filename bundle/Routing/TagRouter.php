@@ -109,7 +109,7 @@ final class TagRouter implements ChainedRouterInterface, RequestMatcherInterface
                     );
                 }
 
-                $tag = $tag ?? $this->tagsService->loadTag($parameters['tagId']);
+                $tag = $tag ?? $this->tagsService->loadTag((int) $parameters['tagId']);
                 unset($parameters['tag'], $parameters['tagId'], $parameters['viewType'], $parameters['layout']);
 
                 return $this->generator->generate($tag, $parameters, $referenceType);

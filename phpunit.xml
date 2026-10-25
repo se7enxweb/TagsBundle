@@ -17,6 +17,9 @@
         <testsuite name="Netgen\TagsBundle\Tests\Templating">
             <directory>tests/Templating</directory>
         </testsuite>
+        <testsuite name="Netgen\TagsBundle\Tests\View">
+            <directory>tests/View</directory>
+        </testsuite>
     </testsuites>
 
     <coverage>
