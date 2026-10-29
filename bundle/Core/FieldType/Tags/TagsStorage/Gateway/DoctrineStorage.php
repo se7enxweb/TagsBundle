@@ -17,7 +17,13 @@ use function in_array;
 
 final class DoctrineStorage extends Gateway
 {
-    public function __construct(private Connection $connection, private LanguageHandler $languageHandler) {}
+    private Connection $connection;
+    private LanguageHandler $languageHandler;
+    public function __construct(Connection $connection, LanguageHandler $languageHandler)
+    {
+        $this->connection = $connection;
+        $this->languageHandler = $languageHandler;
+    }
 
     public function storeFieldData(VersionInfo $versionInfo, Field $field): void
     {

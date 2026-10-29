@@ -18,6 +18,8 @@ use function trim;
  */
 class TagsAdminView implements ViewInterface
 {
+    private Environment $twig;
+    private string $template;
     private PagerfantaInterface $pagerfanta;
 
     private Closure $routeGenerator;
@@ -28,7 +30,11 @@ class TagsAdminView implements ViewInterface
 
     private int $endPage;
 
-    public function __construct(private Environment $twig, private string $template) {}
+    public function __construct(Environment $twig, string $template)
+    {
+        $this->twig = $twig;
+        $this->template = $template;
+    }
 
     public function getName(): string
     {

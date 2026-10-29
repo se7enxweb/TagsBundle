@@ -11,13 +11,15 @@ use function array_map;
 
 final class Tagger
 {
+    private TagHandler $handler;
     public const TAG_PREFIX = 'ngt';
     public const MAIN_TAG_PREFIX = 'ngtm';
     public const PATH_TAG_PREFIX = 'ngtp';
 
-    public function __construct(
-        private TagHandler $handler,
-    ) {}
+    public function __construct(TagHandler $handler)
+    {
+        $this->handler = $handler;
+    }
 
     public function resolveTags(Tag $tag): array
     {

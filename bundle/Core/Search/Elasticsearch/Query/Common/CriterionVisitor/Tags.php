@@ -13,12 +13,17 @@ use function array_merge;
 
 abstract class Tags implements CriterionVisitor
 {
-    public function __construct(
-        private FieldNameResolver $fieldNameResolver,
-        private Handler $contentTypeHandler,
-        private string $fieldTypeIdentifier,
-        private string $fieldName,
-    ) {}
+    private FieldNameResolver $fieldNameResolver;
+    private Handler $contentTypeHandler;
+    private string $fieldTypeIdentifier;
+    private string $fieldName;
+    public function __construct(FieldNameResolver $fieldNameResolver, Handler $contentTypeHandler, string $fieldTypeIdentifier, string $fieldName)
+    {
+        $this->fieldNameResolver = $fieldNameResolver;
+        $this->contentTypeHandler = $contentTypeHandler;
+        $this->fieldTypeIdentifier = $fieldTypeIdentifier;
+        $this->fieldName = $fieldName;
+    }
 
     protected function getSearchFields(Criterion $criterion): array
     {

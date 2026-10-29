@@ -33,17 +33,27 @@ use function urldecode;
 
 final class TagRouter implements ChainedRouterInterface, RequestMatcherInterface
 {
+    private TagsService $tagsService;
+    private TagUrlGenerator $generator;
+    private ConfigResolverInterface $configResolver;
+    private ?RequestContext $requestContext = null;
+    private ?LoggerInterface $logger = null;
     public const TAG_URL_ROUTE_NAME = 'netgen_tags.tag.url';
 
     public const TAG_VIEW_ACTION_CONTROLLER = 'netgen_tags.controller.tag_view:viewAction';
 
     public function __construct(
-        private TagsService $tagsService,
-        private TagUrlGenerator $generator,
-        private ConfigResolverInterface $configResolver,
-        private ?RequestContext $requestContext = null,
-        private ?LoggerInterface $logger = null,
+        TagsService $tagsService,
+        TagUrlGenerator $generator,
+        ConfigResolverInterface $configResolver,
+        ?RequestContext $requestContext = null,
+        ?LoggerInterface $logger = null
     ) {
+        $this->tagsService = $tagsService;
+        $this->generator = $generator;
+        $this->configResolver = $configResolver;
+        $this->requestContext = $requestContext;
+        $this->logger = $logger;
         // PHP 8.0 has no "new" in parameter defaults
         $this->requestContext = $requestContext ?? new RequestContext();
         $this->logger = $logger ?? new NullLogger();
@@ -54,7 +64,7 @@ final class TagRouter implements ChainedRouterInterface, RequestMatcherInterface
         $requestedPath = urldecode($request->attributes->get('semanticPathinfo', $request->getPathInfo()));
         $pathPrefix = $this->generator->getPathPrefix();
 
-        if (!str_starts_with($requestedPath, $pathPrefix)) {
+        if (strncmp($requestedPath, $pathPrefix, strlen($pathPrefix)) !== 0) {
             throw new ResourceNotFoundException('Route not found');
         }
 
@@ -148,7 +158,10 @@ final class TagRouter implements ChainedRouterInterface, RequestMatcherInterface
         throw new RuntimeException("The TagRouter doesn't support the match() method. Please use matchRequest() instead.");
     }
 
-    public function supports(mixed $name): bool
+    /**
+     * @param mixed $name
+     */
+    public function supports($name): bool
     {
         if (is_object($name)) {
             return $this->supportsObject($name);
@@ -162,13 +175,19 @@ final class TagRouter implements ChainedRouterInterface, RequestMatcherInterface
         return $object instanceof Tag;
     }
 
-    public function getRouteDebugMessage(mixed $name, array $parameters = []): string
+    /**
+     * @param mixed $name
+     */
+    public function getRouteDebugMessage($name, array $parameters = []): string
     {
-        return match (true) {
-            $name instanceof RouteObjectInterface => 'Route with key ' . $name->getRouteKey(),
-            $name instanceof SymfonyRoute => 'Route with pattern ' . $name->getPath(),
-            default => $name,
-        };
+        switch (true) {
+            case $name instanceof RouteObjectInterface:
+                return 'Route with key ' . $name->getRouteKey();
+            case $name instanceof SymfonyRoute:
+                return 'Route with pattern ' . $name->getPath();
+            default:
+                return $name;
+        }
     }
 
     /**
@@ -178,7 +197,7 @@ final class TagRouter implements ChainedRouterInterface, RequestMatcherInterface
      */
     private function removePathPrefix(string $path, string $prefix): string
     {
-        if ($prefix !== '/' && str_starts_with($path, $prefix)) {
+        if ($prefix !== '/' && strncmp($path, $prefix, strlen($prefix)) === 0) {
             $path = mb_substr($path, mb_strlen($prefix));
         }
 

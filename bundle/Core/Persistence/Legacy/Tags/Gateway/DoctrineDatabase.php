@@ -34,11 +34,15 @@ use const PHP_INT_MAX;
 
 final class DoctrineDatabase extends Gateway
 {
-    public function __construct(
-        private Connection $connection,
-        private LanguageHandler $languageHandler,
-        private LanguageMaskGenerator $languageMaskGenerator,
-    ) {}
+    private Connection $connection;
+    private LanguageHandler $languageHandler;
+    private LanguageMaskGenerator $languageMaskGenerator;
+    public function __construct(Connection $connection, LanguageHandler $languageHandler, LanguageMaskGenerator $languageMaskGenerator)
+    {
+        $this->connection = $connection;
+        $this->languageHandler = $languageHandler;
+        $this->languageMaskGenerator = $languageMaskGenerator;
+    }
 
     public function getBasicTagData(int $tagId): array
     {

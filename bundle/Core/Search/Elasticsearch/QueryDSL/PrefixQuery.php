@@ -8,10 +8,13 @@ use Ibexa\Elasticsearch\ElasticSearch\QueryDSL\Query;
 
 final class PrefixQuery implements Query
 {
-    public function __construct(
-        private ?string $field = null,
-        private ?string $value = null,
-    ) {}
+    private ?string $field = null;
+    private ?string $value = null;
+    public function __construct(?string $field = null, ?string $value = null)
+    {
+        $this->field = $field;
+        $this->value = $value;
+    }
 
     public function withField(string $field): self
     {

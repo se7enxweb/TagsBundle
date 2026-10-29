@@ -14,7 +14,11 @@ use RuntimeException;
 
 final class ExceptionConversion extends Gateway
 {
-    public function __construct(private Gateway $innerGateway) {}
+    private Gateway $innerGateway;
+    public function __construct(Gateway $innerGateway)
+    {
+        $this->innerGateway = $innerGateway;
+    }
 
     public function getBasicTagData(int $tagId): array
     {

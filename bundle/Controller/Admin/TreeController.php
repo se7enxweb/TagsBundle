@@ -20,6 +20,10 @@ use const ENT_SUBSTITUTE;
 
 final class TreeController extends Controller
 {
+    private TagsService $tagsService;
+    private TranslatorInterface $translator;
+    private RouterInterface $router;
+    private ConfigResolverInterface $configResolver;
     /**
      * @var array<string, string>
      */
@@ -31,11 +35,15 @@ final class TreeController extends Controller
     private array $treeLinks;
 
     public function __construct(
-        private TagsService $tagsService,
-        private TranslatorInterface $translator,
-        private RouterInterface $router,
-        private ConfigResolverInterface $configResolver,
+        TagsService $tagsService,
+        TranslatorInterface $translator,
+        RouterInterface $router,
+        ConfigResolverInterface $configResolver
     ) {
+        $this->tagsService = $tagsService;
+        $this->translator = $translator;
+        $this->router = $router;
+        $this->configResolver = $configResolver;
         $this->treeLabels = [
             'top_level_tags' => $this->translator->trans('tag.tree.top_level_tags', [], 'netgen_tags_admin'),
             'add_child' => $this->translator->trans('tag.tree.add_child', [], 'netgen_tags_admin'),
@@ -62,8 +70,9 @@ final class TreeController extends Controller
      * Returns JSON string containing all children tags for given tag.
      * It is called in AJAX request from jsTree Javascript plugin to render tree with tags.
      * It supports lazy loading; when a tag is clicked in a tree, it calls this method to fetch it's children.
+     * @param mixed $isRoot
      */
-    public function getChildrenAction(?Tag $tag = null, mixed $isRoot = false): JsonResponse
+    public function getChildrenAction(?Tag $tag = null, $isRoot = false): JsonResponse
     {
         $this->denyAccessUnlessGranted('ibexa:tags:read');
 

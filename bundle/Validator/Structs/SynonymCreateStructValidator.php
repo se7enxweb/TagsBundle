@@ -13,7 +13,10 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 final class SynonymCreateStructValidator extends CreateStructValidator
 {
-    public function validate(mixed $value, Constraint $constraint): void
+    /**
+     * @param mixed $value
+     */
+    public function validate($value, Constraint $constraint): void
     {
         if (!$constraint instanceof SynonymCreateStructConstraint) {
             throw new UnexpectedTypeException(

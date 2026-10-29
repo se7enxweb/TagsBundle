@@ -15,6 +15,8 @@ use Pagerfanta\Adapter\AdapterInterface;
  */
 final class RelatedContentAdapter implements AdapterInterface, TagAdapterInterface
 {
+    private TagsService $tagsService;
+    private ConfigResolverInterface $configResolver;
     private Tag $tag;
 
     private int $nbResults;
@@ -29,7 +31,11 @@ final class RelatedContentAdapter implements AdapterInterface, TagAdapterInterfa
      */
     private array $additionalCriteria = [];
 
-    public function __construct(private TagsService $tagsService, private ConfigResolverInterface $configResolver) {}
+    public function __construct(TagsService $tagsService, ConfigResolverInterface $configResolver)
+    {
+        $this->tagsService = $tagsService;
+        $this->configResolver = $configResolver;
+    }
 
     public function setTag(Tag $tag): void
     {

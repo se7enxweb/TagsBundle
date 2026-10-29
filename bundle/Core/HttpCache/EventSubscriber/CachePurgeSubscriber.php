@@ -22,10 +22,13 @@ use function array_unique;
 
 final class CachePurgeSubscriber implements EventSubscriberInterface
 {
-    public function __construct(
-        private Tagger $tagger,
-        private PurgeClientInterface $purgeClient,
-    ) {}
+    private Tagger $tagger;
+    private PurgeClientInterface $purgeClient;
+    public function __construct(Tagger $tagger, PurgeClientInterface $purgeClient)
+    {
+        $this->tagger = $tagger;
+        $this->purgeClient = $purgeClient;
+    }
 
     /**
      * @return array<string, string>

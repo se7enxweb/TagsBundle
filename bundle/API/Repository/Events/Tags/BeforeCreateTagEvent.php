@@ -13,9 +13,13 @@ use function sprintf;
 
 final class BeforeCreateTagEvent extends BeforeEvent
 {
+    private TagCreateStruct $tagCreateStruct;
     private Tag $tag;
 
-    public function __construct(private TagCreateStruct $tagCreateStruct) {}
+    public function __construct(TagCreateStruct $tagCreateStruct)
+    {
+        $this->tagCreateStruct = $tagCreateStruct;
+    }
 
     public function getTagCreateStruct(): TagCreateStruct
     {
@@ -24,13 +28,14 @@ final class BeforeCreateTagEvent extends BeforeEvent
 
     public function getTag(): Tag
     {
-        $this->tag
-            ?? throw new UnexpectedValueException(
+        if ($this->tag === null) {
+            throw new UnexpectedValueException(
                 sprintf(
                     'Return value is not set or not a type of %s. Check with hasTag() or set it with setTag() before you call the getter.',
                     Tag::class,
                 ),
             );
+        }
 
         return $this->tag;
     }

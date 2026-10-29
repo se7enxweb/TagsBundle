@@ -119,7 +119,10 @@ final class Tag extends ValueObject
         }
     }
 
-    public function __get($property): mixed
+    /**
+     * @return mixed
+     */
+    public function __get($property)
     {
         if ($property === 'keyword') {
             return $this->getKeyword();

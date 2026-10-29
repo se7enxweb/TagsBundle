@@ -14,9 +14,16 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 final class TagValidator extends ConstraintValidator
 {
-    public function __construct(private TagsService $tagsService) {}
+    private TagsService $tagsService;
+    public function __construct(TagsService $tagsService)
+    {
+        $this->tagsService = $tagsService;
+    }
 
-    public function validate(mixed $value, Constraint $constraint): void
+    /**
+     * @param mixed $value
+     */
+    public function validate($value, Constraint $constraint): void
     {
         if ($value === null) {
             return;
@@ -47,7 +54,7 @@ final class TagValidator extends ConstraintValidator
                 $this->context->buildViolation($constraint->synonymMessage)
                     ->addViolation();
             }
-        } catch (NotFoundException) {
+        } catch (NotFoundException $exception) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('%tagId%', $value)
                 ->addViolation();

@@ -16,12 +16,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 final class TagMatcherFactory extends ClassNameMatcherFactory
 {
+    private TagsService $tagsService;
+    private ConfigResolverInterface $configResolver;
+    private ContainerInterface $container;
     public function __construct(
         Repository $repository,
-        private TagsService $tagsService,
-        private ConfigResolverInterface $configResolver,
-        private ContainerInterface $container,
+        TagsService $tagsService,
+        ConfigResolverInterface $configResolver,
+        ContainerInterface $container
     ) {
+        $this->tagsService = $tagsService;
+        $this->configResolver = $configResolver;
+        $this->container = $container;
         parent::__construct($repository, 'Netgen\TagsBundle\Matcher\Tag');
     }
 

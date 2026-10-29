@@ -14,13 +14,19 @@ use function implode;
 /**
  * Value for Tags field type.
  */
-final class Value extends BaseValue implements Stringable
+final class Value extends BaseValue
 {
+    /**
+     * @var \Netgen\TagsBundle\API\Repository\Values\Tags\Tag[]
+     */
+    public array $tags = [];
     /**
      * @param \Netgen\TagsBundle\API\Repository\Values\Tags\Tag[] $tags
      */
-    public function __construct(public array $tags = []) {}
-
+    public function __construct(array $tags = [])
+    {
+        $this->tags = $tags;
+    }
     /**
      * Returns a string representation of the field value.
      */

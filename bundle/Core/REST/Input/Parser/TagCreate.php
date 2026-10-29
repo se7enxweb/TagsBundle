@@ -18,7 +18,13 @@ use function is_array;
 
 final class TagCreate extends BaseParser
 {
-    public function __construct(private TagsService $tagsService, private ParserTools $parserTools) {}
+    private TagsService $tagsService;
+    private ParserTools $parserTools;
+    public function __construct(TagsService $tagsService, ParserTools $parserTools)
+    {
+        $this->tagsService = $tagsService;
+        $this->parserTools = $parserTools;
+    }
 
     public function parse(array $data, ParsingDispatcher $parsingDispatcher): TagCreateStruct
     {
@@ -26,11 +32,13 @@ final class TagCreate extends BaseParser
             throw new Exceptions\Parser("Missing or invalid 'ParentTag' element for TagCreate.");
         }
 
-        $data['ParentTag']['_href']
-            ?? throw new Exceptions\Parser("Missing '_href' attribute for ParentTag element in TagCreate.");
+        if (!isset($data['ParentTag']['_href'])) {
+            throw new Exceptions\Parser("Missing '_href' attribute for ParentTag element in TagCreate.");
+        }
 
-        $data['mainLanguageCode']
-            ?? throw new Exceptions\Parser("Missing 'mainLanguageCode' element for TagCreate.");
+        if (!isset($data['mainLanguageCode'])) {
+            throw new Exceptions\Parser("Missing 'mainLanguageCode' element for TagCreate.");
+        }
 
         $tagHrefParts = explode('/', $this->requestParser->parseHref($data['ParentTag']['_href'], 'tagPath'));
 

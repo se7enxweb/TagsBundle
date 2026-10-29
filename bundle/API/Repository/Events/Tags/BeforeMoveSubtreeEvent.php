@@ -12,9 +12,15 @@ use function sprintf;
 
 final class BeforeMoveSubtreeEvent extends BeforeEvent
 {
+    private Tag $tag;
+    private ?Tag $parentTag = null;
     private Tag $movedTag;
 
-    public function __construct(private Tag $tag, private ?Tag $parentTag = null) {}
+    public function __construct(Tag $tag, ?Tag $parentTag = null)
+    {
+        $this->tag = $tag;
+        $this->parentTag = $parentTag;
+    }
 
     public function getTag(): Tag
     {
@@ -28,13 +34,14 @@ final class BeforeMoveSubtreeEvent extends BeforeEvent
 
     public function getMovedTag(): Tag
     {
-        $this->movedTag
-            ?? throw new UnexpectedValueException(
+        if ($this->movedTag === null) {
+            throw new UnexpectedValueException(
                 sprintf(
                     'Return value is not set or not a type of %s. Check with hasMovedTag() or set it with setMovedTag() before you call the getter.',
                     Tag::class,
                 ),
             );
+        }
 
         return $this->movedTag;
     }

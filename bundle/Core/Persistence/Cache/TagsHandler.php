@@ -26,14 +26,16 @@ use function trim;
 
 final class TagsHandler extends AbstractInMemoryHandler implements TagsHandlerInterface
 {
+    private TagsHandlerInterface $tagsHandler;
     private const ALL_TRANSLATIONS_KEY = '0';
 
     public function __construct(
         TransactionAwareAdapterInterface $cache,
         PersistenceLogger $logger,
         InMemoryCache $inMemory,
-        private TagsHandlerInterface $tagsHandler,
+        TagsHandlerInterface $tagsHandler
     ) {
+        $this->tagsHandler = $tagsHandler;
         // No type hint on internal classes, parent::__construct will take care of checking that it gets what it expects.
         parent::__construct($cache, $logger, $inMemory);
     }

@@ -13,7 +13,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class TagsFieldType extends AbstractType
 {
-    public function __construct(private FieldTypeService $fieldTypeService) {}
+    private FieldTypeService $fieldTypeService;
+    public function __construct(FieldTypeService $fieldTypeService)
+    {
+        $this->fieldTypeService = $fieldTypeService;
+    }
 
     public function configureOptions(OptionsResolver $resolver): void
     {

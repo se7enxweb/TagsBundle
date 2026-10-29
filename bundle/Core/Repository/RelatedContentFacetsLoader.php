@@ -15,7 +15,13 @@ use function count;
 
 final class RelatedContentFacetsLoader
 {
-    public function __construct(private TagsService $tagsService, private SearchService $searchService) {}
+    private TagsService $tagsService;
+    private SearchService $searchService;
+    public function __construct(TagsService $tagsService, SearchService $searchService)
+    {
+        $this->tagsService = $tagsService;
+        $this->searchService = $searchService;
+    }
 
     /**
      * Returns facets for given $facetBuilders,

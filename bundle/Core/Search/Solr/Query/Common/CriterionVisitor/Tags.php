@@ -15,6 +15,18 @@ use function array_merge;
 abstract class Tags extends Field
 {
     /**
+     * @var \Ibexa\Contracts\Core\Persistence\Content\Type\Handler
+     */
+    private Handler $contentTypeHandler;
+    /**
+     * @var string
+     */
+    private string $fieldTypeIdentifier;
+    /**
+     * @var string
+     */
+    private string $fieldName;
+    /**
      * @param \Ibexa\Contracts\Core\Persistence\Content\Type\Handler $contentTypeHandler for tag-queries which aren't field-specific
      * @param string $fieldTypeIdentifier identifier of the field type that criterion can handle
      * @param string $fieldName name of the field type's indexed field that criterion can handle
@@ -22,10 +34,13 @@ abstract class Tags extends Field
     public function __construct(
         FieldNameResolver $fieldNameResolver,
         FieldValueMapper $fieldValueMapper,
-        private Handler $contentTypeHandler,
-        private string $fieldTypeIdentifier,
-        private string $fieldName,
+        Handler $contentTypeHandler,
+        string $fieldTypeIdentifier,
+        string $fieldName
     ) {
+        $this->contentTypeHandler = $contentTypeHandler;
+        $this->fieldTypeIdentifier = $fieldTypeIdentifier;
+        $this->fieldName = $fieldName;
         parent::__construct($fieldNameResolver, $fieldValueMapper);
     }
 

@@ -10,11 +10,15 @@ use Pagerfanta\Adapter\AdapterInterface;
 
 final class ChildrenTagsAdapter implements AdapterInterface, TagAdapterInterface
 {
+    private TagsService $tagsService;
     private ?Tag $tag = null;
 
     private int $nbResults;
 
-    public function __construct(private TagsService $tagsService) {}
+    public function __construct(TagsService $tagsService)
+    {
+        $this->tagsService = $tagsService;
+    }
 
     public function setTag(Tag $tag): void
     {

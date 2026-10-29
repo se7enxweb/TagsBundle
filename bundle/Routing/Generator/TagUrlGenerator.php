@@ -23,23 +23,27 @@ use function urlencode;
  */
 final class TagUrlGenerator extends Generator
 {
+    private TagsService $tagsService;
+    private RouterInterface $defaultRouter;
+    private ConfigResolverInterface $configResolver;
     public const INTERNAL_TAG_ROUTE = 'netgen_tags.tag.internal';
 
     public const DEFAULT_PATH_PREFIX = '/tags/view';
 
-    public function __construct(
-        private TagsService $tagsService,
-        private RouterInterface $defaultRouter,
-        private ConfigResolverInterface $configResolver,
-    ) {}
+    public function __construct(TagsService $tagsService, RouterInterface $defaultRouter, ConfigResolverInterface $configResolver)
+    {
+        $this->tagsService = $tagsService;
+        $this->defaultRouter = $defaultRouter;
+        $this->configResolver = $configResolver;
+    }
 
     /**
      * Generates the URL from $tag and $parameters.
      * Entries in $parameters will be added in the query string.
      *
-     * @param \Netgen\TagsBundle\API\Repository\Values\Tags\Tag $tag
+     * @param mixed $tag
      */
-    public function doGenerate(mixed $tag, array $parameters): string
+    public function doGenerate($tag, array $parameters): string
     {
         if (isset($parameters['siteaccess'])) {
             // We generate for a different siteaccess, so potentially in a different language.
@@ -79,7 +83,7 @@ final class TagUrlGenerator extends Generator
 
                 $tagId = $tag->parentTagId;
             } while ($tagId > 0);
-        } catch (NotFoundException) {
+        } catch (NotFoundException $exception) {
             $isInternal = true;
             $tagUrl = $this->defaultRouter->generate(
                 self::INTERNAL_TAG_ROUTE,

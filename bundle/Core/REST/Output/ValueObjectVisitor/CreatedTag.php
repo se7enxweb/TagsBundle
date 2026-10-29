@@ -11,7 +11,10 @@ use function trim;
 
 final class CreatedTag extends RestTag
 {
-    public function visit(Visitor $visitor, Generator $generator, mixed $data): void
+    /**
+     * @param mixed $data
+     */
+    public function visit(Visitor $visitor, Generator $generator, $data): void
     {
         parent::visit($visitor, $generator, $data->restTag);
 

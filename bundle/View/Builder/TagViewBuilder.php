@@ -22,17 +22,26 @@ use function str_contains;
 
 final class TagViewBuilder implements ViewBuilder
 {
-    public function __construct(
-        private TagsService $tagsService,
-        private Configurator $viewConfigurator,
-        private ParametersInjector $viewParametersInjector,
-        private ConfigResolverInterface $configResolver,
-        private AuthorizationCheckerInterface $authorizationChecker,
-    ) {}
-
-    public function matches(mixed $argument): bool
+    private TagsService $tagsService;
+    private Configurator $viewConfigurator;
+    private ParametersInjector $viewParametersInjector;
+    private ConfigResolverInterface $configResolver;
+    private AuthorizationCheckerInterface $authorizationChecker;
+    public function __construct(TagsService $tagsService, Configurator $viewConfigurator, ParametersInjector $viewParametersInjector, ConfigResolverInterface $configResolver, AuthorizationCheckerInterface $authorizationChecker)
     {
-        return is_string($argument) && str_contains($argument, 'netgen_tags.controller.tag_view:');
+        $this->tagsService = $tagsService;
+        $this->viewConfigurator = $viewConfigurator;
+        $this->viewParametersInjector = $viewParametersInjector;
+        $this->configResolver = $configResolver;
+        $this->authorizationChecker = $authorizationChecker;
+    }
+
+    /**
+     * @param mixed $argument
+     */
+    public function matches($argument): bool
+    {
+        return is_string($argument) && strpos($argument, 'netgen_tags.controller.tag_view:') !== false;
     }
 
     public function buildView(array $parameters): View

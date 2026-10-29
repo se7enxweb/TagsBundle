@@ -18,7 +18,13 @@ use function iterator_to_array;
 
 final class TranslationListType extends AbstractType
 {
-    public function __construct(private LanguageService $languageService, private ConfigResolverInterface $configResolver) {}
+    private LanguageService $languageService;
+    private ConfigResolverInterface $configResolver;
+    public function __construct(LanguageService $languageService, ConfigResolverInterface $configResolver)
+    {
+        $this->languageService = $languageService;
+        $this->configResolver = $configResolver;
+    }
 
     public function configureOptions(OptionsResolver $resolver): void
     {

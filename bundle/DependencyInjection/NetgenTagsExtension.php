@@ -25,10 +25,11 @@ final class NetgenTagsExtension extends Extension implements PrependExtensionInt
         /** @var array<string, string> $activatedBundles */
         $activatedBundles = $container->getParameter('kernel.bundles');
 
-        $activatedBundles['EzCoreExtraBundle']
-            ?? throw new RuntimeException(
+        if (!isset($activatedBundles['EzCoreExtraBundle'])) {
+            throw new RuntimeException(
                 'Netgen Tags Bundle requires EzCoreExtraBundle (lolautruche/ez-core-extra-bundle) to be activated to work properly.',
             );
+        }
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);

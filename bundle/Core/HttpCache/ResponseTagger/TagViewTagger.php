@@ -10,9 +10,11 @@ use Netgen\TagsBundle\View\TagView;
 
 final class TagViewTagger implements ResponseTagger
 {
-    public function __construct(
-        private Tagger $tagger,
-    ) {}
+    private Tagger $tagger;
+    public function __construct(Tagger $tagger)
+    {
+        $this->tagger = $tagger;
+    }
 
     public function tag($value): void
     {

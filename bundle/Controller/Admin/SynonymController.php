@@ -15,13 +15,19 @@ use function count;
 
 final class SynonymController extends Controller
 {
-    public function __construct(private TagsService $tagsService) {}
+    private TagsService $tagsService;
+    public function __construct(TagsService $tagsService)
+    {
+        $this->tagsService = $tagsService;
+    }
 
     /**
      * This method is called for add new synonym action without selected language.
      * It renders a form to select language for the keyword of new synonym.
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @param mixed $mainTagId
      */
-    public function addSynonymSelectAction(Request $request, mixed $mainTagId): RedirectResponse|Response
+    public function addSynonymSelectAction(Request $request, $mainTagId)
     {
         $this->denyAccessUnlessGranted('ibexa:tags:addsynonym');
 
@@ -67,8 +73,9 @@ final class SynonymController extends Controller
     /**
      * This method renders view with a form for adding new synonym.
      * After form is being submitted, it stores new synonym and redirects to it.
+     * @param mixed $mainTagId
      */
-    public function addSynonymAction(Request $request, mixed $mainTagId, string $languageCode): Response
+    public function addSynonymAction(Request $request, $mainTagId, string $languageCode): Response
     {
         $this->denyAccessUnlessGranted('ibexa:tags:addsynonym');
 

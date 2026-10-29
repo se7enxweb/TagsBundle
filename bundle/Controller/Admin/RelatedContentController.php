@@ -17,7 +17,13 @@ use function count;
 
 final class RelatedContentController extends Controller
 {
-    public function __construct(private AdapterInterface $adapter, private SortClauseMapper $sortClauseMapper) {}
+    private AdapterInterface $adapter;
+    private SortClauseMapper $sortClauseMapper;
+    public function __construct(AdapterInterface $adapter, SortClauseMapper $sortClauseMapper)
+    {
+        $this->adapter = $adapter;
+        $this->sortClauseMapper = $sortClauseMapper;
+    }
 
     /**
      * Rendering a view which shows related content of tag.

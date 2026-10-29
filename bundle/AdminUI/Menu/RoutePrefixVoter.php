@@ -16,7 +16,13 @@ use function str_starts_with;
 
 final class RoutePrefixVoter implements VoterInterface
 {
-    public function __construct(private RequestStack $requestStack, private string $routePrefix) {}
+    private RequestStack $requestStack;
+    private string $routePrefix;
+    public function __construct(RequestStack $requestStack, string $routePrefix)
+    {
+        $this->requestStack = $requestStack;
+        $this->routePrefix = $routePrefix;
+    }
 
     public function matchItem(ItemInterface $item): ?bool
     {
@@ -26,7 +32,7 @@ final class RoutePrefixVoter implements VoterInterface
         }
 
         $currentRoute = $request->attributes->get('_route') ?? '';
-        if (!str_starts_with($currentRoute, $this->routePrefix)) {
+        if (strncmp($currentRoute, $this->routePrefix, strlen($this->routePrefix)) !== 0) {
             return null;
         }
 
@@ -55,7 +61,7 @@ final class RoutePrefixVoter implements VoterInterface
             return false;
         }
 
-        if (!str_starts_with($testedRoute['route'], $this->routePrefix)) {
+        if (strncmp($testedRoute['route'], $this->routePrefix, strlen($this->routePrefix)) !== 0) {
             return false;
         }
 

@@ -26,12 +26,17 @@ use function trim;
 
 final class TagController extends Controller
 {
-    public function __construct(
-        private TagsService $tagsService,
-        private ContentTypeService $contentTypeService,
-        private AdapterInterface $tagChildrenAdapter,
-        private SearchTagsAdapter $searchTagsAdapter,
-    ) {}
+    private TagsService $tagsService;
+    private ContentTypeService $contentTypeService;
+    private AdapterInterface $tagChildrenAdapter;
+    private SearchTagsAdapter $searchTagsAdapter;
+    public function __construct(TagsService $tagsService, ContentTypeService $contentTypeService, AdapterInterface $tagChildrenAdapter, SearchTagsAdapter $searchTagsAdapter)
+    {
+        $this->tagsService = $tagsService;
+        $this->contentTypeService = $contentTypeService;
+        $this->tagChildrenAdapter = $tagChildrenAdapter;
+        $this->searchTagsAdapter = $searchTagsAdapter;
+    }
 
     /**
      * Rendering a view which shows tag or synonym details.
@@ -96,7 +101,7 @@ final class TagController extends Controller
             return $this->redirectToRoute(
                 'netgen_tags_admin_tag_add',
                 [
-                    'parentId' => $parentTag?->id ?? 0,
+                    'parentId' => (($nullsafeVariable1 = $parentTag) ? $nullsafeVariable1->id : null) ?? 0,
                     'languageCode' => $availableLanguages[0],
                 ],
             );
@@ -116,7 +121,7 @@ final class TagController extends Controller
             return $this->redirectToRoute(
                 'netgen_tags_admin_tag_add',
                 [
-                    'parentId' => $parentTag?->id ?? 0,
+                    'parentId' => (($nullsafeVariable2 = $parentTag) ? $nullsafeVariable2->id : null) ?? 0,
                     'languageCode' => $form->getData()['languageCode'],
                 ],
             );
@@ -477,7 +482,7 @@ final class TagController extends Controller
             return $this->redirectToRoute(
                 'netgen_tags_admin_tag_move_tags',
                 [
-                    'parentId' => $tag?->id ?? 0,
+                    'parentId' => (($nullsafeVariable3 = $tag) ? $nullsafeVariable3->id : null) ?? 0,
                 ],
             );
         }
@@ -486,7 +491,7 @@ final class TagController extends Controller
             return $this->redirectToRoute(
                 'netgen_tags_admin_tag_copy_tags',
                 [
-                    'parentId' => $tag?->id ?? 0,
+                    'parentId' => (($nullsafeVariable4 = $tag) ? $nullsafeVariable4->id : null) ?? 0,
                 ],
             );
         }
@@ -495,7 +500,7 @@ final class TagController extends Controller
             return $this->redirectToRoute(
                 'netgen_tags_admin_tag_delete_tags',
                 [
-                    'parentId' => $tag?->id ?? 0,
+                    'parentId' => (($nullsafeVariable5 = $tag) ? $nullsafeVariable5->id : null) ?? 0,
                 ],
             );
         }
@@ -539,7 +544,7 @@ final class TagController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $newParentTag = $this->tagsService->loadTag($form->getData()['parentTag']);
-            } catch (NotFoundException) {
+            } catch (NotFoundException $exception) {
                 $newParentTag = null;
             }
 
@@ -598,7 +603,7 @@ final class TagController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $newParentTag = $this->tagsService->loadTag($form->getData()['parentTag']);
-            } catch (NotFoundException) {
+            } catch (NotFoundException $exception) {
                 $newParentTag = null;
             }
 

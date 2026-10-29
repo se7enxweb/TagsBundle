@@ -26,6 +26,8 @@ use function var_export;
 
 final class Type extends FieldType
 {
+    private TagsService $tagsService;
+    private ConfigResolverInterface $configResolver;
     /**
      * Default edit view interface for content field.
      */
@@ -55,7 +57,11 @@ final class Type extends FieldType
         ],
     ];
 
-    public function __construct(private TagsService $tagsService, private ConfigResolverInterface $configResolver) {}
+    public function __construct(TagsService $tagsService, ConfigResolverInterface $configResolver)
+    {
+        $this->tagsService = $tagsService;
+        $this->configResolver = $configResolver;
+    }
 
     public function getFieldTypeIdentifier(): string
     {
@@ -72,7 +78,10 @@ final class Type extends FieldType
         return new Value();
     }
 
-    public function fromHash(mixed $hash): Value
+    /**
+     * @param mixed $hash
+     */
+    public function fromHash($hash): Value
     {
         if (!is_array($hash)) {
             return new Value();
@@ -180,7 +189,10 @@ final class Type extends FieldType
         return $value->tags === $this->getEmptyValue()->tags;
     }
 
-    public function validateValidatorConfiguration(mixed $validatorConfiguration): array
+    /**
+     * @param mixed $validatorConfiguration
+     */
+    public function validateValidatorConfiguration($validatorConfiguration): array
     {
         $validationErrors = [];
 
@@ -341,7 +353,10 @@ final class Type extends FieldType
         return $validationErrors;
     }
 
-    public function validateFieldSettings(mixed $fieldSettings): array
+    /**
+     * @param mixed $fieldSettings
+     */
+    public function validateFieldSettings($fieldSettings): array
     {
         $validationErrors = [];
 
@@ -424,7 +439,11 @@ final class Type extends FieldType
         return true;
     }
 
-    protected function createValueFromInput(mixed $inputValue): mixed
+    /**
+     * @param mixed $inputValue
+     * @return mixed
+     */
+    protected function createValueFromInput($inputValue)
     {
         if (is_array($inputValue)) {
             foreach ($inputValue as $inputValueItem) {

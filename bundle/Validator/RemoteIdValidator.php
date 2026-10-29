@@ -14,9 +14,16 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 final class RemoteIdValidator extends ConstraintValidator
 {
-    public function __construct(private TagsService $tagsService) {}
+    private TagsService $tagsService;
+    public function __construct(TagsService $tagsService)
+    {
+        $this->tagsService = $tagsService;
+    }
 
-    public function validate(mixed $value, Constraint $constraint): void
+    /**
+     * @param mixed $value
+     */
+    public function validate($value, Constraint $constraint): void
     {
         if ($value === null) {
             return;
@@ -37,7 +44,7 @@ final class RemoteIdValidator extends ConstraintValidator
                     ->setParameter('%remoteId%', $value)
                     ->addViolation();
             }
-        } catch (NotFoundException) {
+        } catch (NotFoundException $exception) {
             // Do nothing
         }
     }

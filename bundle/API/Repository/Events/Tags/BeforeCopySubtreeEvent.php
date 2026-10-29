@@ -12,9 +12,15 @@ use function sprintf;
 
 final class BeforeCopySubtreeEvent extends BeforeEvent
 {
+    private Tag $tag;
+    private ?Tag $parentTag = null;
     private Tag $copiedTag;
 
-    public function __construct(private Tag $tag, private ?Tag $parentTag = null) {}
+    public function __construct(Tag $tag, ?Tag $parentTag = null)
+    {
+        $this->tag = $tag;
+        $this->parentTag = $parentTag;
+    }
 
     public function getTag(): Tag
     {
@@ -28,13 +34,14 @@ final class BeforeCopySubtreeEvent extends BeforeEvent
 
     public function getCopiedTag(): Tag
     {
-        $this->copiedTag
-            ?? throw new UnexpectedValueException(
+        if ($this->copiedTag === null) {
+            throw new UnexpectedValueException(
                 sprintf(
                     'Return value is not set or not a type of %s. Check with hasCopiedTag() or set it with setCopiedTag() before you call the getter.',
                     Tag::class,
                 ),
             );
+        }
 
         return $this->copiedTag;
     }

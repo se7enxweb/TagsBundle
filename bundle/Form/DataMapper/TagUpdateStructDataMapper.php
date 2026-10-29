@@ -12,9 +12,16 @@ use function iterator_to_array;
 
 final class TagUpdateStructDataMapper implements DataMapperInterface
 {
-    public function __construct(private string $languageCode) {}
+    private string $languageCode;
+    public function __construct(string $languageCode)
+    {
+        $this->languageCode = $languageCode;
+    }
 
-    public function mapDataToForms(mixed $viewData, Traversable $forms): void
+    /**
+     * @param mixed $viewData
+     */
+    public function mapDataToForms($viewData, Traversable $forms): void
     {
         if (!$viewData instanceof TagUpdateStruct) {
             return;
@@ -27,7 +34,10 @@ final class TagUpdateStructDataMapper implements DataMapperInterface
         $forms['remoteId']->setData($viewData->remoteId);
     }
 
-    public function mapFormsToData(Traversable $forms, mixed &$viewData): void
+    /**
+     * @param mixed $viewData
+     */
+    public function mapFormsToData(Traversable $forms, &$viewData): void
     {
         if (!$viewData instanceof TagUpdateStruct) {
             return;

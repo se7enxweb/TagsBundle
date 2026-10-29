@@ -9,13 +9,17 @@ use Pagerfanta\Adapter\AdapterInterface;
 
 final class SearchTagsAdapter implements AdapterInterface
 {
+    private TagsService $tagsService;
     private string $searchText;
 
     private string $language;
 
     private int $nbResults;
 
-    public function __construct(private TagsService $tagsService) {}
+    public function __construct(TagsService $tagsService)
+    {
+        $this->tagsService = $tagsService;
+    }
 
     public function setSearchText(string $searchText): void
     {

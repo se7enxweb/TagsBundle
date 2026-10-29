@@ -12,20 +12,25 @@ use Netgen\TagsBundle\API\Repository\TagsService;
 
 final class NetgenTagsRuntime
 {
-    public function __construct(
-        private TagsService $tagsService,
-        private LanguageService $languageService,
-        private ContentTypeService $contentTypeService,
-    ) {}
+    private TagsService $tagsService;
+    private LanguageService $languageService;
+    private ContentTypeService $contentTypeService;
+    public function __construct(TagsService $tagsService, LanguageService $languageService, ContentTypeService $contentTypeService)
+    {
+        $this->tagsService = $tagsService;
+        $this->languageService = $languageService;
+        $this->contentTypeService = $contentTypeService;
+    }
 
     /**
      * Returns tag keyword for provided tag ID.
+     * @param int|string $tagId
      */
-    public function getTagKeyword(int|string $tagId): string
+    public function getTagKeyword($tagId): string
     {
         try {
             $tag = $this->tagsService->loadTag((int) $tagId);
-        } catch (NotFoundException) {
+        } catch (NotFoundException $exception) {
             return '';
         }
 
@@ -42,13 +47,14 @@ final class NetgenTagsRuntime
 
     /**
      * Returns content type name for provided content type ID or content type object.
+     * @param \Ibexa\Contracts\Core\Repository\Values\ContentType\ContentType|int $contentType
      */
-    public function getContentTypeName(ContentType|int $contentType): string
+    public function getContentTypeName($contentType): string
     {
         if (!$contentType instanceof ContentType) {
             try {
                 $contentType = $this->contentTypeService->loadContentType($contentType);
-            } catch (NotFoundException) {
+            } catch (NotFoundException $exception) {
                 return '';
             }
         }

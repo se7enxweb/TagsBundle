@@ -21,8 +21,10 @@ use function count;
  */
 final class TagsStorage extends GatewayBasedStorage
 {
-    public function __construct(StorageGateway $gateway, private TagsService $tagsService)
+    private TagsService $tagsService;
+    public function __construct(StorageGateway $gateway, TagsService $tagsService)
     {
+        $this->tagsService = $tagsService;
         parent::__construct($gateway);
     }
 
@@ -48,7 +50,7 @@ final class TagsStorage extends GatewayBasedStorage
                     try {
                         $createdTag = $this->createTag($tag);
                         $field->value->externalData[$key]['id'] = $createdTag->id;
-                    } catch (UnauthorizedException) {
+                    } catch (UnauthorizedException $exception) {
                         // If users cannot create tags, just remove it from
                         // the list of tags to be created
                         unset($field->value->externalData[$key]);

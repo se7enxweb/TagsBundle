@@ -18,7 +18,11 @@ use Symfony\Component\Validator\Constraints;
 
 final class TagTreeType extends AbstractType
 {
-    public function __construct(private TagsService $tagsService) {}
+    private TagsService $tagsService;
+    public function __construct(TagsService $tagsService)
+    {
+        $this->tagsService = $tagsService;
+    }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -47,12 +51,19 @@ final class TagTreeType extends AbstractType
     {
         $builder->addModelTransformer(
             new class implements DataTransformerInterface {
-                public function transform(mixed $value): mixed
+                /**
+                 * @param mixed $value
+                 * @return mixed
+                 */
+                public function transform($value)
                 {
                     return $value;
                 }
 
-                public function reverseTransform(mixed $value): int
+                /**
+                 * @param mixed $value
+                 */
+                public function reverseTransform($value): int
                 {
                     return (int) $value;
                 }
@@ -66,7 +77,7 @@ final class TagTreeType extends AbstractType
         if ($form->getData() !== null) {
             try {
                 $tag = $this->tagsService->loadTag((int) $form->getData());
-            } catch (NotFoundException) {
+            } catch (NotFoundException $exception) {
                 // Do nothing
             }
         }

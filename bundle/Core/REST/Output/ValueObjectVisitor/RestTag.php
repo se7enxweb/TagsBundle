@@ -17,7 +17,10 @@ use function trim;
 
 class RestTag extends ValueObjectVisitor
 {
-    public function visit(Visitor $visitor, Generator $generator, mixed $data): void
+    /**
+     * @param mixed $data
+     */
+    public function visit(Visitor $visitor, Generator $generator, $data): void
     {
         $generator->startObjectElement('Tag');
         $visitor->setHeader('Content-Type', $generator->getMediaType('Tag'));

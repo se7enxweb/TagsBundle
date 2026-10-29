@@ -23,7 +23,13 @@ use function uniqid;
  */
 class Handler implements BaseTagsHandler
 {
-    public function __construct(private Gateway $gateway, private Mapper $mapper) {}
+    private Gateway $gateway;
+    private Mapper $mapper;
+    public function __construct(Gateway $gateway, Mapper $mapper)
+    {
+        $this->gateway = $gateway;
+        $this->mapper = $mapper;
+    }
 
     public function load(int $tagId, ?array $translations = null, bool $useAlwaysAvailable = true): Tag
     {
