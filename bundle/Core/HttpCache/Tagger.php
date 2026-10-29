@@ -9,7 +9,7 @@ use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 
 use function array_map;
 
-final readonly class Tagger
+final class Tagger
 {
     public const TAG_PREFIX = 'ngt';
     public const MAIN_TAG_PREFIX = 'ngtm';

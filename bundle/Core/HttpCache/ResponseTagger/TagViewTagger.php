@@ -8,7 +8,7 @@ use Ibexa\Contracts\HttpCache\ResponseTagger\ResponseTagger;
 use Netgen\TagsBundle\Core\HttpCache\Tagger;
 use Netgen\TagsBundle\View\TagView;
 
-final readonly class TagViewTagger implements ResponseTagger
+final class TagViewTagger implements ResponseTagger
 {
     public function __construct(
         private Tagger $tagger,

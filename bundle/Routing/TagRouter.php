@@ -41,9 +41,13 @@ final class TagRouter implements ChainedRouterInterface, RequestMatcherInterface
         private TagsService $tagsService,
         private TagUrlGenerator $generator,
         private ConfigResolverInterface $configResolver,
-        private RequestContext $requestContext = new RequestContext(),
-        private LoggerInterface $logger = new NullLogger(),
-    ) {}
+        private ?RequestContext $requestContext = null,
+        private ?LoggerInterface $logger = null,
+    ) {
+        // PHP 8.0 has no "new" in parameter defaults
+        $this->requestContext = $requestContext ?? new RequestContext();
+        $this->logger = $logger ?? new NullLogger();
+    }
 
     public function matchRequest(Request $request): array
     {

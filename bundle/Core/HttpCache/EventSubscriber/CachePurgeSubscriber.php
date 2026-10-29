@@ -20,7 +20,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use function array_merge;
 use function array_unique;
 
-final readonly class CachePurgeSubscriber implements EventSubscriberInterface
+final class CachePurgeSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private Tagger $tagger,
